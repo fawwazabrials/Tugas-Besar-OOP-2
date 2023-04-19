@@ -1,13 +1,21 @@
 package simplicity;
 
 public interface HouseAction {
-    public void addHouse(int x, int y);
-    /* 
-     * Tambah rumah dari World pada koordinat (x, y). Jika sudah ada rumah, method akan mengembalikan error
+    public void addRoom(Room target, String direction, String roomName);
+    /*
+     * Menambahkan Room dengan nama roomName di House. Ruangan akan ditempelkan pada direction di Room target. 
+     * Jika Room tidak bisa ditambahkan, method akan mengembalikan error
      */
 
-    public void removeHouse(int x, int y);
+    public void removeRoom(Room target);
     /*
-     * Hapus rumah dari World pada koordinat (x, y). Jika tidak ada rumah, method akan mengembalikan error
+     * PREREQ: Room sudah pasti ada
+     * Menghapus Room dari house.
+     */
+
+    public void moveRoom(Room oldRoom, Room target, String direction);
+    /*
+     * Memindahkan oldRoom ke tempat baru.Ruangan akan ditempelkan pada direction di Room target. 
+     * Jika Room tidak bisa ditambahkan, method akan mengembalikan error
      */
 }
