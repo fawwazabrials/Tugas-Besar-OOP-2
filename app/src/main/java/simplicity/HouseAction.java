@@ -3,20 +3,19 @@ package simplicity;
 public interface HouseAction {
     public void addRoom(String roomName, Room benchmarkRoom, Direction direction);
     /*
-     * Menambahkan Room baru pada House. Room baru akan bersebelahan dengan benchmarkRoom pada 
-     * arah direction. Jika benchmarkRoom tidak ada atau sudah bersebelahan dengan Room lain pada 
-     * arah direction, method akan mengembalikan error
+     * Menambahkan Room dengan nama roomName di House. Ruangan akan ditempelkan pada direction di Room target. 
+     * Jika Room tidak bisa ditambahkan, method akan mengembalikan error
      */
 
      public void removeRoom(Room room);
     /*
-    * Menghapus Room dari House. Jika Room tidak ada, method akan mengembalikan error
-    */
+     * PREREQ: Room sudah pasti ada
+     * Menghapus Room dari house.
+     */
 
     public void moveRoom(Room room, Room benchmarkRoom, Direction direction);
     /*
-     * Memindahkan Room dari House. Room akan bersebelahan dengan benchmarkRoom pada arah direction. 
-     * Jika benchmarkRoom tidak ada atau sudah bersebelahan dengan Room lain pada arah direction, 
-     * method akan mengembalikan error
+     * Memindahkan oldRoom ke tempat baru.Ruangan akan ditempelkan pada direction di Room target. 
+     * Jika Room tidak bisa ditambahkan, method akan mengembalikan error
      */
 }
