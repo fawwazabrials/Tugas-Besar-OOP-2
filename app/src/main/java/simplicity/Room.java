@@ -4,17 +4,15 @@ import java.util.*;
 public class Room implements RoomAction {
     // Attributes
     private String roomName;
-    private final int width;
-    private final int length;
+    private final int width = 6;
+    private final int length = 6;
     private Map<Direction, Room> connectedRooms;
 
     private List<Furniture> furnitures;
     private Furniture[][] roomGrid;
 
     // Constructor
-    public Room(String roomName) {
-        width = 6;
-        length = 6;     
+    public Room(String roomName) {   
         furnitures = new ArrayList<Furniture>();
         roomGrid = new Furniture[width][length];
         connectedRooms = new EnumMap<>(Direction.class);
@@ -58,8 +56,8 @@ public class Room implements RoomAction {
             throw new IllegalArgumentException("No furniture at (" + x + ", " + y + ")");
         }
         furnitures.remove(furniture);
-        for (int i = x; i < width; i++) {
-            for (int j = y; j < length; j++) {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
                 if (roomGrid[i][j] == furniture) {
                     roomGrid[i][j] = null;
                 }
@@ -72,14 +70,48 @@ public class Room implements RoomAction {
         if (furniture == null) {
             throw new IllegalArgumentException("No furniture at (" + oldX + ", " + oldY + ")");
         }
-        
+
+        // Mencari titik paling atas kiri dari furniture
+        int topLeftX = -1;
+        int topLeftY = -1;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                if (roomGrid[i][j] == furniture) {
+                    topLeftX = i;
+                    topLeftY = j;
+                    break;
+                }
+            }
+            if (topLeftX != -1 && topLeftY != -1) {
+                break;
+            }
+        }
+
+        // Clone roomGrid
+        Furniture[][] tempRoomGrid = new Furniture[width][length];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                tempRoomGrid[i][j] = roomGrid[i][j];
+            }
+        }
+
         removeFurniture(oldX, oldY);
-        
-        if (!isPlaceable(furniture, newX, newY)) {
+
+        // Mengatasi jika topLeft tidak diinisalisasi akan throw error
+        if (topLeftX == -1 || topLeftY == -1) {
+            throw new IllegalArgumentException("No furniture at (" + oldX + ", " + oldY + ")");
+        }
+
+        int x = newX - (oldX - topLeftX);
+        int y = newY - (oldY - topLeftY);
+
+        if (!isPlaceable(furniture, x, y)) {
+            
+            roomGrid = tempRoomGrid;
+            furnitures.add(furniture);
             throw new IllegalArgumentException("Cannot move furniture to the new location");
         }
-    
-        addFurniture(furniture, newX, newY);
+        addFurniture(furniture, x, y);
     }
 
     public void addFurniture(Furniture furniture, int x, int y) {
@@ -93,17 +125,4 @@ public class Room implements RoomAction {
             }
         }
     }
-
-    // public void printRoom() {
-    //     for (int i = 0; i < width; i++) {
-    //         for (int j = 0; j < length; j++) {
-    //             if (roomGrid[i][j] == null) {
-    //                 System.out.print(" ");
-    //             } else {
-    //                 System.out.print(roomGrid[i][j].getName().charAt(0));
-    //             }
-    //         }
-    //         System.out.println();
-    //     }
-    // }
 }
