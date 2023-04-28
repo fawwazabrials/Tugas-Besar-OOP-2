@@ -3,12 +3,23 @@
  */
 package simplicity;
 
-public class App {
-    public String getGreeting() {
-        return "Hello Tubes!";
-    }
+import javax.swing.JFrame;
 
+public class App {
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        JFrame window = new JFrame();
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(false);
+        window.setTitle("Sim-plicity");
+
+        GamePanel gamePanel = new GamePanel();
+        window.add(gamePanel);
+
+        window.pack();
+
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+
+        gamePanel.startGameThread();
     }
 }
