@@ -1,13 +1,13 @@
 package map;
 import java.util.*;
 
-public class World {
+public class World implements Renderable {
     private static World instance = null;
     private List<House> houses = new ArrayList<>();
     private House[][] worldMap;
 
     // Private Constructor
-    private World() {
+    public World() {
         int width = 64;
         int length = 64;
         worldMap = new House[width][length];
