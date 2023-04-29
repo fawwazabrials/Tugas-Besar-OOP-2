@@ -1,4 +1,4 @@
-package simplicity;
+package map;
 
 public interface Renderable {
     

@@ -1,5 +1,7 @@
-package simplicity;
+package map;
 import java.util.*;
+
+import item.Furniture;
 
 public class Room implements RoomAction {
     // Attributes
@@ -37,10 +39,10 @@ public class Room implements RoomAction {
     public void setRoomName(String roomName) {this.roomName = roomName;}
     
     public boolean isPlaceable(Furniture furniture, int x, int y) {
-        if (furniture.getWidth() + x > width || furniture.getLength() + y > length ) {
+        if (furniture.getLength() + x > width || furniture.getLength() + y > length ) {
             return false;
         }
-        for (int i = x; i < furniture.getWidth() + x; i++) {
+        for (int i = x; i < furniture.getLength() + x; i++) {
             for (int j = y; j < furniture.getLength() + y; j++) {
                 if (roomGrid[x][y] != null) {
                     return false;
@@ -119,7 +121,7 @@ public class Room implements RoomAction {
             throw new IllegalArgumentException("Furniture cannot be placed");
         }
         furnitures.add(furniture);
-        for (int i = x; i < x + furniture.getWidth(); i++) {
+        for (int i = x; i < x + furniture.getLength(); i++) {
             for (int j = y; j < y + furniture.getLength(); j++) {
                 roomGrid[i][j] = furniture;
             }

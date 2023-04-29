@@ -1,4 +1,4 @@
-package simplicity;
+package map;
 
 public interface WorldAction {
     public void addHouse(int x, int y);

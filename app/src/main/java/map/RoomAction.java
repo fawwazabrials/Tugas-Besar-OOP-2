@@ -1,4 +1,6 @@
-package simplicity;
+package map;
+
+import item.Furniture;
 
 public interface RoomAction {
     public void addFurniture(Furniture furniture, int x, int y);
