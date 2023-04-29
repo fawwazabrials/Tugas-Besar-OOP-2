@@ -6,17 +6,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
     // SPRITE SETTINGS
     public final int originalTileSize = 16;    // sprite 16x16
-    public final int scale = 4; // scale ganti klao screen ganti
+    public final int scale = 4; // scale ganti kalau screen ganti
     public final int tileSize = originalTileSize * scale;
 
     // PANEL SETTINGS
