@@ -1,6 +1,6 @@
 package map;
 
-import furniture.Furniture;
+import item.Furniture;
 
 public interface RoomAction {
     public void addFurniture(Furniture furniture, int x, int y);
