@@ -18,6 +18,7 @@ public class Sim implements SimAction{
     private int hunger;
     private int health;
     private int money;
+    private String job;
 
     GamePanel gp;
 
@@ -52,6 +53,14 @@ public class Sim implements SimAction{
         return currRoom;
     }
 
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
     public int getMood() {
         return mood;
     }
@@ -64,75 +73,102 @@ public class Sim implements SimAction{
         return health;
     }
 
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money+= money;
+    }
+
     @Override
     public void work(int time) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'work'");
+        /*
+        * +X money (X sesuai pekerjaan); -10 kekenyangan, -10 mood / 30 detik
+        */
+        hunger-= ((10*time)/30);
+        mood-= ((10*time)/30);
+        if(job == "Badut Sulap") {
+            money += (15*time/4);
+        }
+        else if(job == "Koki") {
+            money += (30*time/4);
+        }
+        else if(job == "Polisi") {
+            money += (35*time/4);
+        }
+        else if(job == "Programmer") {
+            money += (45*time/4);
+        }
+        else if(job == "Dokter") {
+            money += (50*time/4);
+        }
     }
 
     @Override
     public void workout(int time) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'workout'");
+        /*
+        * +5 kesehatan, -5 kekenyangan, +10 mood / 20 detik
+        */
+        health+= (5*time/20);
+        hunger-= (5*time/20);
+        mood+= (10*time/20);
     }
 
     @Override
     public void sleep(int time) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sleep'");
+        /*
+        * +30 mood, +20 kesehatan / 4 menit
+        */
+        mood+= (30*time/4);
+        health+= (20*time/4);
     }
 
     @Override
     public void eat(int time, Food food) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eat'");
+        /*
+        * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
+        */
+        
     }
 
     @Override
     public void cook(int time, Food dish) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'cook'");
+        
     }
 
     @Override
     public void visit(int time, Sim target) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visit'");
+        
     }
 
     @Override
     public void poop(int time) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'poop'");
+
     }
 
     @Override
     public void buyItem(Item item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'buyItem'");
+        
     }
 
     @Override
     public void sellItem(Item item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sellItem'");
+        
     }
 
     @Override
     public void move(Room target) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'move'");
+        
     }
 
     @Override
     public void stargaze(int time) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stargaze'");
+        
     }
 
     @Override
     public void read(int time) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
+        
     }
 }
