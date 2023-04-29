@@ -31,6 +31,15 @@ public class Sim implements SimAction{
         health = 100;
     }
 
+    /* INI ABIL YG NGURUS, JANGAN DIAPUS! */
+    public void update() {
+
+    }
+
+    public void draw() {
+
+    }
+
     public House getHouse() {
         return house;
     }
@@ -53,14 +62,6 @@ public class Sim implements SimAction{
     
     public int getHealth() {
         return health;
-    }
-
-    public void update() {
-
-    }
-
-    public void draw() {
-
     }
 
     @Override
