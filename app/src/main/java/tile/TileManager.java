@@ -8,25 +8,41 @@ import main.GamePanel;
 
 public class TileManager {
     GamePanel gp;
-    Tile[] tile;
+    Tile[] roomTile;
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
-        tile = new Tile[10];
+        roomTile = new Tile[10];
         getTileImage();
     }
 
     public void getTileImage() {
         try {
-            tile[0] = new Tile();
-            tile[0].image = ImageIO.read(getClass().getResourceAsStream("/world/grass.png"));
+            roomTile[0] = new Tile();
+            roomTile[0].image = ImageIO.read(getClass().getResourceAsStream("/room/floor.png"));
+
+            roomTile[1] = new Tile();
+            roomTile[1].image = ImageIO.read(getClass().getResourceAsStream("/room/fridge.png"));
         } catch (IOException e) {
-            System.out.println("bruh");
             e.printStackTrace();
         }
     }
 
-    public void draw(Graphics2D g2) {
-        g2.drawImage(tile[0].image, 0, 0, gp.tileSize, gp.tileSize, null);
+    public void drawRoom(Graphics2D g2, int map[][]) {
+        int width = 6; int height = 6;
+        int offsetX = (gp.screenWidth-width*gp.tileSize)/2;
+        int offsetY = (gp.screenHeight-height*gp.tileSize)/2;
+
+        for (int i=0; i<width; i++) {
+            for (int j=0; j<height; j++) {
+                if (map[i][j] == 0) { // floor
+                    g2.drawImage(roomTile[0].image, offsetX+i*gp.tileSize, offsetY+j*gp.tileSize, gp.tileSize, gp.tileSize, null);
+                }
+                else if (map[i][j] == 1) { // fridge
+                    g2.drawImage(roomTile[1].image, offsetX+i*gp.tileSize, offsetY+j*gp.tileSize, gp.tileSize, gp.tileSize, null);
+                }
+                // System.out.println(i*gp.tileSize + " " + j*gp.tileSize);
+            }
+        }
     }
 }
