@@ -1,7 +1,7 @@
 package map;
 import java.util.*;
 
-public class World implements Renderable {
+public class World {
     private static World instance = null;
     private List<House> houses = new ArrayList<>();
     private House[][] worldMap;

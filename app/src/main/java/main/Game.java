@@ -6,8 +6,7 @@ public class Game {
     public Renderable currentView;
     public long gameTime, time, oldTime;
 
-    public Game(Renderable view) {
-        currentView = view;
+    public Game() {
         time = System.currentTimeMillis();
         gameTime = 0;
     }
