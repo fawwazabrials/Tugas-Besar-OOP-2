@@ -21,6 +21,6 @@ public class Game {
         time = System.currentTimeMillis();
 
         gameTime = (gameTime + time - oldTime) % 720000;
-        System.out.println(gameTime);
+        // System.out.println(gameTime);
     }
 }
