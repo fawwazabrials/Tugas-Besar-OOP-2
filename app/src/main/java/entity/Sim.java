@@ -120,8 +120,8 @@ public class Sim implements SimAction{
         /*
         * +30 mood, +20 kesehatan / 4 menit
         */
-        mood+= (30*time/4);
-        health+= (20*time/4);
+        mood+= (30*time/(4));
+        health+= (20*time/(4));
     }
 
     @Override
@@ -139,17 +139,27 @@ public class Sim implements SimAction{
 
     @Override
     public void visit(int time, Sim target) {
-        
+        /*
+        * +10 mood, -10 kekenyangan / 30 detik
+        */ 
+        mood += (10*time/30);
+        hunger -= (10*time/30);
     }
 
     @Override
     public void poop(int time) {
-
+        /*
+        * -20 kekenyangan, +10 mood / 1 siklus (10 detik)
+        */
+        hunger-= (20*time/10);
+        mood+= (10*time/10);
     }
 
     @Override
     public void buyItem(Item item) {
-        
+        /* 
+        * Membeli Item dari toko, jika Sim tidak memiliki cukup uang maka method akan mengembalikan error 
+        */
     }
 
     @Override
@@ -159,16 +169,24 @@ public class Sim implements SimAction{
 
     @Override
     public void move(Room target) {
-        
+        currRoom = target;
     }
 
     @Override
     public void stargaze(int time) {
-        
+        mood += (20*time);
+        hunger -= (15*time);
     }
+    /*
+     * +20 mood, -15 kekenyangan / 1 menit
+     */
 
     @Override
     public void read(int time) {
-        
+        mood += (20*time);
+        hunger -= (15*time);
     }
+    /*
+     * +20 mood, -15 kekenyangan / 1 menit
+     */
 }
