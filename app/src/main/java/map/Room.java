@@ -3,7 +3,7 @@ import java.util.*;
 
 import item.Furniture;
 
-public class Room implements RoomAction {
+public class Room implements RoomAction, Renderable {
     // Attributes
     private String roomName;
     private final int width = 6;
@@ -17,6 +17,8 @@ public class Room implements RoomAction {
     public Room(String roomName) {   
         furnitures = new ArrayList<Furniture>();
         roomGrid = new Furniture[width][length];
+        Arrays.fill(roomGrid, null); // Isi grid sama null semua
+
         connectedRooms = new EnumMap<>(Direction.class);
 
         this.roomName = roomName;
@@ -126,5 +128,19 @@ public class Room implements RoomAction {
                 roomGrid[i][j] = furniture;
             }
         }
+    }
+
+    public int[][] render() {
+        int[][] renderMap = new int[width][length];
+
+        for (int i=0; i<width; i++) {
+            for (int j=0; j<length; j++) {
+                if (roomGrid[i][j] == null) {
+                    renderMap[i][j] = 0;
+                }
+            }
+        }
+
+        return renderMap;
     }
 }

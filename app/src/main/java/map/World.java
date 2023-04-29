@@ -7,7 +7,7 @@ public class World {
     private House[][] worldMap;
 
     // Private Constructor
-    private World() {
+    public World() {
         int width = 64;
         int length = 64;
         worldMap = new House[width][length];
