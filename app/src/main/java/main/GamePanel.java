@@ -1,20 +1,13 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
+import java.awt.*;
+import javax.swing.*;
 
-import map.World;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
+    private static GamePanel instance = null;
+
     // SPRITE SETTINGS
     public final int originalTileSize = 16;    // sprite 16x16
     public final int scale = 4; // scale ganti klao screen ganti
@@ -27,13 +20,18 @@ public class GamePanel extends JPanel implements Runnable {
     // DRAW COMPONENTS
     TileManager tileM = new TileManager(this);
     Thread gameThread;
-    Game game = new Game(new World());
+    Game game = new Game();
 
     public GamePanel() {
         System.out.println(screenHeight);
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
+    }
+
+    public static GamePanel getInstance() {
+        if (instance == null) instance = new GamePanel();
+        return instance;
     }
 
     public void startGameThread() {
@@ -61,6 +59,14 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        tileM.draw(g2);
+        int[][] test = new int[6][6];
+        for (int i=0; i<6; i++) {
+            for (int j=0; j<6; j++) {
+                test[i][j] = 0;
+            }
+        }
+
+        // HARUS FILL MANUAL GABISA MAKE ARRAYS.FILL, KONTOLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+        tileM.drawRoom(g2, test);
     }
 }

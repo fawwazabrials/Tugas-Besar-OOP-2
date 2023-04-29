@@ -12,7 +12,7 @@ public class App {
         window.setResizable(false);
         window.setTitle("Sim-plicity");
 
-        GamePanel gamePanel = new GamePanel();
+        GamePanel gamePanel = GamePanel.getInstance();
         window.add(gamePanel);
 
         window.pack();
