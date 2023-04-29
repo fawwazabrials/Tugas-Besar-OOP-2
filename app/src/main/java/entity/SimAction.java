@@ -1,5 +1,9 @@
 package entity;
 
+import item.Food;
+import item.Item;
+import map.Room;
+
 public interface SimAction {
     /********************************* PRIMARY ACTIVITY *********************************/
     public void work();

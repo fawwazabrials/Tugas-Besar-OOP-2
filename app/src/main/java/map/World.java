@@ -1,4 +1,4 @@
-package simplicity;
+package map;
 import java.util.*;
 
 public class World {
