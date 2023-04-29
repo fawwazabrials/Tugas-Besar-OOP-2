@@ -18,6 +18,7 @@ public class Sim implements SimAction{
     private int hunger;
     private int health;
     private int money;
+    private String job;
 
     GamePanel gp;
 
@@ -52,6 +53,14 @@ public class Sim implements SimAction{
         return currRoom;
     }
 
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
     public int getMood() {
         return mood;
     }
@@ -62,6 +71,14 @@ public class Sim implements SimAction{
     
     public int getHealth() {
         return health;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
     }
 
     @Override
