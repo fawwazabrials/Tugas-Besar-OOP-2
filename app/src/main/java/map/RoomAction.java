@@ -1,7 +1,7 @@
 package map;
 
 public interface RoomAction {
-    public void addFurniture(String furnitureName, int x, int y);
+    public void addFurniture(Furniture furniture, int x, int y);
     /* 
      * Menaruh Furniture di Room pada koordinat (x, y). Jika tidak bisa ditaruh, method akan mengembalikan error
      */
