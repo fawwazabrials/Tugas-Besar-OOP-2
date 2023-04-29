@@ -1,4 +1,4 @@
-package simplicity;
+package entity;
 
 public interface SimAction {
     /********************************* PRIMARY ACTIVITY *********************************/

@@ -1,29 +1,39 @@
-package simplicity;
+package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
+
+import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
-    final int originalTileSize = 16;    // sprite 16x16
-    final int scale = 1;
+    // SPRITE SETTINGS
+    public final int originalTileSize = 16;    // sprite 16x16
+    public final int scale = 4; // scale ganti klao screen ganti
+    public final int tileSize = originalTileSize * scale;
 
-    final int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 64;
-    final int maxScreenRow = 64;
-    final int screenWidth = tileSize * maxScreenCol; 
-    System.out.println(screenWidth);
-    final int screenHeight = tileSize * maxScreenRow;
+    // PANEL SETTINGS
+    public final int screenWidth = 1024; // 64 x 64 tiling
+    public final int screenHeight = 1024; // 64 x 64 tiling
 
+    // DRAW COMPONENTS
+    TileManager tileM = new TileManager(this);
     Thread gameThread;
 
     public GamePanel() {
+        System.out.println(screenHeight);
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
+
+        
     }
 
     public void startGameThread() {
@@ -51,12 +61,6 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.setColor(Color.white);
-
-        g2.fillRect(0, 0, tileSize, tileSize);
-        g2.fillRect(tileSize, 0, tileSize, tileSize);
-
-
-        g2.dispose();
+        tileM.draw(g2);
     }
 }

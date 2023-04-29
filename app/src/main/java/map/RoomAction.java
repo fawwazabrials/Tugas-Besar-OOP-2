@@ -1,4 +1,4 @@
-package simplicity;
+package map;
 
 public interface RoomAction {
     public void addFurniture(String furnitureName, int x, int y);
