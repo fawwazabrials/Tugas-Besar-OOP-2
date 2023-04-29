@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import map.World;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -26,14 +27,13 @@ public class GamePanel extends JPanel implements Runnable {
     // DRAW COMPONENTS
     TileManager tileM = new TileManager(this);
     Thread gameThread;
+    Game game = new Game(new World());
 
     public GamePanel() {
         System.out.println(screenHeight);
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
-
-        
     }
 
     public void startGameThread() {
@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-
+        game.update();
     }
 
     public void paintComponent(Graphics g) {
