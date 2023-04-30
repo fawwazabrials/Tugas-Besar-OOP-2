@@ -44,9 +44,13 @@ public class Room implements RoomAction, Renderable {
     // Setter Method
     public void setRoomName(String roomName) {this.roomName = roomName;}
     
-    public Room makeDefaultRoom() {
-        Room room = new Room("Bed Room");
-        
+    public static Room makeDefaultRoom() {
+        Room room = new Room("BedRoom");
+        room.addFurniture(new Furniture("kasur", 4, 1), 0, 0);
+        room.addFurniture(new Furniture("toilet", 1, 1), 5, 5);
+        room.addFurniture(new Furniture("kompor", 2, 1), 5, 3);
+        room.addFurniture(new Furniture("meja dan kursi", 3, 3), 0, 1);
+        room.addFurniture(new Furniture("jam", 1, 1), 0, 5);
         return room;
     }
 
@@ -64,6 +68,7 @@ public class Room implements RoomAction, Renderable {
         return true;
     }
     
+    @Override
     public void removeFurniture(int x, int y) {
         Furniture furniture = roomGrid[x][y];
         if (furniture == null) {
@@ -79,6 +84,7 @@ public class Room implements RoomAction, Renderable {
         }
     }
 
+    @Override
      public void moveFurniture(int oldX, int oldY, int newX, int newY) {
         Furniture furniture = roomGrid[oldX][oldY];
         if (furniture == null) {
@@ -128,6 +134,7 @@ public class Room implements RoomAction, Renderable {
         addFurniture(furniture, x, y);
     }
 
+    @Override
     public void addFurniture(Furniture furniture, int x, int y) {
         if (! isPlaceable(furniture, x, y)) {
             throw new IllegalArgumentException("Furniture cannot be placed");
@@ -147,10 +154,11 @@ public class Room implements RoomAction, Renderable {
             for (int j=0; j<length; j++) {
                 if (roomGrid[i][j] == null) {
                     renderMap[i][j] = '.';
+                } else {
+                    renderMap[i][j] = roomGrid[i][j].getName().charAt(0);
                 }
             }
         }
-
         return renderMap;
     }
 }
