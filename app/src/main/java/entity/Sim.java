@@ -2,7 +2,6 @@ package entity;
 
 import java.util.List;
 
-import main.GamePanel;
 import map.House;
 import map.Room;
 import item.Food;
@@ -20,9 +19,8 @@ public class Sim implements SimAction{
     private int money;
     private String job;
 
-    GamePanel gp;
 
-    public Sim(GamePanel gp, House house, List<Item> simItems, Room currRoom) {
+    public Sim(House house, List<Item> simItems, Room currRoom) {
         this.house = house;
         this.simItems = simItems;
         this.currRoom = currRoom;
@@ -30,15 +28,6 @@ public class Sim implements SimAction{
         mood = 100;
         hunger = 100;
         health = 100;
-    }
-
-    /* INI ABIL YG NGURUS, JANGAN DIAPUS! */
-    public void update() {
-
-    }
-
-    public void draw() {
-
     }
 
     public House getHouse() {
