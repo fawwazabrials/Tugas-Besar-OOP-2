@@ -129,7 +129,34 @@ public class Sim implements SimAction{
         /*
         * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
         */
-        
+        switch(food.getName()) {
+            case "Nasi" :
+                hunger+= (5*time/30);
+            case "Kentang" :
+                hunger+= (4*time/30);
+            case "Ayam" : 
+                hunger+= (8*time/30);
+            case "Sapi" : 
+                hunger+= (15*time/30);
+            case "Wortel" : 
+                hunger+= (2*time/30);
+            case "Bayam" : 
+                hunger+= (2*time/30);
+            case "Kacang" : 
+                hunger+= (2*time/30);
+            case "Susu" : 
+                hunger+= (1*time/30);
+            case "Nasi Ayam" :
+                hunger+= (16*time/30);
+            case "Nasi Kari" :
+                hunger+= (30*time/30);
+            case "Susu Kacang" : 
+                hunger+= (5*time/30);
+            case "Tumis Sayur" :
+                hunger+= (5*time/30);
+            case "Bistik" : 
+                hunger+= (22*time/30);
+        }
     }
 
     @Override
