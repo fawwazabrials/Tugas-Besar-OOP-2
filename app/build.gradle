@@ -29,6 +29,10 @@ application {
     mainClass = 'main.App'
 }
 
+tasks.named("run") {
+    standardInput = System.in
+}
+
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
