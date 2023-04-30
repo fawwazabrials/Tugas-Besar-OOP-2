@@ -6,7 +6,8 @@ import javax.swing.*;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
-    private static GamePanel instance = null;
+    // private static GamePanel instance = null;
+    // private static Object lock = new Object();
 
     // SPRITE SETTINGS
     public final int originalTileSize = 16;    // sprite 16x16
@@ -23,16 +24,24 @@ public class GamePanel extends JPanel implements Runnable {
     Game game = new Game();
 
     public GamePanel() {
-        System.out.println(screenHeight);
+        // System.out.println(screenHeight);
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
     }
 
-    public static GamePanel getInstance() {
-        if (instance == null) instance = new GamePanel();
-        return instance;
-    }
+    // public static GamePanel getInstance() {
+    //     GamePanel result = instance;
+    //     if (result == null) {
+    //         synchronized (lock) {
+    //             result = instance;
+    //             if (result == null) {
+    //                 instance = result = new GamePanel();
+    //             }
+    //         }
+    //     }
+    //     return result;
+    // }
 
     public void startGameThread() {
         gameThread = new Thread(this);
@@ -67,6 +76,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         // HARUS FILL MANUAL GABISA MAKE ARRAYS.FILL, KONTOLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
-        tileM.drawRoom(g2, test);
+        tileM.drawRoom(g2, game.currentView.render());
     }
 }
