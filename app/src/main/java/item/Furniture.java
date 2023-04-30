@@ -4,17 +4,19 @@ public class Furniture extends Item {
     // Attributes
     private String name;
     private String category;
+    private String renderChar;
     private int priceValue;
     private int width;
     private int length;
 
     // Constructor
-    public Furniture(String name, int width, int length) {
+    public Furniture(String name) {
         this.name = name;
         this.category = "furniture";
         this.setPrice(name);
         this.setLength(name);
         this.setWidth(name);
+        this.setRenderChar(name);
     }
 
     public String getName() {
@@ -35,6 +37,10 @@ public class Furniture extends Item {
 
     public int getLength() {
         return length;
+    }
+
+    public char getRenderChar() {
+        return renderChar.charAt(0);
     }
 
     public void setPrice(String name) {
@@ -94,6 +100,26 @@ public class Furniture extends Item {
             this.width = 3;
         } else if (name.equals("jam")) {
             this.width = 1;
+        }
+    }
+
+    public void setRenderChar(String name) {
+        if (name.equals("kasur single")) {
+            this.renderChar = "b";
+        } else if (name.equals("kasur queen size")) {
+            this.renderChar = "b";
+        } else if (name.equals("kasur king size")) {
+            this.renderChar = "b";
+        } else if (name.equals("toilet")) {
+            this.renderChar = "t";
+        } else if (name.equals("kompor gas")) {
+            this.renderChar = "k";
+        } else if (name.equals("kompor listrik")) {
+            this.renderChar = "k";
+        } else if (name.equals("meja dan kursi")) {
+            this.renderChar = "m";
+        } else if (name.equals("jam")) {
+            this.renderChar = "j";
         }
     }
 }
