@@ -25,4 +25,13 @@ public class Input {
     public String next() {
         return scan.next();
     }
+
+    public String nextLine() {
+        return scan.nextLine();
+    }
+
+    public void enterUntukLanjut() {
+        System.out.println("\n(Tekan ENTER untuk lanjut)");
+        scan.nextLine();
+    }
 }

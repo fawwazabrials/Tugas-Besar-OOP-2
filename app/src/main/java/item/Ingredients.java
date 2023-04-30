@@ -1,6 +1,6 @@
 package item;
 
-public class Ingredients extends
+public class Ingredients extends Food {
 
     private String name;
     private String category;

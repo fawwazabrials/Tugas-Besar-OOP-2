@@ -11,7 +11,9 @@ public class App {
         new TitleScreen();
 
         Game game = new Game();
-        game.showGamePanel();
+        while (true) {
+            game.showGamePanel();
+        }
     }
 
     
