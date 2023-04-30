@@ -53,9 +53,7 @@ public class Game {
 
         if (input.equals("S")) {
             showSimInfo(currentSim);
-        }
-
-        if (input.equals("E")) {
+        } else if (input.equals("E")) {
             try {
                 editRoom(currentSim);
             } catch (Exception e) {
@@ -105,7 +103,6 @@ public class Game {
 
     public static long getTime() {return gameTime;}
 
-    // Masih ada yang kurang, class Furniture belom kelar
     public void editRoom(Sim currentSim){
 
         // Checking if Sim able to edit room
