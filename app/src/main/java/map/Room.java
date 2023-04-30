@@ -44,9 +44,11 @@ public class Room implements RoomAction, Renderable {
     // Setter Method
     public void setRoomName(String roomName) {this.roomName = roomName;}
     
-    // public Room makeDefaultRoom() {
-    //     // Room room = new Room("");
-    // }
+    public Room makeDefaultRoom() {
+        Room room = new Room("Bed Room");
+        
+        return room;
+    }
 
     public boolean isPlaceable(Furniture furniture, int x, int y) {
         if (furniture.getLength() + x > width || furniture.getLength() + y > length ) {

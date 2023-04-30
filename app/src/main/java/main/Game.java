@@ -175,7 +175,6 @@ public class Game {
 
     public static long getTime() {return gameTime;}
 
-    // Masih ada yang kurang, class Furniture belom kelar
     public void editRoom(Sim currentSim){
 
         // Checking if Sim able to edit room
