@@ -9,12 +9,16 @@ import map.World;
 import util.ClearScreen;
 import util.Input;
 import item.*;
+import map.*;
 
 public class Game {
     private Renderable currentView;
     private Sim currentSim;
     private World world;
     private static long gameTime, day;
+
+    private boolean isUpgrading;
+    private final Object upgradeLock = new Object();
 
     private long dayLastSimAdded = -1;
     Input scan = Input.getInstance();
@@ -63,13 +67,19 @@ public class Game {
         }
         else if (input.equals("X")) {
             System.exit(0);
-        }
-
+        } 
         else if (input.equals("E")) {
             try {
                 editRoom(currentSim);
             } catch (Exception e) {
-                
+                System.out.println(e.getMessage());
+            }
+        } 
+        else if (input.equals("U")) {
+            try {
+                upgradeHouse();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
 
@@ -190,7 +200,7 @@ public class Game {
             System.out.println("==========================");
             
             if (currentSim.getSimItems().isEmpty()) {
-                System.out.println("There is no furniture in your inventory.");
+                throw new IllegalArgumentException("No furniture found.");
             } else {
                 for (Item item : currentSim.getSimItems()) {
                     if (item instanceof Furniture) {
@@ -253,5 +263,76 @@ public class Game {
         } else {
             throw new IllegalArgumentException("Invalid input.");
         }
+    }
+
+    public void upgradeHouse() {
+        synchronized(upgradeLock) {
+            if (isUpgrading) {
+                throw new IllegalArgumentException("House still in upgrade.");
+            }
+            isUpgrading = true;
+        }
+
+        System.out.println("House Map:");
+        currentSim.getHouse().printHouse();
+
+        System.out.print("ENTER NEW ROOM NAME: ");
+        String roomName = scan.next();
+
+        System.out.print("ENTER ROOM AS BENCHMARK: ");
+        String benchmark = scan.next();
+        Room benchmarkRoom = null;
+        
+        for (Room room : currentSim.getHouse().getRooms()) {
+            if (room.getRoomName().equals(benchmark)) {
+                benchmarkRoom = room;
+                break;
+            }
+        }
+
+        if (benchmarkRoom == null) {
+            synchronized(upgradeLock) {
+                isUpgrading = false;
+            }
+            throw new IllegalArgumentException("Benchmark room not found.");
+        }
+        
+        System.out.println("Direction : (N)orth  (S)outh  (E)ast  (W)est");
+        System.out.print("ENTER DIRECTION BASED ON BENCHMARK ROOM: ");
+        String direction = scan.next();
+        Direction dir = null;
+        
+        if (direction.equals("N")) {
+            dir = Direction.NORTH;
+        } else if (direction.equals("S")) {
+            dir = Direction.SOUTH;
+        } else if (direction.equals("E")) {
+            dir = Direction.EAST;
+        } else if (direction.equals("W")) {
+            dir = Direction.WEST;
+        } else {
+            synchronized(upgradeLock) {
+                isUpgrading = false;
+            }
+            throw new IllegalArgumentException("Invalid direction.");
+        }
+
+        Room target = benchmarkRoom;
+        Direction targetDir = dir;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(18 * 60 * 1000);
+                    currentSim.getHouse().addRoom(roomName, target, targetDir);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                } finally {
+                    synchronized(upgradeLock) {
+                        isUpgrading = false;
+                    }
+                }
+            }
+        }).start();
     }
 }
