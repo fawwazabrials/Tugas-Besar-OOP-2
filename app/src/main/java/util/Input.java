@@ -1,5 +1,6 @@
 package util;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Input {
@@ -32,6 +33,10 @@ public class Input {
 
     public void enterUntukLanjut() {
         System.out.println("\n(Tekan ENTER untuk lanjut)");
-        scan.nextLine();
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
