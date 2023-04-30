@@ -16,7 +16,7 @@ public class Game {
     private World world;
     private static long gameTime, day;
 
-    private long dayLastSimAdded = -2;
+    private long dayLastSimAdded = -1;
     Input scan = Input.getInstance();
 
     public Game() {
@@ -65,12 +65,17 @@ public class Game {
             System.exit(0);
         }
 
-        if (input.equals("E")) {
+        else if (input.equals("E")) {
             try {
                 editRoom(currentSim);
             } catch (Exception e) {
                 
             }
+        }
+
+        else {
+            System.out.println("\nMasukkan input sesuai dengan opsi diatas!");
+            scan.enterUntukLanjut();
         }
     }
 
@@ -82,29 +87,31 @@ public class Game {
         int simNum = world.getSims().size();
 
         if (simNum <= 1) {
-            System.out.println("Kamu hanya memiliki 1 sim! Silahkan buat sim lain untuk dimainkan.");
+            System.out.println("\nKamu hanya memiliki 1 sim! Silahkan buat sim lain untuk dimainkan.");
             scan.enterUntukLanjut();
         } else {
             System.out.println("\nPilih sim mana yang ingin dimainkan: ");
             int cnt = 1;
             for (int i=0; i<simNum; i++) {
-                if (!world.getSims().get(0).equals(currentSim)) { // Bukan sim yang sekarang lagi dimainin
-                    System.out.println(cnt + ". " + world.getSims().get(i).getName());
-                } else {
+                if (world.getSims().get(i) == currentSim) { // Bukan sim yang sekarang lagi dimainin
                     System.out.println(cnt + ". " + world.getSims().get(i).getName() + " (Sim sekarang)");
+                } else {
+                    System.out.println(cnt + ". " + world.getSims().get(i).getName());
                 }
                 cnt++;
             }
 
             int input = -1;
             while (input == -1) {
-                System.out.println("PILIH SIM: ");
+                System.out.print("PILIH SIM: ");
+                input = scan.nextInt();
+
                 if (input <= 0 || input > simNum) {
-                    System.out.println("Masukan angka di dalam batas sim!");
+                    System.out.println("\nMasukan angka di dalam batas sim!");
                     input = -1;
                 } else {
-                    if (world.getSims().get(input-1).equals(currentSim)) {
-                        System.out.println("Tidak bisa mengganti ke sim yang sedang dimainkan!");
+                    if (world.getSims().get(input-1) == currentSim) {
+                        System.out.println("\nTidak bisa mengganti ke sim yang sedang dimainkan!");
                         scan.enterUntukLanjut();
                     } else {
                         changeSim(world.getSims().get(input-1));
@@ -117,6 +124,7 @@ public class Game {
     public void addSimOption() {
         if (day <= dayLastSimAdded) {
             System.out.println("\nSim tidak bisa ditambahkan! Sim hanya bisa ditambahkan setiap 1 hari.");
+            System.out.println(day + " <= " + dayLastSimAdded);
             scan.enterUntukLanjut();
         } else {
             System.out.print("ENTER SIM NAME: ");
@@ -131,9 +139,7 @@ public class Game {
                     
                 }
             }
-            currentSim = world.getSims().get(0);
-            currentView = currentSim.getRoom();
-            dayLastSimAdded = day;
+            dayLastSimAdded = -1;
         }
     }
 
@@ -143,6 +149,8 @@ public class Game {
 
     public void startNew() {
         addSimOption();
+        currentSim = world.getSims().get(0);
+        currentView = currentSim.getRoom();
     }
 
     public void changeSim(Sim newSim) {
