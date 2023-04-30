@@ -21,7 +21,7 @@ public class GamePanel extends JPanel implements Runnable {
     // DRAW COMPONENTS
     TileManager tileM = new TileManager(this);
     Thread gameThread;
-    Game game = new Game();
+    Game game = new Game(this);
 
     public GamePanel() {
         // System.out.println(screenHeight);

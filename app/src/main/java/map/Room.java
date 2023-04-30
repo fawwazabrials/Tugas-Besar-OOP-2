@@ -17,7 +17,7 @@ public class Room implements RoomAction, Renderable {
     public Room(String roomName) {   
         furnitures = new ArrayList<Furniture>();
         roomGrid = new Furniture[width][length];
-        Arrays.fill(roomGrid, null); // Isi grid sama null semua
+        createBlankRoom(); // Isi grid sama null semua
 
         connectedRooms = new EnumMap<>(Direction.class);
 
@@ -27,6 +27,14 @@ public class Room implements RoomAction, Renderable {
         connectedRooms.put(Direction.SOUTH, null);
         connectedRooms.put(Direction.EAST, null);
         connectedRooms.put(Direction.WEST, null);
+    }
+
+    public void createBlankRoom() {
+        for (int i=0; i<width; i++) {
+            for (int j=0; j<length; j++) {
+                roomGrid[i][j] = null;
+            }
+        }
     }
 
     // Getter Method

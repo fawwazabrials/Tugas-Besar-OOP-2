@@ -1,21 +1,26 @@
 package map;
 import java.util.*;
 
+import main.GamePanel;
+
 public class World {
     private static World instance = null;
     private List<House> houses = new ArrayList<>();
     private House[][] worldMap;
+    public GamePanel gp;
 
     // Private Constructor
-    public World() {
+    public World(GamePanel gp) {
+        this.gp = gp;
+
         int width = 64;
         int length = 64;
         worldMap = new House[width][length];
     }
 
-    public static World getInstance() {
+    public static World getInstance(GamePanel gp) {
         if (instance == null) {
-            instance = new World();
+            instance = new World(gp);
         }
         return instance;
     }
@@ -27,7 +32,7 @@ public class World {
         if (worldMap[x][y] != null) {
             throw new IllegalArgumentException("House already exists");
         }
-        House newHouse = new House(x, y);
+        House newHouse = new House(gp, x, y);
         houses.add(newHouse);
         worldMap[x][y] = newHouse;
     }

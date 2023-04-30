@@ -2,6 +2,7 @@ package map;
 import java.util.*;
 
 import entity.Sim;
+import main.GamePanel;
 
 import java.awt.Point;
 
@@ -13,7 +14,7 @@ public class House implements HouseAction{
     private List<Room> rooms;
     private Map<Point, Room> roomMap;
 
-    public House(int x, int y) {
+    public House(GamePanel gp, int x, int y) {
         this.x = x;
         this.y = y;
         rooms = new ArrayList<Room>();
@@ -21,7 +22,7 @@ public class House implements HouseAction{
         roomMap = new HashMap<>();
         roomMap.put(new Point(0, 0), rooms.get(0));
 
-        owner = new Sim(this, rooms.get(0));
+        owner = new Sim(gp, this, rooms.get(0));
 
     }
 

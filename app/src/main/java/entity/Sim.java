@@ -2,6 +2,7 @@ package entity;
 
 import java.util.List;
 
+import main.Game;
 import main.GamePanel;
 import map.House;
 import map.Room;
@@ -21,9 +22,10 @@ public class Sim implements SimAction{
 
     GamePanel gp;
 
-    public Sim(GamePanel gp, House house, List<Item> simItems, Room currRoom) {
-        this.house = house;
-        this.simItems = simItems;
+    public Sim(GamePanel gp, House house, Room currRoom) {
+        this.gp = gp;
+        // this.house = house;
+        // this.simItems = simItems;
         this.currRoom = currRoom;
         
         mood = 100;
