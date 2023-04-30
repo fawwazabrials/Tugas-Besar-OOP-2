@@ -1,7 +1,7 @@
 package entity;
 
 import java.util.List;
-import java.util.ArrayList
+import java.util.ArrayList;
 
 import map.House;
 import map.Room;
@@ -34,10 +34,17 @@ public class Sim extends Exception implements SimAction, Runnable {
         this.house = house;
         this.currRoom = currRoom;
         
-        mood = 100;
-        hunger = 100;
-        health = 100;
+        mood = 80;
+        hunger = 80;
+        health = 80;
+
+        money = 100;
+
+        x = 5;
+        y = 3;
     }
+
+    public String getName() {return name;}
 
     public House getHouse() {
         return house;
@@ -83,6 +90,12 @@ public class Sim extends Exception implements SimAction, Runnable {
         this.money+= money;
     }
 
+    public int getX() {return x;}
+    public void setX(int newX) {x = newX;}
+
+    public int getY() {return y;}
+    public void setY(int newY) {y = newY;}
+
     @Override
     public void work(int time) {
         /*
@@ -112,9 +125,9 @@ public class Sim extends Exception implements SimAction, Runnable {
             }
             
         }
-        else {
-            throw new Exception("Please try again.");
-        }
+        // else {
+        //     throw new Exception("Please try again.");
+        // }
     }
 
     @Override
@@ -128,9 +141,9 @@ public class Sim extends Exception implements SimAction, Runnable {
             mood+= (10*time/20000);
             Game.moveTime(time);
         }
-        else {
-            throw new Exception("Please try again.");
-        }
+        // else {
+        //     throw new Exception("Please try again.");
+        // }
     }
 
     @Override
@@ -198,9 +211,9 @@ public class Sim extends Exception implements SimAction, Runnable {
             }
             Game.moveTime(time);
         }
-        else {
-            throw new Exception("Not in inventory!");
-        }
+        // else {
+        //     throw new Exception("Not in inventory!");
+        // }
     }
     @Override
     public void cook(int time, Food dish) {
@@ -223,12 +236,12 @@ public class Sim extends Exception implements SimAction, Runnable {
 
     @Override
     public void buyItem(Item item) {
-        new Thread(new Runnable() {
-            public void run() {
-                delay(waktu antar);
-                add inventory
-            }
-        }).start();
+        // new Thread(new Runnable() {
+        //     public void run() {
+        //         delay(waktu antar);
+        //         add inventory
+        //     }
+        // }).start();
     }
 
     @Override
