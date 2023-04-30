@@ -43,47 +43,29 @@ public class Sim implements SimAction, Runnable {
     }
 
 
+    public String getName() {return name;}
 
-    public House getHouse() {
-        return house;
-    }
+    public House getHouse() {return house;}
 
-    public List<Item> getSimItems() {
-        return simItems;
-    }
+    public List<Item> getSimItems() {return simItems;}
 
-    public Room getRoom() {
-        return currRoom;
-    }
-
+    public Room getRoom() {return currRoom;}
     public void setRoom(Room newRoom) {
         currRoom = newRoom;
     }
 
-    public String getJob() {
-        return job;
-    }
-
+    public String getJob() {return job;}
     public void setJob(String job) {
         this.job = job;
     }
 
-    public int getMood() {
-        return mood;
-    }
+    public int getMood() {return mood;}
 
-    public int getHunger() {
-        return hunger;
-    }
-    
-    public int getHealth() {
-        return health;
-    }
+    public int getHunger() {return hunger;}   
 
-    public int getMoney() {
-        return money;
-    }
+    public int getHealth() {return health;}
 
+    public int getMoney() {return money;}
     public void setMoney(int money) {
         this.money+= money;
     }
