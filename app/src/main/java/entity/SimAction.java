@@ -41,6 +41,7 @@ public interface SimAction {
     /*
      * -20 kekenyangan, +10 mood / 1 siklus (10 detik)
      */
+    
 
 
     /********************************* UTIL *********************************/
