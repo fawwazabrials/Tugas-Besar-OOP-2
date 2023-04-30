@@ -55,6 +55,15 @@ public class Game {
         System.out.print("\nENTER COMMAND: ");
         String input = scan.next();
 
+        if (input.equals("Ch")) {
+            changeSimOption();
+        } 
+        else if (input.equals("A")) {
+            addSimOption();
+        }
+        else if (input.equals("X")) {
+            System.exit(0);
+        } else if (input.equals("E")) {
             try {
                 editRoom(currentSim);
             } catch (Exception e) {
