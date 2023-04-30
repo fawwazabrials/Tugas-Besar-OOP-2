@@ -1,11 +1,15 @@
 package map;
 import java.util.*;
+
+import entity.Sim;
+
 import java.awt.Point;
 
 public class House implements HouseAction{
     // House coordinate
     private int x;
     private int y;
+    private Sim owner;
     private List<Room> rooms;
     private Map<Point, Room> roomMap;
 
@@ -16,11 +20,15 @@ public class House implements HouseAction{
         rooms.add(new Room("Bed Room"));
         roomMap = new HashMap<>();
         roomMap.put(new Point(0, 0), rooms.get(0));
+
+        owner = new Sim(this, rooms.get(0));
+
     }
 
     // Getter Methods
     public int getX() {return x;}
     public int getY() {return y;}
+    public Sim getOwner() {return owner;}
     public List<Room> getRooms() {return rooms;}
 
     public void addRoom(String roomName, Room benchmarkRoom, Direction direction) {
