@@ -20,17 +20,14 @@ public class Sim implements SimAction, Runnable {
     private int hunger;
     private int health;
     private int money;
+    private String job;
 
     private long timeLastPoop;
     private long timeLastEat;
     private long timeLastSleep;
     private long timeLastUpdate;
-
-
     private String job;
-
     Thread simThread;
-
 
     public Sim(House house, Room currRoom, String name) {
         this.name = name;
@@ -42,30 +39,46 @@ public class Sim implements SimAction, Runnable {
         health = 100;
     }
 
+    public House getHouse() {
+        return house;
+    }
 
-    public String getName() {return name;}
+    public List<Item> getSimItems() {
+        return simItems;
+    }
 
-    public House getHouse() {return house;}
+    public Room getRoom() {
+        return currRoom;
+    }
 
-    public List<Item> getSimItems() {return simItems;}
-
-    public Room getRoom() {return currRoom;}
     public void setRoom(Room newRoom) {
         currRoom = newRoom;
     }
 
-    public String getJob() {return job;}
+    public String getJob() {
+        return job;
+    }
+
     public void setJob(String job) {
         this.job = job;
     }
 
-    public int getMood() {return mood;}
+    public int getMood() {
+        return mood;
+    }
 
-    public int getHunger() {return hunger;}   
+    public int getHunger() {
+        return hunger;
+    }
+    
+    public int getHealth() {
+        return health;
+    }
 
-    public int getHealth() {return health;}
+    public int getMoney() {
+        return money;
+    }
 
-    public int getMoney() {return money;}
     public void setMoney(int money) {
         this.money+= money;
     }
@@ -75,26 +88,35 @@ public class Sim implements SimAction, Runnable {
         /*
         * +X money (X sesuai pekerjaan); -10 kekenyangan, -10 mood / 30 detik
         */
-        
-        
 
-        hunger-= ((10*time)/30);
-        mood-= ((10*time)/30);
-        if(job == "Badut Sulap") {
-            money += (15*time/4);
+        if(time%120 == 0) {
+            if(time > 240000) {
+                hunger-= ((10*time)/30000);
+                mood-= ((10*time)/30000);
+
+                if(job == "Badut Sulap") {
+                    money += (15*time/240000);
+                }
+                else if(job == "Koki") {
+                    money += (30*time/240000);
+                }
+                else if(job == "Polisi") {
+                    money += (35*time/240000);
+                }
+                else if(job == "Programmer") {
+                    money += (45*time/240000);
+                }
+                else if(job == "Dokter") {
+                    money += (50*time/240000);
+                }
+                Game.moveTime(time);
+            }
+            
         }
-        else if(job == "Koki") {
-            money += (30*time/4);
+        else {
+            throw new Exception("Please try again.");
         }
-        else if(job == "Polisi") {
-            money += (35*time/4);
-        }
-        else if(job == "Programmer") {
-            money += (45*time/4);
-        }
-        else if(job == "Dokter") {
-            money += (50*time/4);
-        }
+        
     }
 
     @Override
@@ -102,9 +124,15 @@ public class Sim implements SimAction, Runnable {
         /*
         * +5 kesehatan, -5 kekenyangan, +10 mood / 20 detik
         */
-        health+= (5*time/20);
-        hunger-= (5*time/20);
-        mood+= (10*time/20);
+        if(time%20 == 0) {
+            health+= (5*time/20000);
+            hunger-= (5*time/20000);
+            mood+= (10*time/20000);
+            Game.moveTime(time);
+        }
+        else {
+            throw new Exception("Please try again.");
+        }
     }
 
     @Override
@@ -112,8 +140,9 @@ public class Sim implements SimAction, Runnable {
         /*
         * +30 mood, +20 kesehatan / 4 menit
         */
-        mood+= (30*time/4);
-        health+= (20*time/4);
+        mood+= (30*time/240000);
+        health+= (20*time/240000);
+        Game.moveTime(time);
     }
 
     @Override
@@ -121,32 +150,63 @@ public class Sim implements SimAction, Runnable {
         /*
         * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
         */
-        
+        switch(food.getName()) {
+            case "Nasi" :
+                hunger+= (5*time/30000);
+            case "Kentang" :
+                hunger+= (4*time/30000);
+            case "Ayam" : 
+                hunger+= (8*time/30000);
+            case "Sapi" : 
+                hunger+= (15*time/30000);
+            case "Wortel" : 
+                hunger+= (2*time/30000);
+            case "Bayam" : 
+                hunger+= (2*time/30000);
+            case "Kacang" : 
+                hunger+= (2*time/30000);
+            case "Susu" : 
+                hunger+= (1*time/30000);
+            case "Nasi Ayam" :
+                hunger+= (16*time/30000);
+            case "Nasi Kari" :
+                hunger+= (30*time/30000);
+            case "Susu Kacang" : 
+                hunger+= (5*time/30000);
+            case "Tumis Sayur" :
+                hunger+= (5*time/30000);
+            case "Bistik" : 
+                hunger+= (22*time/30000);
+            }
+        Game.moveTime(time);
     }
-
     @Override
     public void cook(int time, Food dish) {
-        
+
+        Game.moveTime(time);
     }
 
     @Override
     public void visit(int time, Sim target) {
         
+        Game.moveTime(time);
     }
 
     @Override
     public void poop(int time) {
-        // Game.moveTime(time);
+        hunger-= (20*time/10000);
+        mood+= (10*time/10000);
+        Game.moveTime(time);
     }
 
     @Override
     public void buyItem(Item item) {
-        // new Thread(new Runnable() {
-        //     public void run() {
-        //         // delay(waktu nganter);
-        //         // add inventory
-        //     }
-        // }).start();
+        new Thread(new Runnable() {
+            public void run() {
+                delay(waktu antar);
+                add inventory
+            }
+        }).start();
     }
 
     @Override
@@ -156,17 +216,21 @@ public class Sim implements SimAction, Runnable {
 
     @Override
     public void move(Room target) {
-        
+        currRoom = target;
     }
 
     @Override
     public void stargaze(int time) {
-        
+        mood += (20*time/60000);
+        hunger -= (15*time/60000);
+        Game.moveTime(time);
     }
 
     @Override
     public void read(int time) {
-        
+        mood += (20*time/60000);
+        hunger -= (15*time/60000);
+        Game.moveTime(time);
     }
 
 
