@@ -195,7 +195,7 @@ public class Game {
 
             System.out.print("ENTER FURNITURE NAME: ");
             String itemName = scan.next();
-            Furniture furniture;
+            Furniture furniture = null;
              
             for (Item item : currentSim.getSimItems()) {
                 if (item instanceof Furniture && itemName.equals(item.getName())) {
