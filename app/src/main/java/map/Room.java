@@ -46,20 +46,21 @@ public class Room implements RoomAction, Renderable {
     
     public static Room makeDefaultRoom() {
         Room room = new Room("BedRoom");
-        room.addFurniture(new Furniture("kasur", 4, 1), 0, 0);
-        room.addFurniture(new Furniture("toilet", 1, 1), 5, 5);
-        room.addFurniture(new Furniture("kompor", 2, 1), 5, 3);
-        room.addFurniture(new Furniture("meja dan kursi", 3, 3), 0, 1);
-        room.addFurniture(new Furniture("jam", 1, 1), 0, 5);
+        room.addFurniture(new Furniture("kasur single"), 0, 0);
+        room.addFurniture(new Furniture("toilet"), 5, 5);
+        room.addFurniture(new Furniture("kompor gas"), 5, 2);
+        room.addFurniture(new Furniture("meja dan kursi"), 2, 0);
+        room.addFurniture(new Furniture("jam"), 0, 5);
         return room;
     }
 
     public boolean isPlaceable(Furniture furniture, int x, int y) {
-        if (furniture.getLength() + x > width || furniture.getLength() + y > length ) {
+        if (furniture.getWidth() + x > width || furniture.getLength() + y > length ) {
             return false;
         }
-        for (int i = x; i < furniture.getLength() + x; i++) {
+        for (int i = x; i < furniture.getWidth() + x; i++) {
             for (int j = y; j < furniture.getLength() + y; j++) {
+                // System.out.println("checking: " + furniture.getName() + " at " + i + ", " + j);
                 if (roomGrid[x][y] != null) {
                     return false;
                 }
@@ -140,7 +141,7 @@ public class Room implements RoomAction, Renderable {
             throw new IllegalArgumentException("Furniture cannot be placed");
         }
         furnitures.add(furniture);
-        for (int i = x; i < x + furniture.getLength(); i++) {
+        for (int i = x; i < x + furniture.getWidth(); i++) {
             for (int j = y; j < y + furniture.getLength(); j++) {
                 roomGrid[i][j] = furniture;
             }
@@ -155,7 +156,7 @@ public class Room implements RoomAction, Renderable {
                 if (roomGrid[i][j] == null) {
                     renderMap[i][j] = '.';
                 } else {
-                    renderMap[i][j] = roomGrid[i][j].getName().charAt(0);
+                    renderMap[i][j] = roomGrid[i][j].getRenderChar();
                 }
             }
         }

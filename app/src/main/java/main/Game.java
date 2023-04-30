@@ -39,6 +39,9 @@ public class Game {
 
     public void showRender() {
         char[][] rendered = currentView.render();
+
+        rendered[currentSim.getX()][currentSim.getY()] = 'S'; // tampilin sim
+
         for (int i=0; i<6; i++) {
             for (int j=0; j<6; j++) {
                 System.out.print(rendered[i][j] + " ");
