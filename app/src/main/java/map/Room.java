@@ -17,7 +17,11 @@ public class Room implements RoomAction, Renderable {
     public Room(String roomName) {   
         furnitures = new ArrayList<Furniture>();
         roomGrid = new Furniture[width][length];
-        Arrays.fill(roomGrid, null); // Isi grid sama null semua
+        for (int i=0; i<width; i++) {
+            for (int j=0; j<length; j++) {
+                roomGrid[i][j] = null;
+            }
+        }
 
         connectedRooms = new EnumMap<>(Direction.class);
 
@@ -40,6 +44,10 @@ public class Room implements RoomAction, Renderable {
     // Setter Method
     public void setRoomName(String roomName) {this.roomName = roomName;}
     
+    // public Room makeDefaultRoom() {
+    //     // Room room = new Room("");
+    // }
+
     public boolean isPlaceable(Furniture furniture, int x, int y) {
         if (furniture.getLength() + x > width || furniture.getLength() + y > length ) {
             return false;
@@ -130,13 +138,13 @@ public class Room implements RoomAction, Renderable {
         }
     }
 
-    public int[][] render() {
-        int[][] renderMap = new int[width][length];
+    public char[][] render() {
+        char[][] renderMap = new char[width][length];
 
         for (int i=0; i<width; i++) {
             for (int j=0; j<length; j++) {
                 if (roomGrid[i][j] == null) {
-                    renderMap[i][j] = 0;
+                    renderMap[i][j] = '.';
                 }
             }
         }

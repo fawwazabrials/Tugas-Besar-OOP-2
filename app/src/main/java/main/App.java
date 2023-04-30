@@ -3,8 +3,16 @@
  */
 package main;
 
+import java.util.Scanner;
+import util.ClearScreen;
+
 public class App {
     public static void main(String[] args) {
-        
+        new TitleScreen();
+
+        Game game = new Game();
+        game.showGamePanel();
     }
+
+    
 }

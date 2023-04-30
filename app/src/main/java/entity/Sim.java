@@ -6,10 +6,13 @@ import map.House;
 import map.Room;
 import item.Food;
 import item.Item;
+import main.Game;
 
 
-public class Sim implements SimAction{
-    public int x, y, speed; // Game stuff
+public class Sim implements SimAction, Runnable {
+    private x, y;
+
+    private String name;
     private House house;
     private List<Item> simItems;
     private Room currRoom;
@@ -17,18 +20,29 @@ public class Sim implements SimAction{
     private int hunger;
     private int health;
     private int money;
+
+    private long timeLastPoop;
+    private long timeLastEat;
+    private long timeLastSleep;
+    private long timeLastUpdate;
+
+
     private String job;
 
+    Thread simThread;
 
-    public Sim(House house, List<Item> simItems, Room currRoom) {
+
+    public Sim(House house, Room currRoom, String name) {
+        this.name = name;
         this.house = house;
-        this.simItems = simItems;
         this.currRoom = currRoom;
         
         mood = 100;
         hunger = 100;
         health = 100;
     }
+
+
 
     public House getHouse() {
         return house;
@@ -40,6 +54,10 @@ public class Sim implements SimAction{
 
     public Room getRoom() {
         return currRoom;
+    }
+
+    public void setRoom(Room newRoom) {
+        currRoom = newRoom;
     }
 
     public String getJob() {
@@ -75,6 +93,9 @@ public class Sim implements SimAction{
         /*
         * +X money (X sesuai pekerjaan); -10 kekenyangan, -10 mood / 30 detik
         */
+        
+        
+
         hunger-= ((10*time)/30);
         mood-= ((10*time)/30);
         if(job == "Badut Sulap") {
@@ -133,12 +154,17 @@ public class Sim implements SimAction{
 
     @Override
     public void poop(int time) {
-
+        // Game.moveTime(time);
     }
 
     @Override
     public void buyItem(Item item) {
-        
+        // new Thread(new Runnable() {
+        //     public void run() {
+        //         // delay(waktu nganter);
+        //         // add inventory
+        //     }
+        // }).start();
     }
 
     @Override
@@ -159,5 +185,26 @@ public class Sim implements SimAction{
     @Override
     public void read(int time) {
         
+    }
+
+
+
+    @Override
+    public void run() {
+        // while (simThread != null) {
+        //     if (Game.getTime() > timeLastUpdate) {
+        //         long delta = Game.getTime() - timeLastUpdate;
+        //         timeLastUpdate += delta;
+        //         timeLastEat += delta;
+        //         timeLastPoop += delta;
+        //         timeLastSleep += delta;
+
+        //         // if (timeLastSleep > 4menit) {
+        //         //     health -= delta;
+        //         // }
+
+        //         // if (health == 0) simThread == null;
+        //     }
+        // }
     }
 }

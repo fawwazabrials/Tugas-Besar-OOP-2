@@ -3,9 +3,10 @@ package main;
 import java.util.Scanner;
 
 import util.ClearScreen;
+import util.Input;
 
 public class TitleScreen {
-    Scanner scan = new Scanner(System.in);
+    Input scan = Input.getInstance();
 
     public TitleScreen() {
         show();
@@ -13,7 +14,8 @@ public class TitleScreen {
 
     private void show() {
         System.out.println("1. Start game");
-        System.out.println("2. Quit");
+        System.out.println("2. Help");
+        System.out.println("3. Exit");
 
         getInput();
     }
@@ -23,11 +25,12 @@ public class TitleScreen {
         String input = scan.next();
 
         if (input.equals("1")) {
-            scan.close();
             // pass, quit from method
         }
         else if (input.equals("2")) {
-            scan.close();
+            // TODO: HELP!
+        }
+        else if (input.equals("3")) {
             System.exit(0);
         }
         else {
