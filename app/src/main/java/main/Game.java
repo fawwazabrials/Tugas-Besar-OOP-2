@@ -8,6 +8,7 @@ import map.Renderable;
 import map.World;
 import util.ClearScreen;
 import util.Input;
+import item.*;
 
 public class Game {
     private Renderable currentView;
@@ -52,6 +53,14 @@ public class Game {
         if (input.equals("S")) {
             showSimInfo(currentSim);
         }
+
+        if (input.equals("E")) {
+            try {
+                editRoom(currentSim);
+            } catch (Exception e) {
+                
+            }
+        }
     }
 
     public void actionOptions() {
@@ -94,4 +103,85 @@ public class Game {
     }
 
     public static long getTime() {return gameTime;}
+
+    // Masih ada yang kurang, class Furniture belom kelar
+    public void editRoom(Sim currentSim){
+
+        // Checking if Sim able to edit room
+
+        // if ....
+
+        System.out.println("\n(A)dd Furniture  (R)emove Furniture  (M)ove Furniture");
+        System.out.print("ENTER COMMAND: ");
+        String input = scan.next();
+
+        if (input.equals("A")) {
+            System.out.println("List of Furnitures:");
+            System.out.println("==========================");
+            
+            if (currentSim.getSimItems().isEmpty()) {
+                System.out.println("There is no furniture in your inventory.");
+            } else {
+                for (Item item : currentSim.getSimItems()) {
+                    if (item instanceof Furniture) {
+                        System.out.println(item.getName());
+                        System.out.println("--------------------------");
+                    }
+                }
+            }
+
+            System.out.print("ENTER FURNITURE NAME: ");
+            String itemName = scan.next();
+            Furniture furniture;
+             
+            for (Item item : currentSim.getSimItems()) {
+                if (item instanceof Furniture && itemName.equals(item.getName())) {
+                    furniture = (Furniture)item;
+                }
+            }
+
+            if (furniture == null) {
+                throw new IllegalArgumentException("Furniture not found.");
+            }
+
+            System.out.print("ENTER X COORDINATE: ");
+            int x = scan.nextInt();
+            System.out.print("ENTER Y COORDINATE: ");
+            int y = scan.nextInt();
+
+            currentSim.getRoom().addFurniture(furniture, x, y);
+        } else if (input.equals("R")) {
+            if (currentSim.getRoom().getFurnitures().isEmpty()) {
+                System.out.println("There is no furniture in this room.");
+            } else {
+                System.out.println("Furniture want to remove:");
+                System.out.print("ENTER X COORDINATE: ");
+                int x = scan.nextInt();
+                System.out.print("ENTER Y COORDINATE: ");
+                int y = scan.nextInt();
+
+                currentSim.getRoom().removeFurniture(x, y);
+            }
+        } else if (input.equals("M")) {
+            if (currentSim.getRoom().getFurnitures().isEmpty()) {
+                System.out.println("There is no furniture in this room.");
+            } else {
+                System.out.println("Furniture want to move:");
+                System.out.print("ENTER X COORDINATE: ");
+                int x = scan.nextInt();
+                System.out.print("ENTER Y COORDINATE: ");
+                int y = scan.nextInt();
+
+                System.out.println("New coordinate:");
+                System.out.print("ENTER NEW X COORDINATE: ");
+                int newX = scan.nextInt();
+                System.out.print("ENTER NEW Y COORDINATE: ");
+                int newY = scan.nextInt();
+
+                currentSim.getRoom().moveFurniture(x, y, newX, newY);
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid input.");
+        }
+    }
 }
