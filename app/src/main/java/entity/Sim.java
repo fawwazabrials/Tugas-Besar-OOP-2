@@ -10,7 +10,7 @@ import main.Game;
 
 
 public class Sim implements SimAction, Runnable {
-    private x, y;
+    private int x, y;
 
     private String name;
     private House house;

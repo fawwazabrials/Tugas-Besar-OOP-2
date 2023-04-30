@@ -40,13 +40,14 @@ public class Game {
     }
 
     public void showOptions() {
-        System.out.println("\n(S)im Info  (I)nventory  (A)ctions  (B)uy Item  (M)ove Sim");
-        System.out.println("(C)reate Sim  (Ch)ange Sim  (E)dit Room");
-        System.out.println("(U)pgrade House");
+        System.out.println("\n(S)im Info        (C)urrent Location  (I)nventory");
+        System.out.println("(U)pgrade House   (M)ove Sim          (E)dit Room");
+        System.out.println("(A)dd Sim         (Ch)ange Sim        (L)ist Object  ");
+        System.out.println("(G)o to Object    (A)ction            (S)hop");
     }
 
     public void getInput() {
-        System.out.print("ENTER COMMAND: ");
+        System.out.print("\nENTER COMMAND: ");
         String input = scan.next();
 
         if (input.equals("S")) {
