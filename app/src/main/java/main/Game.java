@@ -348,7 +348,7 @@ public class Game {
         String input = scan.next();
 
         if (input.equals("A")) {
-            System.out.println("List of Furnitures:");
+            System.out.println("\nList of Furnitures:");
             System.out.println("==========================");
             
             if (currentSim.getSimItems().isEmpty()) {
@@ -362,7 +362,7 @@ public class Game {
                 }
             }
 
-            System.out.print("ENTER FURNITURE NAME: ");
+            System.out.print("\nENTER FURNITURE NAME: ");
             String itemName = scan.next();
             Furniture furniture = null;
              
@@ -386,25 +386,25 @@ public class Game {
             if (currentSim.getRoom().getFurnitures().isEmpty()) {
                 throw new IllegalArgumentException("No furniture found.");
             } else {
-                System.out.println("Furniture want to remove:");
+                System.out.println("\nFurniture want to remove:");
                 System.out.print("ENTER X COORDINATE: ");
                 int x = scan.nextInt();
                 System.out.print("ENTER Y COORDINATE: ");
                 int y = scan.nextInt();
 
-                currentSim.getRoom().removeFurniture(x, y);
+                currentSim.getSimItems().add(currentSim.getRoom().removeFurniture(x, y));        
             }
         } else if (input.equals("M")) {
             if (currentSim.getRoom().getFurnitures().isEmpty()) {
                 throw new IllegalArgumentException("No furniture found.");
             } else {
-                System.out.println("Furniture want to move:");
+                System.out.println("\nFurniture want to move:");
                 System.out.print("ENTER X COORDINATE: ");
                 int x = scan.nextInt();
                 System.out.print("ENTER Y COORDINATE: ");
                 int y = scan.nextInt();
 
-                System.out.println("New coordinate:");
+                System.out.println("\nNew coordinate:");
                 System.out.print("ENTER NEW X COORDINATE: ");
                 int newX = scan.nextInt();
                 System.out.print("ENTER NEW Y COORDINATE: ");
