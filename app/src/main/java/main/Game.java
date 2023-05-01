@@ -5,8 +5,7 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
 import entity.Sim;
-import map.Renderable;
-import map.World;
+import util.Angka;
 import util.ClearScreen;
 import util.Input;
 import item.*;
@@ -91,9 +90,37 @@ public class Game {
             listObjectOption(true);
         }
 
+        else if (input.equals("G")) {
+            goToObjectOption();
+        }
+
         else {
             System.out.println("\nMasukkan input sesuai dengan opsi diatas!");
             scan.enterUntukLanjut();
+        }
+    }
+
+    public void goToObjectOption() {
+        List<Furniture> furnitures = currentSim.getRoom().getFurnitures();
+        
+        if (furnitures.size() == 0) {
+            System.out.println("\nTidak ada objek di dalam ruangan!");
+            scan.enterUntukLanjut();
+        } else {
+            listObjectOption(false);
+
+            int input = -999;
+            while (input == -999) {
+                System.out.print("\nENTER OBJEK YANG DITUJU: ");
+                input = Angka.stringToInt(scan.next());
+
+                if (input <= 0 || input > furnitures.size()) {
+                    System.out.println("Masukkan angka dalam batas objek!");
+                } else {
+                    currentSim.goToObject(furnitures.get(input-1).getY(), furnitures.get(input-1).getX());
+                }
+
+            }
         }
     }
 
