@@ -2,6 +2,7 @@ package item;
 
 public class Furniture extends Item {
     // Attributes
+    private int x, y;
     private String name;
     private String category;
     private String renderChar;
@@ -10,7 +11,10 @@ public class Furniture extends Item {
     private int length;
 
     // Constructor
-    public Furniture(String name) {
+    public Furniture(String name, int x, int y) {
+        this.x = x;
+        this.y = y;
+
         this.name = name;
         this.category = "furniture";
         this.setPrice(name);
@@ -18,6 +22,12 @@ public class Furniture extends Item {
         this.setWidth(name);
         this.setRenderChar(name);
     }
+
+    public int getX() {return x;}
+    public void setX(int newX) {x = newX;}
+
+    public int getY() {return y;}
+    public void setY(int newY) {y = newY;}
 
     public String getName() {
         return name;
