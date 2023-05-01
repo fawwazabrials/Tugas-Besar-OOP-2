@@ -46,11 +46,11 @@ public class Room implements RoomAction, Renderable {
     
     public static Room makeDefaultRoom() {
         Room room = new Room("BedRoom");
-        room.addFurniture(new Furniture("kasur single"), 0, 0);
-        room.addFurniture(new Furniture("toilet"), 5, 5);
-        room.addFurniture(new Furniture("kompor gas"), 5, 2);
-        room.addFurniture(new Furniture("meja dan kursi"), 2, 0);
-        room.addFurniture(new Furniture("jam"), 0, 5);
+        room.addFurniture(new Furniture("kasur single", 0, 0), 0, 0);
+        room.addFurniture(new Furniture("toilet", 5, 5), 5, 5);
+        room.addFurniture(new Furniture("kompor gas", 5, 2), 5, 2);
+        room.addFurniture(new Furniture("meja dan kursi", 2, 0), 2, 0);
+        room.addFurniture(new Furniture("jam", 0, 5), 0, 5);
         return room;
     }
 
