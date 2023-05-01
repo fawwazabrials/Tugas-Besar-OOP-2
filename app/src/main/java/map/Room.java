@@ -39,6 +39,7 @@ public class Room implements RoomAction, Renderable {
     public int getLength() {return length;}
     public Map<Direction, Room> getConnectedRooms() {return connectedRooms;}
     public List<Furniture> getFurnitures() {return furnitures;}
+    public Furniture[][] getRoomGrid() {return roomGrid;}
 
 
     // Setter Method

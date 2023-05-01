@@ -33,6 +33,7 @@ public class Game {
     public void showGamePanel() {
         ClearScreen.clear();
         showRender();
+        showOverlapAction();
         showOptions();
         getInput();
     }
@@ -98,6 +99,56 @@ public class Game {
             System.out.println("\nMasukkan input sesuai dengan opsi diatas!");
             scan.enterUntukLanjut();
         }
+    }
+
+    public void showOverlapAction() {
+        Furniture overlap = getOverlapFurniture();
+
+        if (overlap == null) {
+
+        }
+        else {
+            if (overlap.getAction().equals("sleep")) {
+                System.out.println("\nApakah anda ingin tidur? (Y/N)");
+                String input = scan.next();
+                if (input.equals("Y")) {
+                    // TODO : tambahin method buat sleep
+                }
+            }
+            else if (overlap.getAction().equals("poop")) {
+                System.out.println("\nApakah anda ingin buang air? (Y/N)");
+                String input = scan.next();
+                if (input.equals("Y")) {
+                    // TODO : tambahin method buat poop
+                }
+            }
+            else if (overlap.getAction().equals("cook")) {
+                System.out.println("\nApakah anda ingin memasak? (Y/N)");
+                String input = scan.next();
+                if (input.equals("Y")) {
+                    // TODO : tambahin method buat cook
+                }
+            }
+            else if (overlap.getAction().equals("eat")) {
+                System.out.println("\nApakah anda ingin makan? (Y/N)");
+                String input = scan.next();
+                if (input.equals("Y")) {
+                    // TODO : tambahin method buat eat
+                }
+            }
+            else if (overlap.getAction().equals("seetime")) {
+                // apa ini langsung tunjukin waktu aja ya? hmm
+                System.out.println("\nApakah anda ingin melihat waktu? (Y/N)");
+                String input = scan.next();
+                if (input.equals("Y")) {
+                    // TODO : tambahin method buat seetime
+                }
+            }
+        }
+    }
+
+    public Furniture getOverlapFurniture() {
+        return currentSim.getRoom().getRoomGrid()[currentSim.getY()][currentSim.getX()];
     }
 
     public void goToObjectOption() {
