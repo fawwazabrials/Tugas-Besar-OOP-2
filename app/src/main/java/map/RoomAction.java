@@ -8,7 +8,7 @@ public interface RoomAction {
      * Menaruh Furniture di Room pada koordinat (x, y). Jika tidak bisa ditaruh, method akan mengembalikan error
      */
 
-    public void removeFurniture(int x, int y);
+    public Furniture removeFurniture(int x, int y);
     /*
      * Menghapus Furniture di Room pada koordinat (x, y). Jika tidak ada Furniture, method akan mengembalikan error
      */
