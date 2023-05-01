@@ -204,7 +204,7 @@ public class Sim extends Exception implements SimAction, Runnable {
                 throw new IllegalArgumentException("Not enough ingredients in inventory.");
             }
             break;
-            default: throw new IllegalArgumentException("No such dish to cook.")
+            default: throw new IllegalArgumentException("No such dish to cook.");
         }
         mood += 10;
         Game.moveTime((int) 1.5*dish.getHungerPoint());
