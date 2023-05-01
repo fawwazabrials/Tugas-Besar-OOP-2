@@ -12,9 +12,11 @@ public class Sim extends Exception implements SimAction, Runnable {
     private int x, y;
 
     private String name;
-    private House house;
-    private Inventory simItems;
+
+    private House simHouse, currHouse;
     private Room currRoom;
+
+    private Inventory simItems;
     private int mood;
     private int hunger;
     private int health;
@@ -29,7 +31,7 @@ public class Sim extends Exception implements SimAction, Runnable {
 
     public Sim(House house, Room currRoom, String name) {
         this.name = name;
-        this.house = house;
+        this.simHouse = house;
         this.currRoom = currRoom;
         
         mood = 80;
@@ -43,54 +45,37 @@ public class Sim extends Exception implements SimAction, Runnable {
     }
 
     public String getName() {return name;}
-
-    public House getHouse() {
-        return house;
-    }
-
-    public Inventory getSimItems() {
-        return simItems;
-    }
-
-    public Room getRoom() {
-        return currRoom;
-    }
-
+    public House getHouse() {return simHouse;}
+    public House getCurrHouse() {return currHouse;}
+    public Inventory getSimItems() {return simItems;}
+    public Room getRoom() {return currRoom;}
     public void setRoom(Room newRoom) {
         currRoom = newRoom;
     }
-
-    public String getJob() {
-        return job;
+    public String getJob() {return job;}
+    public void setJob(String job) {this.job = job;}
+    public int getMood() {return mood;}
+    public void setMood(int newMood) {
+        if (mood > 100) mood = 100;
+        else mood = newMood;
     }
-
-    public void setJob(String job) {
-        this.job = job;
+    public int getHunger() {return hunger;}
+    public void setHunger(int newHunger) {
+        if (hunger > 100) hunger = 100;
+        else hunger = newHunger;
     }
-
-    public int getMood() {
-        return mood;
+    public int getHealth() {return health;}
+    public void setHealth(int newHealth) {
+        if (health > 100) health = 100;
+        else health = newHealth;
     }
-
-    public int getHunger() {
-        return hunger;
-    }
-    
-    public int getHealth() {
-        return health;
-    }
-
-    public int getMoney() {
-        return money;
-    }
+    public int getMoney() {return money;}
 
     public void setMoney(int money) {
         this.money+= money;
     }
-
     public int getX() {return x;}
     public void setX(int newX) {x = newX;}
-
     public int getY() {return y;}
     public void setY(int newY) {y = newY;}
 
@@ -152,12 +137,12 @@ public class Sim extends Exception implements SimAction, Runnable {
         /*
         * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
         */
-        for(Map.Entry<Item, Integer> e : simItems.getItems("Food").entrySet()){
-            if(e.getKey().getName().equals(food.getName())){
-                hunger += (food.hungerPoints*(time%30000));
-            }
-        }
-        Game.moveTime(time);
+        // for(Map.Entry<Item, Integer> e : simItems.getItems("Food").entrySet()){
+        //     if(e.getKey().getName().equals(food.getName())){
+        //         hunger += (food.hungerPoints*(time%30000));
+        //     }
+        // }
+        // Game.moveTime(time);
     }
     @Override
     public void cook(int time, Food dish) {
