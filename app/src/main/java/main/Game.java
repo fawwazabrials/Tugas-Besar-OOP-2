@@ -12,18 +12,20 @@ import item.*;
 import map.*;
 
 public class Game {
-    private Renderable currentView;
-    private Sim currentSim;
-    private World world;
+    Renderable currentView;
+    Sim currentSim;
+    World world;
+    private GameSimOption simOption = new GameSimOption(this);
     private static long gameTime, day;
 
-    private boolean isUpgrading;
+    private boolean isUpgrading, overlapActionShowed;
     private final Object upgradeLock = new Object();
 
     private long dayLastSimAdded = -1;
-    Input scan = Input.getInstance();
+    protected Input scan = Input.getInstance();
 
     public Game() {
+        overlapActionShowed = false;
         gameTime = 0;
         day = 0;
         world = World.getInstance();
@@ -55,7 +57,7 @@ public class Game {
     public void showOptions() {
         System.out.println("\n(S)im Info        (C)urrent Location  (I)nventory");
         System.out.println("(U)pgrade House   (M)ove Sim          (E)dit Room");
-        System.out.println("(A)dd Sim         (Ch)ange Sim        (L)ist Object  ");
+        System.out.println("(Ad)dd Sim        (Ch)ange Sim        (L)ist Object  ");
         System.out.println("(G)o to Object    (A)ction            (S)hop");
         System.out.println("                 E(X)it");
     }
@@ -67,9 +69,14 @@ public class Game {
         if (input.equals("Ch")) {
             changeSimOption();
         } 
-        else if (input.equals("A")) {
+        else if (input.equals("Ad")) {
             addSimOption();
         }
+
+        else if (input.equals("A")) {
+            actionOptions();
+        }
+
         else if (input.equals("X")) {
             System.exit(0);
         } 
@@ -115,45 +122,70 @@ public class Game {
     public void showOverlapAction() {
         Furniture overlap = getOverlapFurniture();
 
-        if (overlap == null) {
+        if (overlap != null && !overlapActionShowed) {
+            overlapAction(overlap, true);
+            overlapActionShowed = true;
+        } else if (overlap == null) overlapActionShowed = false;
+    }
 
-        }
-        else {
-            if (overlap.getAction().equals("sleep")) {
-                System.out.println("\nApakah anda ingin tidur? (Y/N)");
+    public void overlapAction(Furniture overlap, boolean ask) {
+        if (overlap.getAction().equals("sleep")) {
+            if (ask) {
+                System.out.print("\nApakah anda ingin tidur? (Y/N) ");
                 String input = scan.next();
                 if (input.equals("Y")) {
                     // TODO : tambahin method buat sleep
                 }
+            } else {
+                    // TODO : tambahin method buat sleep
+
             }
-            else if (overlap.getAction().equals("poop")) {
-                System.out.println("\nApakah anda ingin buang air? (Y/N)");
+        }
+        else if (overlap.getAction().equals("poop")) {
+            if (ask) {
+                System.out.print("\nApakah anda ingin buang air? (Y/N) ");
                 String input = scan.next();
                 if (input.equals("Y")) {
-                    // TODO : tambahin method buat poop
+                    simOption.poop();
                 }
+            } else {
+                simOption.poop();
+
             }
-            else if (overlap.getAction().equals("cook")) {
-                System.out.println("\nApakah anda ingin memasak? (Y/N)");
+        }
+        else if (overlap.getAction().equals("cook")) {
+            if (ask) {
+                System.out.print("\nApakah anda ingin memasak? (Y/N) ");
                 String input = scan.next();
                 if (input.equals("Y")) {
                     // TODO : tambahin method buat cook
                 }
+            } else {
+                // TODO : tambahin method buat cook
+
             }
-            else if (overlap.getAction().equals("eat")) {
-                System.out.println("\nApakah anda ingin makan? (Y/N)");
+        }
+        else if (overlap.getAction().equals("eat")) {
+            if (ask) {
+                System.out.print("\nApakah anda ingin makan? (Y/N) ");
                 String input = scan.next();
                 if (input.equals("Y")) {
                     // TODO : tambahin method buat eat
                 }
+            } else {
+                    // TODO : tambahin method buat eat
             }
-            else if (overlap.getAction().equals("seetime")) {
+        }
+        else if (overlap.getAction().equals("seetime")) {
+            if (ask) {
                 // apa ini langsung tunjukin waktu aja ya? hmm
-                System.out.println("\nApakah anda ingin melihat waktu? (Y/N)");
+                System.out.print("\nApakah anda ingin melihat waktu? (Y/N) ");
                 String input = scan.next();
                 if (input.equals("Y")) {
-                    // TODO : tambahin method buat seetime
+                    simOption.seeTime();
                 }
+            } else {
+                simOption.seeTime();
             }
         }
     }
@@ -180,6 +212,7 @@ public class Game {
                     System.out.println("Masukkan angka dalam batas objek!");
                 } else {
                     currentSim.goToObject(furnitures.get(input-1).getY(), furnitures.get(input-1).getX());
+                    overlapActionShowed = false;
                 }
 
             }
@@ -203,7 +236,52 @@ public class Game {
     }
 
     public void actionOptions() {
-        // if (oprion == S) scan.line();
+        int actionNum = 4;
+
+        System.out.println("\n----- AKSI YANG BISA DILAKUKAN -----");
+        System.out.println("1. Work");
+        System.out.println("2. Workout");
+        System.out.println("3. Visit");
+        System.out.println("4. Stargaze");
+
+        Furniture furniture = getOverlapFurniture();
+        if (furniture != null) {
+            actionNum++;
+            System.out.println(actionNum + ". " + furniture.getAction());
+        }
+
+        int input = -999;
+        while (input <= 0) {
+            System.out.print("\nMASUKKAN AKSI YANG INGIN DILAKUKAN: ");
+            input = Angka.stringToInt(scan.next());
+
+            if (input <= 0 || input > actionNum) {
+                System.out.println("Masukkan angka dalam batas aksi!");
+            } else {
+                switch (input) {
+                    case 1:
+                        // TODO: Tambahin simAction work disini
+                        break;
+
+                    case 2:
+                        simOption.workout();
+                        break;
+                    
+                    case 3:
+                        // TODO: Tambahin simAction visit disini
+                        break;
+                    
+                    case 4:
+                        // TODO: Tambahin simAction stargaze disini
+                        break;
+
+                    case 5:
+                        overlapAction(furniture, false);
+                        break;
+                }
+            }
+        }
+
     }
 
     public void changeSimOption() {
@@ -289,10 +367,13 @@ public class Game {
     }
 
     public static void moveTime(int time) {
-        for (int i=0; i<time; i++) {
+        int secs = time / 1000;
+        
+        for (int i=0; i<secs; i++) {
             try {
                 Thread.sleep(1000); // 1 second
-                day = gameTime % 720000;
+                gameTime++;
+                day = gameTime / 720;
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }    
@@ -300,6 +381,8 @@ public class Game {
     }
 
     public static long getTime() {return gameTime;}
+    public static long getDay() {return day;}
+
 
     public House currentHouse() {
         House house = null;
@@ -334,7 +417,7 @@ public class Game {
             throw new IllegalArgumentException("Room not found.");
         }
 
-        currentSim.setRoom(room);
+        currentSim.move(room);
         changeView(currentSim.getRoom());
     }
 

@@ -1,7 +1,7 @@
 package map;
 
 public interface WorldAction {
-    public void addHouse(int x, int y);
+    public void addHouse(int x, int y, String simName);
     /* 
      * Tambah rumah dari World pada koordinat (x, y). Jika sudah ada rumah, method akan mengembalikan error
      */
