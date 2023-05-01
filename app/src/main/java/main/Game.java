@@ -1,5 +1,6 @@
 package main;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -40,7 +41,7 @@ public class Game {
     public void showRender() {
         char[][] rendered = currentView.render();
 
-        rendered[currentSim.getX()][currentSim.getY()] = 'S'; // tampilin sim
+        rendered[currentSim.getY()][currentSim.getX()] = 'S'; // tampilin sim
 
         for (int i=0; i<6; i++) {
             for (int j=0; j<6; j++) {
@@ -86,10 +87,30 @@ public class Game {
             }
         }
 
+        else if (input.equals("L")) {
+            listObjectOption(true);
+        }
+
         else {
             System.out.println("\nMasukkan input sesuai dengan opsi diatas!");
             scan.enterUntukLanjut();
         }
+    }
+
+    public void listObjectOption(boolean enter) {
+        List<Furniture> furnitures = currentSim.getRoom().getFurnitures();
+        
+        if (furnitures.size() == 0) {
+            System.out.println("\nTidak ada objek di dalam ruangan!");
+            scan.enterUntukLanjut();
+        } else {
+            System.out.println("\nBerikut adalah objek yang ada di dalam ruangan");
+            for (int i=0; i<furnitures.size(); i++) {
+                System.out.println((i+1) + ". " + furnitures.get(i).getName());
+            }
+            if (enter) scan.enterUntukLanjut();
+        }
+
     }
 
     public void actionOptions() {
