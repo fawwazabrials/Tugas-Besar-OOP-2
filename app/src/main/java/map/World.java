@@ -3,7 +3,7 @@ import java.util.*;
 
 import entity.Sim;
 
-public class World {
+public class World implements WorldAction{
     private static World instance = null;
     private List<Sim> sims = new ArrayList<>();
     private Sim[][] worldMap;
