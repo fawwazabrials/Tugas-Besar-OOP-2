@@ -34,7 +34,7 @@ public class Game {
 
     public void showGamePanel() {
         // TODO: ini bawah nanti di uncomment
-        // ClearScreen.clear();
+        ClearScreen.clear();
         showRender();
         showOverlapAction();
         showOptions();
@@ -85,20 +85,23 @@ public class Game {
                 moveRoomOption();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
             }
         }
         else if (input.equals("E")) {
             try {
-                editRoom(currentSim);
+                editRoomOption();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
             }
         } 
         else if (input.equals("U")) {
             try {
-                upgradeHouse();
+                upgradeHouseOption();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
             }
         }
 
@@ -209,6 +212,7 @@ public class Game {
                     System.out.println("Masukkan angka dalam batas objek!");
                 } else {
                     currentSim.goToObject(furnitures.get(input-1).getY(), furnitures.get(input-1).getX());
+                    overlapActionShowed = false;
                 }
 
             }
@@ -417,7 +421,7 @@ public class Game {
         changeView(currentSim.getRoom());
     }
 
-    public void editRoom(Sim currentSim){
+    public void editRoomOption(){
         if (! currentHouse().equals(currentSim.getHouse())) {
             throw new IllegalArgumentException("Sim is not in their house.");
         }
@@ -427,7 +431,7 @@ public class Game {
         String input = scan.next();
 
         if (input.equals("A")) {
-            System.out.println("List of Furnitures:");
+            System.out.println("\nList of Furnitures:");
             System.out.println("==========================");
             
             if (currentSim.getSimItems().isEmpty()) {
@@ -441,7 +445,7 @@ public class Game {
                 }
             }
 
-            System.out.print("ENTER FURNITURE NAME: ");
+            System.out.print("\nENTER FURNITURE NAME: ");
             String itemName = scan.next();
             Furniture furniture = null;
              
@@ -465,25 +469,25 @@ public class Game {
             if (currentSim.getRoom().getFurnitures().isEmpty()) {
                 throw new IllegalArgumentException("No furniture found.");
             } else {
-                System.out.println("Furniture want to remove:");
+                System.out.println("\nFurniture want to remove:");
                 System.out.print("ENTER X COORDINATE: ");
                 int x = scan.nextInt();
                 System.out.print("ENTER Y COORDINATE: ");
                 int y = scan.nextInt();
 
-                currentSim.getRoom().removeFurniture(x, y);
+                currentSim.getSimItems().add(currentSim.getRoom().removeFurniture(x, y));        
             }
         } else if (input.equals("M")) {
             if (currentSim.getRoom().getFurnitures().isEmpty()) {
                 throw new IllegalArgumentException("No furniture found.");
             } else {
-                System.out.println("Furniture want to move:");
+                System.out.println("\nFurniture want to move:");
                 System.out.print("ENTER X COORDINATE: ");
                 int x = scan.nextInt();
                 System.out.print("ENTER Y COORDINATE: ");
                 int y = scan.nextInt();
 
-                System.out.println("New coordinate:");
+                System.out.println("\nNew coordinate:");
                 System.out.print("ENTER NEW X COORDINATE: ");
                 int newX = scan.nextInt();
                 System.out.print("ENTER NEW Y COORDINATE: ");
@@ -496,7 +500,7 @@ public class Game {
         }
     }
 
-    public void upgradeHouse() {
+    public void upgradeHouseOption() {
         synchronized(upgradeLock) {
             if (isUpgrading) {
                 throw new IllegalArgumentException("House still in upgrade.");
@@ -504,10 +508,10 @@ public class Game {
             isUpgrading = true;
         }
 
-        System.out.println("House Map:");
+        System.out.println("\nHouse Map:");
         currentSim.getHouse().printHouse();
 
-        System.out.print("ENTER NEW ROOM NAME: ");
+        System.out.print("\nENTER NEW ROOM NAME: ");
         String roomName = scan.next();
 
         System.out.print("ENTER ROOM AS BENCHMARK: ");
@@ -554,10 +558,9 @@ public class Game {
             @Override
             public void run() {
                 try {
-                    // Thread.sleep(18 * 60 * 1000);
-                    Thread.sleep(1000);
+                    Thread.sleep(18 * 60 * 1000);
                     currentSim.getHouse().addRoom(roomName, target, targetDir);
-                    // currentSim.setMoney(currentSim.getMoney() - 1500);
+                    currentSim.setMoney(currentSim.getMoney() - 1500);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 } finally {

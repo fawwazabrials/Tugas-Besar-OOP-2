@@ -71,7 +71,7 @@ public class Room implements RoomAction, Renderable {
     }
     
     @Override
-    public void removeFurniture(int x, int y) {
+    public Furniture removeFurniture(int x, int y) {
         Furniture furniture = roomGrid[x][y];
         if (furniture == null) {
             throw new IllegalArgumentException("No furniture at (" + x + ", " + y + ")");
@@ -84,6 +84,8 @@ public class Room implements RoomAction, Renderable {
                 }
             }
         }
+
+        return furniture;
     }
 
     @Override

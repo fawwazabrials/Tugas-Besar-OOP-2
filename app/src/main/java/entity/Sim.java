@@ -105,33 +105,25 @@ public class Sim extends Exception implements SimAction, Runnable {
         /*
         * +X money (X sesuai pekerjaan); -10 kekenyangan, -10 mood / 30 detik
         */
-        if(time%120 == 0) {
-            if(time > 240000) {
-                hunger-= ((10*time)/30000);
-                mood-= ((10*time)/30000);
+            hunger-= ((10*time)/30000);
+            mood-= ((10*time)/30000);
 
-                if(job == "Badut Sulap") {
-                    money += (15*time/240000);
-                }
-                else if(job == "Koki") {
-                    money += (30*time/240000);
-                }
-                else if(job == "Polisi") {
-                    money += (35*time/240000);
-                }
-                else if(job == "Programmer") {
-                    money += (45*time/240000);
-                }
-                else if(job == "Dokter") {
-                    money += (50*time/240000);
-                }
-                Game.moveTime(time);
+            if(job == "Badut Sulap") {
+                money += (15*time/240000);
             }
-            
-        }
-        // else {
-        //     throw new Exception("Please try again.");
-        // }
+            else if(job == "Koki") {
+                money += (30*time/240000);
+            }
+            else if(job == "Polisi") {
+                money += (35*time/240000);
+            }
+            else if(job == "Programmer") {
+                money += (45*time/240000);
+            }
+            else if(job == "Dokter") {
+                money += (50*time/240000);
+            }
+            Game.moveTime(time);
     }
 
     @Override
@@ -143,9 +135,6 @@ public class Sim extends Exception implements SimAction, Runnable {
         hunger-= (5*time/20000);
         mood+= (10*time/20000);
         Game.moveTime(time);
-        // else {
-        //     throw new Exception("Please try again.");
-        // }
     }
 
     @Override
@@ -213,9 +202,7 @@ public class Sim extends Exception implements SimAction, Runnable {
             }
             Game.moveTime(time);
         }
-        // else {
-        //     throw new Exception("Not in inventory!");
-        // }
+
     }
     @Override
     public void cook(int time, Food dish) {
@@ -225,8 +212,10 @@ public class Sim extends Exception implements SimAction, Runnable {
 
     @Override
     public void visit(int time, Sim target) {
-        
-        Game.moveTime(time);
+        double visittime;
+        visittime = Math.sqrt(Math.pow((x-target.x), 2) + Math.pow((y - target.y), 2));
+        int totaltime = (int) visittime + time;
+        Game.moveTime(totaltime);
     }
 
     @Override
@@ -279,11 +268,9 @@ public class Sim extends Exception implements SimAction, Runnable {
                 timeLastEat += delta;
                 timeLastPoop += delta;
                 timeLastSleep += delta;
-
                 if (timeLastSleep > 240000) {
                     health -= delta;
                 }
-
                 if (health == 0) simThread = null;
             }
         }
