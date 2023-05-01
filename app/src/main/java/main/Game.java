@@ -31,7 +31,7 @@ public class Game {
     }
 
     public void showGamePanel() {
-        ClearScreen.clear();
+        // ClearScreen.clear();
         showRender();
         showOverlapAction();
         showOptions();
@@ -72,6 +72,13 @@ public class Game {
         else if (input.equals("X")) {
             System.exit(0);
         } 
+        else if (input.equals("M")){
+            try {
+                moveRoomOption();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
         else if (input.equals("E")) {
             try {
                 editRoom(currentSim);
@@ -287,11 +294,47 @@ public class Game {
 
     public static long getTime() {return gameTime;}
 
+    public House currentHouse() {
+        House house = null;
+        for (Sim sim : world.getSims()) {
+            if (sim.getHouse().getRooms().contains(currentSim.getRoom())) {
+                house = sim.getHouse();
+            }
+        }
+        return house;
+    }
+
+    public void moveRoomOption(){
+        if (currentHouse() == null) {
+            throw new IllegalArgumentException("Sim is not in any house.");
+        }
+
+        System.out.println("\nHouse Map :");
+        System.out.println("==========================");
+        currentHouse().printHouse();
+        
+
+        System.out.print("ENTER ROOM NAME: ");
+        String roomName = scan.next();
+        Room room = null;
+        for (Room r : currentHouse().getRooms()) {
+            if (r.getRoomName().equals(roomName)) {
+                room = r;
+            }
+        }
+
+        if (room == null) {
+            throw new IllegalArgumentException("Room not found.");
+        }
+
+        currentSim.setRoom(room);
+        changeView(currentSim.getRoom());
+    }
+
     public void editRoom(Sim currentSim){
-
-        // Checking if Sim able to edit room
-
-        // if ....
+        if (! currentHouse().equals(currentSim.getHouse())) {
+            throw new IllegalArgumentException("Sim is not in their house.");
+        }
 
         System.out.println("\n(A)dd Furniture  (R)emove Furniture  (M)ove Furniture");
         System.out.print("ENTER COMMAND: ");
@@ -334,7 +377,7 @@ public class Game {
             currentSim.getRoom().addFurniture(furniture, x, y);
         } else if (input.equals("R")) {
             if (currentSim.getRoom().getFurnitures().isEmpty()) {
-                System.out.println("There is no furniture in this room.");
+                throw new IllegalArgumentException("No furniture found.");
             } else {
                 System.out.println("Furniture want to remove:");
                 System.out.print("ENTER X COORDINATE: ");
@@ -346,7 +389,7 @@ public class Game {
             }
         } else if (input.equals("M")) {
             if (currentSim.getRoom().getFurnitures().isEmpty()) {
-                System.out.println("There is no furniture in this room.");
+                throw new IllegalArgumentException("No furniture found.");
             } else {
                 System.out.println("Furniture want to move:");
                 System.out.print("ENTER X COORDINATE: ");
@@ -425,8 +468,10 @@ public class Game {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(18 * 60 * 1000);
+                    // Thread.sleep(18 * 60 * 1000);
+                    Thread.sleep(1000);
                     currentSim.getHouse().addRoom(roomName, target, targetDir);
+                    // currentSim.setMoney(currentSim.getMoney() - 1500);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 } finally {
