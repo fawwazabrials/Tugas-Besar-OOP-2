@@ -139,12 +139,10 @@ public class Sim extends Exception implements SimAction, Runnable {
         /*
         * +5 kesehatan, -5 kekenyangan, +10 mood / 20 detik
         */
-        if(time%20 == 0) {
-            health+= (5*time/20000);
-            hunger-= (5*time/20000);
-            mood+= (10*time/20000);
-            Game.moveTime(time);
-        }
+        health+= (5*time/20000);
+        hunger-= (5*time/20000);
+        mood+= (10*time/20000);
+        Game.moveTime(time);
         // else {
         //     throw new Exception("Please try again.");
         // }
@@ -215,9 +213,9 @@ public class Sim extends Exception implements SimAction, Runnable {
             }
             Game.moveTime(time);
         }
-        else {
-            throw new Exception("Not in inventory!");
-        }
+        // else {
+        //     throw new Exception("Not in inventory!");
+        // }
     }
     @Override
     public void cook(int time, Food dish) {
