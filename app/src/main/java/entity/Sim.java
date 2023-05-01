@@ -9,7 +9,6 @@ import item.Food;
 import item.Item;
 import main.Game;
 
-
 public class Sim extends Exception implements SimAction, Runnable {
     private int x, y;
 
