@@ -6,6 +6,7 @@ public class Furniture extends Item {
     private String name;
     private String category;
     private String renderChar;
+    private String action;
     private int priceValue;
     private int width;
     private int length;
@@ -21,6 +22,27 @@ public class Furniture extends Item {
         this.setLength(name);
         this.setWidth(name);
         this.setRenderChar(name);
+        this.setAction(name);
+    }
+
+    private void setAction(String name) {
+        if (name.equals("kasur single")) {
+            this.action = "sleep";
+        } else if (name.equals("kasur queen size")) {
+            this.action = "sleep";
+        } else if (name.equals("kasur king size")) {
+            this.action = "sleep";
+        } else if (name.equals("toilet")) {
+            this.action = "poop";
+        } else if (name.equals("kompor gas")) {
+            this.action = "cook";
+        } else if (name.equals("kompor listrik")) {
+            this.action = "cook";
+        } else if (name.equals("meja dan kursi")) {
+            this.action = "eat";
+        } else if (name.equals("jam")) {
+            this.action = "seetime";
+        }
     }
 
     public int getX() {return x;}
@@ -28,6 +50,8 @@ public class Furniture extends Item {
 
     public int getY() {return y;}
     public void setY(int newY) {y = newY;}
+
+    public String getAction() {return action;}
 
     public String getName() {
         return name;
