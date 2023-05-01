@@ -96,6 +96,11 @@ public class Sim extends Exception implements SimAction, Runnable {
     public int getY() {return y;}
     public void setY(int newY) {y = newY;}
 
+    public void goToObject(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
     @Override
     public void work(int time) {
         /*
