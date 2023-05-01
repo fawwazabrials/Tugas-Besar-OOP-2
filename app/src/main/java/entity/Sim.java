@@ -5,6 +5,8 @@ import java.util.*;
 import map.House;
 import map.Room;
 import item.Food;
+import item.Dish;
+import item.Ingredients;
 import item.Item;
 import main.Game;
 
@@ -92,19 +94,19 @@ public class Sim extends Exception implements SimAction, Runnable {
             hunger-= ((10*time)/30000);
             mood-= ((10*time)/30000);
             if(time%4 == 0) {
-                if(job == "Badut Sulap") {
+                if(job == "badut sulap") {
                     money += (15*(time%240000));
                 }
-                else if(job == "Koki") {
+                else if(job == "koki") {
                     money += (30*(time%240000));
                 }
-                else if(job == "Polisi") {
+                else if(job == "polisi") {
                     money += (35*(time%240000));
                 }
-                else if(job == "Programmer") {
+                else if(job == "programmer") {
                     money += (45*(time%240000));
                 }
-                else if(job == "Dokter") {
+                else if(job == "dokter") {
                     money += (50*(time%240000));
                 }
             }
@@ -133,21 +135,79 @@ public class Sim extends Exception implements SimAction, Runnable {
     }
 
     @Override
-    public void eat(int time, Food food) {
+    public void eat(int time, Food food){
         /*
         * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
         */
-        for(Map.Entry<Item, Integer> e : simItems.getItems("Food").entrySet()){
+        if(!simItems.getItems("food").containsKey(food)){
+            throw new IllegalArgumentException("No food in inventory.");
+        }
+        for(Map.Entry<Item, Integer> e : simItems.getItems("food").entrySet()){
             if(e.getKey().getName().equals(food.getName())){
-                hunger += (food.hungerPoints*(time%30000)); //menanti Food.java
+                hunger += (food.getHungerPoint()*(time%30000));
             }
         }
         Game.moveTime(time);
     }
     @Override
-    public void cook(int time, Food dish) {
-        
-        Game.moveTime(time);
+    public void cook(Food dish) {
+        switch(dish.getName()){
+            case "nasi ayam":
+            if(simItems.checkItemAvailable("nasi",1) && simItems.checkItemAvailable("ayam",1)){
+                simItems.removeItem(simItems.getItemsByName("nasi"));
+                simItems.removeItem(simItems.getItemsByName("ayam"));
+                simItems.addItem(dish);
+            }
+            else{
+                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+            }
+            break;
+            case "nasi kari":
+            if(simItems.checkItemAvailable("nasi",1) && simItems.checkItemAvailable("kentang",1) && simItems.checkItemAvailable("wortel",1) && simItems.checkItemAvailable("sapi",1)){
+                simItems.removeItem(simItems.getItemsByName("nasi"));
+                simItems.removeItem(simItems.getItemsByName("kentang"));
+                simItems.removeItem(simItems.getItemsByName("wortel"));
+                simItems.removeItem(simItems.getItemsByName("sapi"));
+                simItems.addItem(dish);
+            }
+            else{
+                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+            }
+            break;
+            case "susu kacang":
+            if(simItems.checkItemAvailable("susu",1) && simItems.checkItemAvailable("kacang",1)){
+                simItems.removeItem(simItems.getItemsByName("susu"));
+                simItems.removeItem(simItems.getItemsByName("kacang"));
+                simItems.addItem(dish);
+            }
+            else{
+                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+            }
+            break;
+            case "tumis sayur":
+            if(simItems.checkItemAvailable("wortel",1) && simItems.checkItemAvailable("bayam",1)){
+                simItems.removeItem(simItems.getItemsByName("wortel"));
+                simItems.removeItem(simItems.getItemsByName("bayam"));
+                simItems.addItem(dish);
+            }
+            else{
+                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+            }
+            break;
+            case "bistik":
+            if(simItems.checkItemAvailable("kentang",1) && simItems.checkItemAvailable("sapi",1)){
+                simItems.removeItem(simItems.getItemsByName("kentang"));
+                simItems.removeItem(simItems.getItemsByName("sapi"));
+                simItems.addItem(dish);
+            }
+            else{
+                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+            }
+            break;
+            default: throw new IllegalArgumentException("No such dish to cook.")
+        }
+        mood += 10;
+        Game.moveTime((int) 1.5*dish.getHungerPoint());
     }
 
     @Override

@@ -21,6 +21,15 @@ public class Inventory {
         return wanted;
     }
 
+    public Item getItemsByName(String name){
+        for(Map.Entry<Item, Integer> e : items.entrySet()){
+            if(e.getKey().getName().equals(name)){
+                return e.getKey();
+            }
+        }
+        return null;
+    }
+
     public void addItem(Item in){
         if(items.containsKey(in)){
             items.put(in, items.get(in) + 1);

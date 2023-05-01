@@ -26,7 +26,7 @@ public interface SimAction {
      * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
      */
 
-    public void cook(int time, Food dish);
+    public void cook(Food dish);
     /*
      * +10 mood / makanan yang dimasak; Bahan yang dipakai akan hilang dan Dish akan ditambahkan dari inventory
      * Jika bahan tidak ada/ kurang di invemntory maka method akan mengembalikan error
