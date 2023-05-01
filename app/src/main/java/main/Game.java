@@ -31,7 +31,7 @@ public class Game {
     }
 
     public void showGamePanel() {
-        // ClearScreen.clear();
+        ClearScreen.clear();
         showRender();
         showOverlapAction();
         showOptions();
@@ -77,20 +77,23 @@ public class Game {
                 moveRoomOption();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
             }
         }
         else if (input.equals("E")) {
             try {
-                editRoom(currentSim);
+                editRoomOption();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
             }
         } 
         else if (input.equals("U")) {
             try {
-                upgradeHouse();
+                upgradeHouseOption();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
             }
         }
 
@@ -331,7 +334,7 @@ public class Game {
         changeView(currentSim.getRoom());
     }
 
-    public void editRoom(Sim currentSim){
+    public void editRoomOption(){
         if (! currentHouse().equals(currentSim.getHouse())) {
             throw new IllegalArgumentException("Sim is not in their house.");
         }
@@ -410,7 +413,7 @@ public class Game {
         }
     }
 
-    public void upgradeHouse() {
+    public void upgradeHouseOption() {
         synchronized(upgradeLock) {
             if (isUpgrading) {
                 throw new IllegalArgumentException("House still in upgrade.");
@@ -418,10 +421,10 @@ public class Game {
             isUpgrading = true;
         }
 
-        System.out.println("House Map:");
+        System.out.println("\nHouse Map:");
         currentSim.getHouse().printHouse();
 
-        System.out.print("ENTER NEW ROOM NAME: ");
+        System.out.print("\nENTER NEW ROOM NAME: ");
         String roomName = scan.next();
 
         System.out.print("ENTER ROOM AS BENCHMARK: ");
@@ -468,10 +471,9 @@ public class Game {
             @Override
             public void run() {
                 try {
-                    // Thread.sleep(18 * 60 * 1000);
-                    Thread.sleep(1000);
+                    Thread.sleep(18 * 60 * 1000);
                     currentSim.getHouse().addRoom(roomName, target, targetDir);
-                    // currentSim.setMoney(currentSim.getMoney() - 1500);
+                    currentSim.setMoney(currentSim.getMoney() - 1500);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 } finally {
