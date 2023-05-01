@@ -1,7 +1,6 @@
 package entity;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 import map.House;
 import map.Room;
@@ -14,7 +13,7 @@ public class Sim extends Exception implements SimAction, Runnable {
 
     private String name;
     private House house;
-    private List<Item> simItems;
+    private Inventory simItems;
     private Room currRoom;
     private int mood;
     private int hunger;
@@ -49,7 +48,7 @@ public class Sim extends Exception implements SimAction, Runnable {
         return house;
     }
 
-    public List<Item> getSimItems() {
+    public Inventory getSimItems() {
         return simItems;
     }
 
@@ -107,21 +106,22 @@ public class Sim extends Exception implements SimAction, Runnable {
         */
             hunger-= ((10*time)/30000);
             mood-= ((10*time)/30000);
-
-            if(job == "Badut Sulap") {
-                money += (15*time/240000);
-            }
-            else if(job == "Koki") {
-                money += (30*time/240000);
-            }
-            else if(job == "Polisi") {
-                money += (35*time/240000);
-            }
-            else if(job == "Programmer") {
-                money += (45*time/240000);
-            }
-            else if(job == "Dokter") {
-                money += (50*time/240000);
+            if(time%4 == 0) {
+                if(job == "Badut Sulap") {
+                    money += (15*(time%240000));
+                }
+                else if(job == "Koki") {
+                    money += (30*(time%240000));
+                }
+                else if(job == "Polisi") {
+                    money += (35*(time%240000));
+                }
+                else if(job == "Programmer") {
+                    money += (45*(time%240000));
+                }
+                else if(job == "Dokter") {
+                    money += (50*(time%240000));
+                }
             }
             Game.moveTime(time);
     }
@@ -152,61 +152,16 @@ public class Sim extends Exception implements SimAction, Runnable {
         /*
         * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
         */
-        List<Item> foodItems = new ArrayList<Item>();
-        for(Item e : simItems) {
-            if (e.getCategory().equals("Food")) {
-                foodItems.add(e);
+        for(Map.Entry<Item, Integer> e : simItems.getItems("Food").entrySet()){
+            if(e.getKey().getName().equals(food.getName())){
+                hunger += (food.hungerPoints*(time%30000));
             }
         }
-        if(foodItems.contains(food)) {
-            switch(food.getName()) {
-                case "Nasi" :
-                    hunger+= (5*time/30000);
-                    simItems.remove("Nasi");
-                case "Kentang" :
-                    hunger+= (4*time/30000);
-                    simItems.remove("Kentang");
-                case "Ayam" : 
-                    hunger+= (8*time/30000);
-                    simItems.remove("Ayam");
-                case "Sapi" : 
-                    hunger+= (15*time/30000);
-                    simItems.remove("Sapi");
-                case "Wortel" : 
-                    hunger+= (2*time/30000);
-                    simItems.remove("Wortel");
-                case "Bayam" : 
-                    hunger+= (2*time/30000);
-                    simItems.remove("Bayam");
-                case "Kacang" : 
-                    hunger+= (2*time/30000);
-                    simItems.remove("Kacang");
-                case "Susu" : 
-                    hunger+= (1*time/30000);
-                    simItems.remove("Susu");
-                case "Nasi Ayam" :
-                    hunger+= (16*time/30000);
-                    simItems.remove("Nasi Ayam");
-                case "Nasi Kari" :
-                    hunger+= (30*time/30000);
-                    simItems.remove("Nasi Kari");
-                case "Susu Kacang" : 
-                    hunger+= (5*time/30000);
-                    simItems.remove("Susu Kacang");
-                case "Tumis Sayur" :
-                    hunger+= (5*time/30000);
-                    simItems.remove("Tumis Sayur");
-                case "Bistik" : 
-                    hunger+= (22*time/30000);
-                    simItems.remove("Bistik");
-            }
-            Game.moveTime(time);
-        }
-
+        Game.moveTime(time);
     }
     @Override
     public void cook(int time, Food dish) {
-
+        
         Game.moveTime(time);
     }
 
