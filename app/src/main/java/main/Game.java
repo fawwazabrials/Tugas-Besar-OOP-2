@@ -417,7 +417,7 @@ public class Game {
             throw new IllegalArgumentException("Room not found.");
         }
 
-        currentSim.setRoom(room);
+        currentSim.move(room);
         changeView(currentSim.getRoom());
     }
 
