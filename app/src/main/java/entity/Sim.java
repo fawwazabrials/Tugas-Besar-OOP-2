@@ -202,9 +202,7 @@ public class Sim extends Exception implements SimAction, Runnable {
             }
             Game.moveTime(time);
         }
-        // else {
-        //     throw new Exception("Not in inventory!");
-        // }
+
     }
     @Override
     public void cook(int time, Food dish) {
