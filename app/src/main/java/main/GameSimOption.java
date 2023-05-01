@@ -16,7 +16,7 @@ public class GameSimOption {
 
         while (time <= 0) {
             System.out.println("\nMASUKKAN WAKTU (dalam kelipatan 20 detik): ");
-            time = scan.nextInt();
+            time = Angka.stringToInt(scan.nextLine());
             if (time % 20 == 0) {
                 System.out.println("\nSim sedang berolahraga...");
                 game.currentSim.workout(time * 1000);

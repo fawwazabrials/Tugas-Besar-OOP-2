@@ -35,6 +35,7 @@ public class Input {
         System.out.println("\n(Tekan ENTER untuk lanjut)");
         try {
             System.in.read();
+            scan.next();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -64,7 +64,7 @@ public class Game {
 
     public void getInput() {
         System.out.print("\nENTER COMMAND: ");
-        String input = scan.next();
+        String input = scan.nextLine();
 
         if (input.equals("Ch")) {
             changeSimOption();
@@ -132,7 +132,7 @@ public class Game {
         if (overlap.getAction().equals("sleep")) {
             if (ask) {
                 System.out.print("\nApakah anda ingin tidur? (Y/N) ");
-                String input = scan.next();
+                String input = scan.nextLine();
                 if (input.equals("Y")) {
                     // TODO : tambahin method buat sleep
                 }
@@ -144,7 +144,7 @@ public class Game {
         else if (overlap.getAction().equals("poop")) {
             if (ask) {
                 System.out.print("\nApakah anda ingin buang air? (Y/N) ");
-                String input = scan.next();
+                String input = scan.nextLine();
                 if (input.equals("Y")) {
                     simOption.poop();
                 }
@@ -156,7 +156,7 @@ public class Game {
         else if (overlap.getAction().equals("cook")) {
             if (ask) {
                 System.out.print("\nApakah anda ingin memasak? (Y/N) ");
-                String input = scan.next();
+                String input = scan.nextLine();
                 if (input.equals("Y")) {
                     // TODO : tambahin method buat cook
                 }
@@ -168,7 +168,7 @@ public class Game {
         else if (overlap.getAction().equals("eat")) {
             if (ask) {
                 System.out.print("\nApakah anda ingin makan? (Y/N) ");
-                String input = scan.next();
+                String input = scan.nextLine();
                 if (input.equals("Y")) {
                     // TODO : tambahin method buat eat
                 }
@@ -180,7 +180,7 @@ public class Game {
             if (ask) {
                 // apa ini langsung tunjukin waktu aja ya? hmm
                 System.out.print("\nApakah anda ingin melihat waktu? (Y/N) ");
-                String input = scan.next();
+                String input = scan.nextLine();
                 if (input.equals("Y")) {
                     simOption.seeTime();
                 }
@@ -206,7 +206,7 @@ public class Game {
             int input = -999;
             while (input <= 0) {
                 System.out.print("\nENTER OBJEK YANG DITUJU: ");
-                input = Angka.stringToInt(scan.next());
+                input = Angka.stringToInt(scan.nextLine());
 
                 if (input <= 0 || input > furnitures.size()) {
                     System.out.println("Masukkan angka dalam batas objek!");
@@ -253,7 +253,7 @@ public class Game {
         int input = -999;
         while (input <= 0) {
             System.out.print("\nMASUKKAN AKSI YANG INGIN DILAKUKAN: ");
-            input = Angka.stringToInt(scan.next());
+            input = Angka.stringToInt(scan.nextLine());
 
             if (input <= 0 || input > actionNum) {
                 System.out.println("Masukkan angka dalam batas aksi!");
@@ -305,7 +305,7 @@ public class Game {
             int input = -999;
             while (input <= 0) {
                 System.out.print("PILIH SIM: ");
-                input = Angka.stringToInt(scan.next());
+                input = Angka.stringToInt(scan.nextLine());
 
                 if (input <= 0 || input > simNum) {
                     System.out.println("\nMasukan angka di dalam batas sim!");
@@ -329,7 +329,7 @@ public class Game {
             scan.enterUntukLanjut();
         } else {
             System.out.print("ENTER SIM NAME: ");
-            String simName = scan.next();
+            String simName = scan.nextLine();
 
             boolean found = false;
             while (!found) {
@@ -405,7 +405,7 @@ public class Game {
         
 
         System.out.print("ENTER ROOM NAME: ");
-        String roomName = scan.next();
+        String roomName = scan.nextLine();
         Room room = null;
         for (Room r : currentHouse().getRooms()) {
             if (r.getRoomName().equals(roomName)) {
@@ -428,7 +428,7 @@ public class Game {
 
         System.out.println("\n(A)dd Furniture  (R)emove Furniture  (M)ove Furniture");
         System.out.print("ENTER COMMAND: ");
-        String input = scan.next();
+        String input = scan.nextLine();
 
         if (input.equals("A")) {
             System.out.println("\nList of Furnitures:");
@@ -446,7 +446,7 @@ public class Game {
             }
 
             System.out.print("\nENTER FURNITURE NAME: ");
-            String itemName = scan.next();
+            String itemName = scan.nextLine();
             Furniture furniture = null;
              
             for (Item item : currentSim.getSimItems()) {
@@ -512,10 +512,10 @@ public class Game {
         currentSim.getHouse().printHouse();
 
         System.out.print("\nENTER NEW ROOM NAME: ");
-        String roomName = scan.next();
+        String roomName = scan.nextLine();
 
         System.out.print("ENTER ROOM AS BENCHMARK: ");
-        String benchmark = scan.next();
+        String benchmark = scan.nextLine();
         Room benchmarkRoom = null;
         
         for (Room room : currentSim.getHouse().getRooms()) {
@@ -534,7 +534,7 @@ public class Game {
         
         System.out.println("Direction : (N)orth  (S)outh  (E)ast  (W)est");
         System.out.print("ENTER DIRECTION BASED ON BENCHMARK ROOM: ");
-        String direction = scan.next();
+        String direction = scan.nextLine();
         Direction dir = null;
         
         if (direction.equals("N")) {
