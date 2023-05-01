@@ -159,6 +159,7 @@ public class Game {
                 String input = scan.nextLine();
                 if (input.equals("Y")) {
                     // TODO : tambahin method buat cook
+                    showDishTable();
                 }
             } else {
                 // TODO : tambahin method buat cook
@@ -570,5 +571,16 @@ public class Game {
                 }
             }
         }).start();
+    }
+
+    public void showDishTable() {
+        System.out.println("\nList of Dish:");
+        System.out.println("--------------------------------------------------------------------");
+        System.out.println("Dish Name\t\tHunger Point\tRecipe");
+        System.out.println("Nasi ayam\t\t16\t\tNasi, Ayam");
+        System.out.println("Nasi kari\t\t30\t\tNasi, Kentang, Wortel, Sapi");
+        System.out.println("Susu kacang\t\t5\t\tSusu, Kacang");
+        System.out.println("Tumis sayur\t\t5\t\tWortel, Bayam");
+        System.out.println("Bistik\t\t\t22\t\tKentang, Sapi");
     }
 }
