@@ -107,21 +107,22 @@ public class Sim extends Exception implements SimAction, Runnable {
         */
             hunger-= ((10*time)/30000);
             mood-= ((10*time)/30000);
-
-            if(job == "Badut Sulap") {
-                money += (15*time/240000);
-            }
-            else if(job == "Koki") {
-                money += (30*time/240000);
-            }
-            else if(job == "Polisi") {
-                money += (35*time/240000);
-            }
-            else if(job == "Programmer") {
-                money += (45*time/240000);
-            }
-            else if(job == "Dokter") {
-                money += (50*time/240000);
+            if(time%4 == 0) {
+                if(job == "Badut Sulap") {
+                    money += (15*(time%240000));
+                }
+                else if(job == "Koki") {
+                    money += (30*(time%240000));
+                }
+                else if(job == "Polisi") {
+                    money += (35*(time%240000));
+                }
+                else if(job == "Programmer") {
+                    money += (45*(time%240000));
+                }
+                else if(job == "Dokter") {
+                    money += (50*(time%240000));
+                }
             }
             Game.moveTime(time);
     }
