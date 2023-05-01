@@ -23,8 +23,8 @@ public class Sim extends Exception implements SimAction, Runnable {
     private int money;
     private String job;
 
-    private long timeLastPoop;
-    private long timeLastEat;
+    private long timeLastPoop; //belum pake di method poop
+    private long timeLastEat;  //belum pake di method eat
     private long timeLastSleep;
     private long timeLastUpdate;
     Thread simThread;
@@ -137,12 +137,12 @@ public class Sim extends Exception implements SimAction, Runnable {
         /*
         * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
         */
-        // for(Map.Entry<Item, Integer> e : simItems.getItems("Food").entrySet()){
-        //     if(e.getKey().getName().equals(food.getName())){
-        //         hunger += (food.hungerPoints*(time%30000));
-        //     }
-        // }
-        // Game.moveTime(time);
+        for(Map.Entry<Item, Integer> e : simItems.getItems("Food").entrySet()){
+            if(e.getKey().getName().equals(food.getName())){
+                hunger += (food.hungerPoints*(time%30000)); //menanti Food.java
+            }
+        }
+        Game.moveTime(time);
     }
     @Override
     public void cook(int time, Food dish) {
