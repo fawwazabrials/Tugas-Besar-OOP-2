@@ -31,6 +31,7 @@ public class Game {
     }
 
     public void showGamePanel() {
+        // TODO: ini bawah nanti di uncomment
         ClearScreen.clear();
         showRender();
         showOverlapAction();
@@ -171,7 +172,7 @@ public class Game {
             listObjectOption(false);
 
             int input = -999;
-            while (input == -999) {
+            while (input <= 0) {
                 System.out.print("\nENTER OBJEK YANG DITUJU: ");
                 input = Angka.stringToInt(scan.next());
 
@@ -223,10 +224,10 @@ public class Game {
                 cnt++;
             }
 
-            int input = -1;
-            while (input == -1) {
+            int input = -999;
+            while (input <= 0) {
                 System.out.print("PILIH SIM: ");
-                input = scan.nextInt();
+                input = Angka.stringToInt(scan.next());
 
                 if (input <= 0 || input > simNum) {
                     System.out.println("\nMasukan angka di dalam batas sim!");
@@ -261,6 +262,9 @@ public class Game {
                     
                 }
             }
+
+            // DEBUG: ganti day jadi -1; 
+            // TODO: NANTI INI GANTI dayLastSimAdded = day;
             dayLastSimAdded = -1;
         }
     }
