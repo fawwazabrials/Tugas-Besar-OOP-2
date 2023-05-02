@@ -1,7 +1,9 @@
 package util;
 
-import java.io.IOException;
 import java.util.Scanner;
+
+import exception.NoInputException;
+import exception.WrongInputException;
 
 public class Input {
     private static Input instance = null;
@@ -33,11 +35,35 @@ public class Input {
 
     public void enterUntukLanjut() {
         System.out.println("\n(Tekan ENTER untuk lanjut)");
+        if (scan.hasNext()) {
+            scan.nextLine(); 
+        }
+        scan.nextLine();
+    }
+
+    public int getIntegerInput(String message) throws NoInputException, WrongInputException {
         try {
-            System.in.read();
-            scan.nextLine();
-        } catch (IOException e) {
-            e.printStackTrace();
+            String input = getInput(message);
+            int intInput = Angka.stringToInt(input);
+
+            if (intInput == -999) {
+                throw new WrongInputException();
+            } else {
+                return intInput;
+            }
+        } catch (NoInputException e) {
+            throw(e);
+        }
+    }
+
+    public String getInput(String message) throws NoInputException {
+        System.out.println(message);
+
+        String input = scan.nextLine();
+        if (input.equals("\n")) {
+            throw new NoInputException();
+        } else {
+            return input;
         }
     }
 }
