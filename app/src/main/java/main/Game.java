@@ -13,6 +13,7 @@ import map.*;
 
 public class Game {
     Renderable currentView;
+    String currentHouse;
     Sim currentSim;
     World world;
     private GameSimOption simOption = new GameSimOption(this);
@@ -30,21 +31,47 @@ public class Game {
         day = 0;
         world = World.getInstance();
         startNew();
+        currentHouse = currentSim.getName();
     }
 
     public void showGamePanel() {
         // TODO: ini bawah nanti di uncomment
         ClearScreen.clear();
-        showRender();
-        showOverlapAction();
-        showOptions();
-        getInput();
+
+        if (currentSim.isDead()) {
+            currentSim.killSim();
+            world.getSims().remove(currentSim);
+            showDeadScreen();
+        }
+
+        else {
+            showRender();
+            showOverlapAction();
+            showOptions();
+            getInput();
+        }
+    }
+
+    public void showDeadScreen() {
+        System.out.println("\nSim kamu mati!");
+
+        if (world.getSims().size() == 0) {
+            showGameOverScreen();
+        } else {
+            changeSimOption();
+        }
+    }
+
+    public void showGameOverScreen() {
+        System.out.println("Semua Sim kamu mati! Kamu kalah!");
+        System.exit(0);
     }
 
     public void showRender() {
         char[][] rendered = currentView.render();
 
         rendered[currentSim.getY()][currentSim.getX()] = 'S'; // tampilin sim
+        System.out.println("Rumah " + currentHouse + " - " + currentSim.getRoom().getRoomName());
 
         for (int i=0; i<6; i++) {
             for (int j=0; j<6; j++) {
@@ -68,7 +95,12 @@ public class Game {
 
         if (input.equals("Ch")) {
             changeSimOption();
-        } 
+        }
+        
+        else if (input.equals("S")) {
+            showSimInfo();
+        }
+        
         else if (input.equals("Ad")) {
             addSimOption();
         }
@@ -88,14 +120,16 @@ public class Game {
                 scan.enterUntukLanjut();
             }
         }
-        else if (input.equals("E")) {
-            try {
-                editRoomOption();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                scan.enterUntukLanjut();
-            }
-        } 
+
+        // TODO: Uncomment kalo udah dibenerin
+        // else if (input.equals("E")) {
+        //     try {
+        //         editRoomOption();
+        //     } catch (Exception e) {
+        //         System.out.println(e.getMessage());
+        //         scan.enterUntukLanjut();
+        //     }
+        // } 
         else if (input.equals("U")) {
             try {
                 upgradeHouseOption();
@@ -117,6 +151,18 @@ public class Game {
             System.out.println("\nMasukkan input sesuai dengan opsi diatas!");
             scan.enterUntukLanjut();
         }
+    }
+
+    public void showSimInfo() {
+        System.out.println("\n------ SIM INFO ------");
+        System.out.println("Nama: " + currentSim.getName());
+        System.out.println("Pekerjaan: " + currentSim.getJob());
+        System.out.println("Kesehatan: " + currentSim.getHealth());
+        System.out.println("Kekenyangan: " + currentSim.getHunger());
+        System.out.println("Mood: " + currentSim.getMood());
+        System.out.println("Uang: " + currentSim.getMoney());
+
+        scan.enterUntukLanjut();
     }
 
     public void showOverlapAction() {
@@ -268,7 +314,7 @@ public class Game {
                         break;
                     
                     case 3:
-                        // TODO: Tambahin simAction visit disini
+                        simOption.visit();
                         break;
                     
                     case 4:
@@ -360,6 +406,7 @@ public class Game {
     public void changeSim(Sim newSim) {
         currentSim = newSim;
         changeView(currentSim.getRoom());
+        currentHouse = currentSim.getName();
     }
 
     public void changeView(Renderable newView) {
@@ -368,7 +415,7 @@ public class Game {
 
     public static void moveTime(int time) {
         int secs = time / 1000;
-        
+
         for (int i=0; i<secs; i++) {
             try {
                 Thread.sleep(1000); // 1 second

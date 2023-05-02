@@ -8,7 +8,9 @@ import item.Food;
 import item.Item;
 import main.Game;
 
-public class Sim extends Exception implements SimAction, Runnable {
+public class Sim extends Exception implements SimAction {
+    boolean alive;
+
     private int x, y;
 
     private String name;
@@ -26,14 +28,18 @@ public class Sim extends Exception implements SimAction, Runnable {
     private long timeLastPoop;
     private long timeLastEat;
     private long timeLastSleep;
-    private long timeLastUpdate;
-    Thread simThread;
+    private long timeLastVisitUpdate = 0;
+
+    // private boolean visiting;
 
     public Sim(House house, Room currRoom, String name) {
         this.name = name;
         this.simHouse = house;
         this.currRoom = currRoom;
+        currHouse = simHouse;
+        // visiting = false;
         
+        alive = true;
         mood = 80;
         hunger = 80;
         health = 80;
@@ -109,6 +115,8 @@ public class Sim extends Exception implements SimAction, Runnable {
                 }
             }
             Game.moveTime(time);
+
+            updateSim();
     }
 
     @Override
@@ -116,10 +124,15 @@ public class Sim extends Exception implements SimAction, Runnable {
         /*
         * +5 kesehatan, -5 kekenyangan, +10 mood / 20 detik
         */
+        int cycle = time / 20000;
+
+
         health+= (5*time/20000);
         hunger-= (5*time/20000);
         mood+= (10*time/20000);
         Game.moveTime(time);
+
+        updateSim();
     }
 
     @Override
@@ -130,6 +143,8 @@ public class Sim extends Exception implements SimAction, Runnable {
         mood+= (30*time/240000);
         health+= (20*time/240000);
         Game.moveTime(time);
+
+        updateSim();
     }
 
     @Override
@@ -143,19 +158,56 @@ public class Sim extends Exception implements SimAction, Runnable {
         //     }
         // }
         // Game.moveTime(time);
+
+        updateSim();
     }
     @Override
     public void cook(int time, Food dish) {
         
         Game.moveTime(time);
+
+        updateSim();
+    }
+
+    public boolean isDead() {
+        if (health < 0 || mood < 0 || hunger < 0) return true;
+        return false;
+    }
+
+    public void killSim() {
+        alive = false;
+    }
+
+    public void updateSim() {
+        // BANGSAT INI GAJADI, GW MAU BUNUH DIRIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+        // if (visiting) {
+        //     if (Game.getTime() - timeLastVisitUpdate > 30) {
+        //         long delta = Game.getTime() - timeLastVisitUpdate;
+        //         int times = (int)delta / 30;
+        //         timeLastVisitUpdate = Game.getTime();
+                
+        //         // penambahan tiap 30 detik
+        //         setMood(getMood()+10*times);
+        //         setHunger(getHunger()-10*times);
+        //     }
+        // }
     }
 
     @Override
-    public void visit(int time, Sim target) {
-        double visittime;
-        visittime = Math.sqrt(Math.pow((x-target.x), 2) + Math.pow((y - target.y), 2));
-        int totaltime = (int) visittime + time;
-        Game.moveTime(totaltime);
+    public void visit(Sim target) {
+        double visittime = Math.sqrt(Math.pow((this.getHouse().getX() - target.getHouse().getX()), 2) + Math.pow((this.getHouse().getY() - target.getHouse().getY()), 2));
+        int cycle = (int)(visittime / 30);
+
+        // DEBUG: INSTANT MOVE
+        // Game.moveTime(0);
+
+        // TODO: NANTI BAWAH UNCOMMENT
+        Game.moveTime((int)visittime * 1000);
+
+        currHouse = target.getHouse(); // ganti rumah sekarang
+        currRoom = target.getHouse().getRooms().get(0); // ganti ruangan jadi ruangan awal rumah orang
+
+        updateSim();
     }
 
     @Override
@@ -163,6 +215,8 @@ public class Sim extends Exception implements SimAction, Runnable {
         hunger-= (20*time/10000);
         mood+= (10*time/10000);
         Game.moveTime(time);
+
+        updateSim();
     }
 
     @Override
@@ -190,6 +244,8 @@ public class Sim extends Exception implements SimAction, Runnable {
         mood += (20*time/60000);
         hunger -= (15*time/60000);
         Game.moveTime(time);
+
+        updateSim();
     }
 
     @Override
@@ -197,22 +253,7 @@ public class Sim extends Exception implements SimAction, Runnable {
         mood += (20*time/60000);
         hunger -= (15*time/60000);
         Game.moveTime(time);
-    }
 
-    @Override
-    public void run() {
-        while (simThread != null) {
-            if (Game.getTime() > timeLastUpdate) {
-                long delta = Game.getTime() - timeLastUpdate;
-                timeLastUpdate += delta;
-                timeLastEat += delta;
-                timeLastPoop += delta;
-                timeLastSleep += delta;
-                if (timeLastSleep > 240000) {
-                    health -= delta;
-                }
-                if (health == 0) simThread = null;
-            }
-        }
+        updateSim();
     }
 }

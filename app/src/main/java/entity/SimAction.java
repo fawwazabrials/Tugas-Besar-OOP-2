@@ -32,7 +32,7 @@ public interface SimAction {
      * Jika bahan tidak ada/ kurang di invemntory maka method akan mengembalikan error
      */
 
-    public void visit(int time, Sim target);
+    public void visit(Sim target);
     /*
      * +10 mood, -10 kekenyangan / 30 detik
      */ 
