@@ -38,7 +38,7 @@ public class Input {
         if (scan.hasNext()) {
             scan.nextLine(); 
         }
-        scan.nextLine();
+        scan.next();
     }
 
     public int getIntegerInput(String message) throws NoInputException, WrongInputException {
