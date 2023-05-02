@@ -10,6 +10,7 @@ import util.ClearScreen;
 import util.Input;
 import item.*;
 import map.*;
+import java.util.*;
 
 public class Game {
     Renderable currentView;
@@ -205,6 +206,7 @@ public class Game {
                 String input = scan.nextLine();
                 if (input.equals("Y")) {
                     // TODO : tambahin method buat cook
+                    showDishTable();
                 }
             } else {
                 // TODO : tambahin method buat cook
@@ -442,6 +444,8 @@ public class Game {
     }
 
     public void moveRoomOption(){
+        // Belom ada currentHouse di Sim
+        // if (currentSim.getCurrentHouse() == null)
         if (currentHouse() == null) {
             throw new IllegalArgumentException("Sim is not in any house.");
         }
@@ -469,6 +473,8 @@ public class Game {
     }
 
     public void editRoomOption(){
+        // Belom ada currentHouse di Sim
+        // if (! currentSim.getCurrentHouse().equals(currentSim.getHouse()))
         if (! currentHouse().equals(currentSim.getHouse())) {
             throw new IllegalArgumentException("Sim is not in their house.");
         }
@@ -481,14 +487,12 @@ public class Game {
             System.out.println("\nList of Furnitures:");
             System.out.println("==========================");
             
-            if (currentSim.getSimItems().isEmpty()) {
+            if (currentSim.getSimItems().getItems("furniture").isEmpty()) {
                 throw new IllegalArgumentException("No furniture found.");
             } else {
-                for (Item item : currentSim.getSimItems()) {
-                    if (item instanceof Furniture) {
-                        System.out.println(item.getName());
+                for (Map.Entry<Item, Integer> item : currentSim.getSimItems().getItems("furniture").entrySet()) {
+                        System.out.println(item.getKey().getName());
                         System.out.println("--------------------------");
-                    }
                 }
             }
 
@@ -496,9 +500,9 @@ public class Game {
             String itemName = scan.nextLine();
             Furniture furniture = null;
              
-            for (Item item : currentSim.getSimItems()) {
-                if (item instanceof Furniture && itemName.equals(item.getName())) {
-                    furniture = (Furniture)item;
+            for (Map.Entry<Item, Integer> item : currentSim.getSimItems().getItems("furniture").entrySet()) {
+                if (itemName.equals(item.getKey().getName())) {
+                    furniture = (Furniture)item.getKey();
                 }
             }
 
@@ -522,7 +526,7 @@ public class Game {
                 System.out.print("ENTER Y COORDINATE: ");
                 int y = scan.nextInt();
 
-                currentSim.getSimItems().add(currentSim.getRoom().removeFurniture(x, y));        
+                currentSim.getSimItems().addItem(currentSim.getRoom().removeFurniture(x, y));      
             }
         } else if (input.equals("M")) {
             if (currentSim.getRoom().getFurnitures().isEmpty()) {
@@ -617,5 +621,16 @@ public class Game {
                 }
             }
         }).start();
+    }
+
+    public void showDishTable() {
+        System.out.println("\nList of Dish:");
+        System.out.println("--------------------------------------------------------------------");
+        System.out.println("Dish Name\t\tHunger Point\tRecipe");
+        System.out.println("Nasi ayam\t\t16\t\tNasi, Ayam");
+        System.out.println("Nasi kari\t\t30\t\tNasi, Kentang, Wortel, Sapi");
+        System.out.println("Susu kacang\t\t5\t\tSusu, Kacang");
+        System.out.println("Tumis sayur\t\t5\t\tWortel, Bayam");
+        System.out.println("Bistik\t\t\t22\t\tKentang, Sapi");
     }
 }

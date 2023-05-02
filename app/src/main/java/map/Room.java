@@ -46,7 +46,7 @@ public class Room implements RoomAction, Renderable {
     public void setRoomName(String roomName) {this.roomName = roomName;}
     
     public static Room makeDefaultRoom() {
-        Room room = new Room("BedRoom");
+        Room room = new Room("Bed Room");
         room.addFurniture(new Furniture("kasur single", 0, 0), 0, 0);
         room.addFurniture(new Furniture("toilet", 5, 5), 5, 5);
         room.addFurniture(new Furniture("kompor gas", 5, 2), 5, 2);
