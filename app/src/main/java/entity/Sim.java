@@ -30,7 +30,7 @@ public class Sim extends Exception implements SimAction {
     private long timeLastPoop; //belum pake di method poop
     private long timeLastEat;  //belum pake di method eat
     private long timeLastSleep;
-    private long timeLastVisitUpdate = 0;
+    private long bufferedVisitTime;
 
     // private boolean visiting;
 
@@ -40,6 +40,7 @@ public class Sim extends Exception implements SimAction {
         this.currRoom = currRoom;
         currHouse = simHouse;
         // visiting = false;
+        bufferedVisitTime = 0;
         
         alive = true;
         mood = 80;
@@ -250,14 +251,27 @@ public class Sim extends Exception implements SimAction {
 
     @Override
     public void visit(Sim target) {
-        double visittime = Math.sqrt(Math.pow((this.getHouse().getX() - target.getHouse().getX()), 2) + Math.pow((this.getHouse().getY() - target.getHouse().getY()), 2));
+        int visittime = (int)(Math.sqrt(Math.pow((this.getHouse().getX() - target.getHouse().getX()), 2) + Math.pow((this.getHouse().getY() - target.getHouse().getY()), 2)));
         int cycle = (int)(visittime / 30);
 
         // DEBUG: INSTANT MOVE
         // Game.moveTime(0);
 
-        // TODO: NANTI BAWAH UNCOMMENT
-        Game.moveTime((int)visittime * 1000);
+        for (int i=0; i<cycle; i++) {
+            Game.moveTime(30 * 1000);
+            setHunger(getHunger() - 10);
+            setMood(getMood() + 10);
+        }
+
+        Game.moveTime(visittime%30 * 1000); // sisa waktu
+        bufferedVisitTime += visittime%30 * 1000;
+
+        if (bufferedVisitTime > 30) {
+            cycle = (int)(bufferedVisitTime / 30);
+            setHunger(getHunger()- 10*cycle);
+            setMood(getMood()+ 10*cycle);
+            bufferedVisitTime %= 30;
+        }
 
         currHouse = target.getHouse(); // ganti rumah sekarang
         currRoom = target.getHouse().getRooms().get(0); // ganti ruangan jadi ruangan awal rumah orang
