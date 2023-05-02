@@ -132,6 +132,10 @@ public class GameSimOption {
     }
 
     public void upgradeHouse() {
+        if (game.currentSim.getUpgradeHouse() != null) {
+            throw new IllegalArgumentException("Rumah sedang di-upgrade!");
+        }
+
         if (game.currentSim.getMoney() >= 1500) {
             game.currentSim.getHouse().printHouse();
 
@@ -139,7 +143,7 @@ public class GameSimOption {
             String roomName = scan.nextLine();
             // TODO: Cek nama ruangan ada atau tidak
 
-            System.out.print("MASUKKAN NAMA RUANGAN TARGET :");
+            System.out.print("MASUKKAN NAMA RUANGAN TARGET : ");
             String target = scan.nextLine();
             
             Room targetRoom = null;
@@ -149,16 +153,19 @@ public class GameSimOption {
                     break;
                 }
             }
-
             if (targetRoom == null) {
-                throw new IllegalArgumentException("Ruangan target tidak ditemukan!");
+                throw new IllegalArgumentException("\nRuangan target tidak ditemukan!");
             }
             
             System.out.println("\nDirection : (N)orth  (S)outh  (E)ast  (W)est");
-            System.out.print("ENTER DIRECTION BASED ON BENCHMARK ROOM: ");
+            System.out.print("MASUKKAN ARAH RUANGAN BERDASARKAN TARGET : ");
             Direction direction = Direction.strToDirection(scan.nextLine());
-            
+
+            if (targetRoom.getConnectedRooms().get(direction) != null) {
+                throw new IllegalArgumentException("\nAda ruangan lain!");
+            }            
             game.currentSim.upgradeHouse(roomName, targetRoom, direction);
+            System.out.println("\nMelakukan upgrade....");
         } else {
             System.out.println("\nUang Sim tidak mencukupi!");
             scan.enterUntukLanjut();
