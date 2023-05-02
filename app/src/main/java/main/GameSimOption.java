@@ -3,6 +3,8 @@ package main;
 import java.util.List;
 
 import entity.Sim;
+import map.Direction;
+import map.Room;
 import util.Angka;
 import util.Input;
 
@@ -127,5 +129,39 @@ public class GameSimOption {
         game.currentSim.poop(10000); // 10 DETIK
         System.out.println("\nSim selesai buang air!");
         scan.enterUntukLanjut();
+    }
+
+    public void upgradeHouse() {
+        if (game.currentSim.getMoney() >= 1500) {
+            game.currentSim.getHouse().printHouse();
+
+            System.out.print("\nMASUKKAN NAMA RUANGAN BARU : ");
+            String roomName = scan.nextLine();
+            // TODO: Cek nama ruangan ada atau tidak
+
+            System.out.print("MASUKKAN NAMA RUANGAN TARGET :");
+            String target = scan.nextLine();
+            
+            Room targetRoom = null;
+            for (Room room : game.currentSim.getHouse().getRooms()) {
+                if (room.getRoomName().equals(target)) {
+                    targetRoom = room;
+                    break;
+                }
+            }
+
+            if (targetRoom == null) {
+                throw new IllegalArgumentException("Ruangan target tidak ditemukan!");
+            }
+            
+            System.out.println("\nDirection : (N)orth  (S)outh  (E)ast  (W)est");
+            System.out.print("ENTER DIRECTION BASED ON BENCHMARK ROOM: ");
+            Direction direction = Direction.strToDirection(scan.nextLine());
+            
+            game.currentSim.upgradeHouse(roomName, targetRoom, direction);
+        } else {
+            System.out.println("\nUang Sim tidak mencukupi!");
+            scan.enterUntukLanjut();
+        }
     }
 }
