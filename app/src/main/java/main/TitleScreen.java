@@ -22,7 +22,7 @@ public class TitleScreen {
 
     private void getInput() {
         System.out.print("\nENTER COMMAND: ");
-        String input = scan.next();
+        String input = scan.nextLine();
 
         if (input.equals("1")) {
             // pass, quit from method
