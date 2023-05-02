@@ -51,7 +51,7 @@ public class Sim extends Exception implements SimAction {
         hunger = 80;
         health = 80;
 
-        money = 100;
+        money = 10000;
 
         x = 5;
         y = 3;
@@ -84,6 +84,10 @@ public class Sim extends Exception implements SimAction {
     }
     public int getMoney() {return money;}
 
+    public Thread getUpgradeHouse() {
+        return upgradeHouse;
+    }
+
     public void setMoney(int money) {
         this.money+= money;
     }
@@ -98,21 +102,25 @@ public class Sim extends Exception implements SimAction {
     }
 
     public void upgradeHouse(String roomName, Room target, Direction direction) {
-        if (upgradeHouse != null) {
-            throw new IllegalArgumentException("House still in upgrade!");
-        } else {
+        if (upgradeHouse == null) {
             money -= 1500;
             upgradeHouse = new Thread(new Runnable() {
                 long timeLastUpgrade = Game.getTime();
                 public void run(){
                     while (upgradeHouse != null) {
-                        if (Game.getTime() - timeLastUpgrade > 1000 * 60 * 18) {
-                            simHouse.addRoom(roomName, target, direction);
-                            upgradeHouse = null;
+                        try {
+                            if (Game.getTime() - timeLastUpgrade >= 18 * 60) {
+                                upgradeHouse = null;
+                            }
+                            Thread.sleep(3000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
+                    simHouse.addRoom(roomName, target, direction);
                 }
             });
+            upgradeHouse.start();
         }
     }
 
