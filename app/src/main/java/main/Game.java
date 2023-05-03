@@ -15,13 +15,16 @@ import java.util.*;
 public class Game {
     Renderable currentView;
     String currentHouse;
-    Sim currentSim;
+    static Sim currentSim;
     World world;
     private GameSimOption simOption = new GameSimOption(this);
     private static long gameTime, day;
 
     private boolean isUpgrading, overlapActionShowed;
     private final Object upgradeLock = new Object();
+
+    // CHEAT OPTIONS
+    private static boolean skiptime, fastbuild, fastshop, addinfinitesim = false;
 
     private long dayLastSimAdded = -1;
     protected Input scan = Input.getInstance();
@@ -59,7 +62,7 @@ public class Game {
         if (world.getSims().size() == 0) {
             showGameOverScreen();
         } else {
-            changeSimOption();
+            changeSimOption(true);
         }
     }
 
@@ -95,7 +98,7 @@ public class Game {
         String input = scan.nextLine();
 
         if (input.equals("Ch")) {
-            changeSimOption();
+            changeSimOption(false);
         }
         
         else if (input.equals("S")) {
@@ -131,6 +134,7 @@ public class Game {
         //         scan.enterUntukLanjut();
         //     }
         // } 
+        
         else if (input.equals("U")) {
             try {
                 simOption.upgradeHouse();
@@ -148,9 +152,66 @@ public class Game {
             goToObjectOption();
         }
 
+        else if (input.split(" ")[0].equals("testingcheats")) {
+            try {
+                if (input.split(" ").length == 2) {
+                    cheatOptions(input.split(" ")[1], 0);
+                } 
+    
+                if (input.split(" ").length == 3) { // money/mood/health/hunger cheat
+                    cheatOptions(input.split(" ")[1], Integer.parseInt(input.split(" ")[2]));
+                } 
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+
         else {
             System.out.println("\nMasukkan input sesuai dengan opsi diatas!");
             scan.enterUntukLanjut();
+        }
+    }
+
+    public void cheatOptions(String cheat, int val) {
+        switch (cheat) {
+            case "money":
+                currentSim.setMoney(val);
+                break;
+
+            case "mood":
+                currentSim.setMood(val);
+                break;
+
+            case "health":
+                currentSim.setHealth(val);
+                break;
+
+            case "hunger":
+                currentSim.setHunger(val);
+                break;
+
+            case "skiptime":
+                skiptime = !skiptime;
+                break;
+
+            case "fastbuild":
+                fastbuild = !fastbuild; // TODO: implement this cheat
+                break;
+
+            case "fastshop":
+                fastshop = !fastshop; // TODO: implement this cheat
+                break;
+
+            case "killcurrentsim":
+                currentSim.killSim();
+                break;
+
+            case "addinfinitesim":
+                addinfinitesim = !addinfinitesim;
+                break;
+
+            case "forwardtime":
+                addTime(val);
         }
     }
 
@@ -332,10 +393,10 @@ public class Game {
 
     }
 
-    public void changeSimOption() {
+    public void changeSimOption(boolean deadscreen) {
         int simNum = world.getSims().size();
 
-        if (simNum <= 1) {
+        if (simNum <= 1 && !deadscreen) {
             System.out.println("\nKamu hanya memiliki 1 sim! Silahkan buat sim lain untuk dimainkan.");
             scan.enterUntukLanjut();
         } else {
@@ -415,17 +476,26 @@ public class Game {
         currentView = newView;
     }
 
+    public void addTime(int secs) {
+        gameTime += secs;
+        day = gameTime / 720;
+    }
+
     public static void moveTime(int time) {
         int secs = time / 1000;
 
         for (int i=0; i<secs; i++) {
-            try {
-                Thread.sleep(1000); // 1 second
-                gameTime++;
-                day = gameTime / 720;
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }    
+            if (!currentSim.isDead()) {
+                try {
+                    if (!skiptime) {
+                        Thread.sleep(1000); // 1 second
+                    }
+                    gameTime++;
+                    day = gameTime / 720;
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }    
+            } 
         }
     }
 
