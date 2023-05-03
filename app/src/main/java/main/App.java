@@ -3,23 +3,18 @@
  */
 package main;
 
-import javax.swing.JFrame;
+import java.util.Scanner;
+import util.ClearScreen;
 
 public class App {
     public static void main(String[] args) {
-        JFrame window = new JFrame();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
-        window.setTitle("Sim-plicity");
+        new TitleScreen();
 
-        GamePanel gamePanel = GamePanel.getInstance();
-        window.add(gamePanel);
-
-        window.pack();
-
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
-
-        gamePanel.startGameThread();
+        Game game = new Game();
+        while (true) {
+            game.showGamePanel();
+        }
     }
+
+    
 }

@@ -1,16 +1,18 @@
 package map;
 import java.util.*;
 
-public class World {
+import entity.Sim;
+
+public class World implements WorldAction{
     private static World instance = null;
-    private List<House> houses = new ArrayList<>();
-    private House[][] worldMap;
+    private List<Sim> sims = new ArrayList<>();
+    private Sim[][] worldMap;
 
     // Private Constructor
     public World() {
         int width = 64;
         int length = 64;
-        worldMap = new House[width][length];
+        worldMap = new Sim[width][length];
     }
 
     public static World getInstance() {
@@ -21,23 +23,24 @@ public class World {
     }
 
     // Getter Method
-    public List<House> getHouses() {return houses;}
+    public List<Sim> getSims() {return sims;}
 
-    public void addHouse(int x, int y) {
+    public void addHouse(int x, int y, String simName) {
         if (worldMap[x][y] != null) {
             throw new IllegalArgumentException("House already exists");
         }
         House newHouse = new House(x, y);
-        houses.add(newHouse);
-        worldMap[x][y] = newHouse;
+        Sim newSim = new Sim(newHouse, newHouse.getRooms().get(0), simName);
+        sims.add(newSim);
+        worldMap[x][y] = newSim;
     }
 
     public void removeHouse(int x, int y) {
         if (worldMap[x][y] == null) {
             throw new IllegalArgumentException("House doesn't exist");
         }
-        House removedHouse = worldMap[x][y];
-        houses.remove(removedHouse);
+        Sim removedSim = worldMap[x][y];
+        sims.remove(removedSim);
         worldMap[x][y] = null;
     }
 }
