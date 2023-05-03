@@ -133,7 +133,7 @@ public class Game {
         // } 
         else if (input.equals("U")) {
             try {
-                upgradeHouseOption();
+                simOption.upgradeHouse();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 scan.enterUntukLanjut();
@@ -549,78 +549,6 @@ public class Game {
         } else {
             throw new IllegalArgumentException("Invalid input.");
         }
-    }
-
-    public void upgradeHouseOption() {
-        synchronized(upgradeLock) {
-            if (isUpgrading) {
-                throw new IllegalArgumentException("House still in upgrade.");
-            }
-            isUpgrading = true;
-        }
-
-        System.out.println("\nHouse Map:");
-        currentSim.getHouse().printHouse();
-
-        System.out.print("\nENTER NEW ROOM NAME: ");
-        String roomName = scan.nextLine();
-
-        System.out.print("ENTER ROOM AS BENCHMARK: ");
-        String benchmark = scan.nextLine();
-        Room benchmarkRoom = null;
-        
-        for (Room room : currentSim.getHouse().getRooms()) {
-            if (room.getRoomName().equals(benchmark)) {
-                benchmarkRoom = room;
-                break;
-            }
-        }
-
-        if (benchmarkRoom == null) {
-            synchronized(upgradeLock) {
-                isUpgrading = false;
-            }
-            throw new IllegalArgumentException("Benchmark room not found.");
-        }
-        
-        System.out.println("Direction : (N)orth  (S)outh  (E)ast  (W)est");
-        System.out.print("ENTER DIRECTION BASED ON BENCHMARK ROOM: ");
-        String direction = scan.nextLine();
-        Direction dir = null;
-        
-        if (direction.equals("N")) {
-            dir = Direction.NORTH;
-        } else if (direction.equals("S")) {
-            dir = Direction.SOUTH;
-        } else if (direction.equals("E")) {
-            dir = Direction.EAST;
-        } else if (direction.equals("W")) {
-            dir = Direction.WEST;
-        } else {
-            synchronized(upgradeLock) {
-                isUpgrading = false;
-            }
-            throw new IllegalArgumentException("Invalid direction.");
-        }
-
-        Room target = benchmarkRoom;
-        Direction targetDir = dir;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(18 * 60 * 1000);
-                    currentSim.getHouse().addRoom(roomName, target, targetDir);
-                    currentSim.setMoney(currentSim.getMoney() - 1500);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                } finally {
-                    synchronized(upgradeLock) {
-                        isUpgrading = false;
-                    }
-                }
-            }
-        }).start();
     }
 
     public void showDishTable() {

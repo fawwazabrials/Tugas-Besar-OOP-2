@@ -4,6 +4,7 @@ import java.util.*;
 
 import map.House;
 import map.Room;
+import map.Direction;
 import item.Food;
 import item.Dish;
 import item.Ingredients;
@@ -32,12 +33,15 @@ public class Sim extends Exception implements SimAction {
     private long timeLastSleep;
     private long bufferedVisitTime;
 
+    private Thread upgradeHouse;
+
     // private boolean visiting;
 
     public Sim(House house, Room currRoom, String name) {
         this.name = name;
         this.simHouse = house;
         this.currRoom = currRoom;
+        this.upgradeHouse = null;
         currHouse = simHouse;
         // visiting = false;
         bufferedVisitTime = 0;
@@ -47,7 +51,7 @@ public class Sim extends Exception implements SimAction {
         hunger = 80;
         health = 80;
 
-        money = 100;
+        money = 10000;
 
         x = 5;
         y = 3;
@@ -80,6 +84,10 @@ public class Sim extends Exception implements SimAction {
     }
     public int getMoney() {return money;}
 
+    public Thread getUpgradeHouse() {
+        return upgradeHouse;
+    }
+
     public void setMoney(int money) {
         this.money+= money;
     }
@@ -91,6 +99,29 @@ public class Sim extends Exception implements SimAction {
     public void goToObject(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public void upgradeHouse(String roomName, Room target, Direction direction) {
+        if (upgradeHouse == null) {
+            money -= 1500;
+            upgradeHouse = new Thread(new Runnable() {
+                long timeLastUpgrade = Game.getTime();
+                public void run(){
+                    while (upgradeHouse != null) {
+                        try {
+                            if (Game.getTime() - timeLastUpgrade >= 18 * 60) {
+                                upgradeHouse = null;
+                            }
+                            Thread.sleep(3000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    simHouse.addRoom(roomName, target, direction);
+                }
+            });
+            upgradeHouse.start();
+        }
     }
 
     @Override

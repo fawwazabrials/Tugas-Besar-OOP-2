@@ -61,7 +61,6 @@ public class Room implements RoomAction, Renderable {
         }
         for (int i = x; i < furniture.getWidth() + x; i++) {
             for (int j = y; j < furniture.getLength() + y; j++) {
-                // System.out.println("checking: " + furniture.getName() + " at " + i + ", " + j);
                 if (roomGrid[x][y] != null) {
                     return false;
                 }
@@ -95,7 +94,6 @@ public class Room implements RoomAction, Renderable {
             throw new IllegalArgumentException("No furniture at (" + oldX + ", " + oldY + ")");
         }
 
-        // Mencari titik paling atas kiri dari furniture
         int topLeftX = -1;
         int topLeftY = -1;
         for (int i = 0; i < width; i++) {

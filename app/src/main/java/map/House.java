@@ -25,9 +25,6 @@ public class House implements HouseAction{
 
     @Override
     public void addRoom(String roomName, Room benchmarkRoom, Direction direction) {
-        if (benchmarkRoom.getConnectedRooms().get(direction) != null) {
-            throw new IllegalArgumentException("Room already exists!");
-        }
         /* Mencari key dengan value benchamarkRoom */
         Point coordinate = null;
         for (Map.Entry<Point, Room> entry : roomMap.entrySet()) {
@@ -35,9 +32,7 @@ public class House implements HouseAction{
                 coordinate = entry.getKey();
             }
         }
-        if (coordinate == null) {
-            throw new IllegalArgumentException("Room not found!");
-        }
+
         Room newRoom = new Room(roomName);
         benchmarkRoom.getConnectedRooms().put(direction, newRoom);
         switch(direction) {
@@ -53,8 +48,6 @@ public class House implements HouseAction{
             case WEST:
                 roomMap.put(new Point((int)coordinate.getX(), (int)coordinate.getY() - 1), newRoom);
                 break;
-            default:
-                throw new IllegalArgumentException("Invalid direction");
         }
 
         Point newRoomCoordinate = null;
@@ -66,16 +59,20 @@ public class House implements HouseAction{
         }
 
         if (roomMap.containsKey(new Point((int)newRoomCoordinate.getX() - 1, (int)newRoomCoordinate.getY()))) {
-            newRoom.getConnectedRooms().put(Direction.SOUTH, roomMap.get(new Point((int)newRoomCoordinate.getX() - 1, (int)newRoomCoordinate.getY())));
+            newRoom.getConnectedRooms().put(Direction.NORTH, roomMap.get(new Point((int)newRoomCoordinate.getX() - 1, (int)newRoomCoordinate.getY())));
+            roomMap.get(new Point((int)newRoomCoordinate.getX() - 1, (int)newRoomCoordinate.getY())).getConnectedRooms().put(Direction.SOUTH, newRoom);
         }
         if (roomMap.containsKey(new Point((int)newRoomCoordinate.getX() + 1, (int)newRoomCoordinate.getY()))) {
-            newRoom.getConnectedRooms().put(Direction.NORTH, roomMap.get(new Point((int)newRoomCoordinate.getX() + 1, (int)newRoomCoordinate.getY())));
+            newRoom.getConnectedRooms().put(Direction.SOUTH, roomMap.get(new Point((int)newRoomCoordinate.getX() + 1, (int)newRoomCoordinate.getY())));
+            roomMap.get(new Point((int)newRoomCoordinate.getX() + 1, (int)newRoomCoordinate.getY())).getConnectedRooms().put(Direction.NORTH, newRoom);
         }
         if (roomMap.containsKey(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() - 1))) {
             newRoom.getConnectedRooms().put(Direction.WEST, roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() - 1)));
+            roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() - 1)).getConnectedRooms().put(Direction.EAST, newRoom);
         }
         if (roomMap.containsKey(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() + 1))) {
             newRoom.getConnectedRooms().put(Direction.EAST, roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() + 1)));
+            roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() + 1)).getConnectedRooms().put(Direction.WEST, newRoom);
         }
 
         rooms.add(newRoom);
