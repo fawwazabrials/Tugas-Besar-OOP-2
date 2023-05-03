@@ -4,6 +4,7 @@ import java.util.*;
 
 import map.House;
 import map.Room;
+import util.Angka;
 import map.Direction;
 import item.Food;
 import item.Dish;
@@ -11,7 +12,7 @@ import item.Ingredients;
 import item.Item;
 import main.Game;
 
-public class Sim extends Exception implements SimAction {
+public class Sim extends Exception implements SimAction, Runnable {
     boolean alive;
 
     private int x, y;
@@ -30,10 +31,12 @@ public class Sim extends Exception implements SimAction {
 
     private long timeLastPoop; //belum pake di method poop
     private long timeLastEat;  //belum pake di method eat
-    private long timeLastSleep;
+    private volatile long timeLastSleep;
+    private int dayLastSleep;
+
     private long bufferedVisitTime;
 
-    private Thread upgradeHouse;
+    private Thread upgradeHouse, trackUpdates;
 
     // private boolean visiting;
 
@@ -45,6 +48,8 @@ public class Sim extends Exception implements SimAction {
         currHouse = simHouse;
         // visiting = false;
         bufferedVisitTime = 0;
+
+        resetTimeLastSleep(); dayLastSleep = (int)Game.getDay();
         
         alive = true;
         mood = 80;
@@ -55,8 +60,12 @@ public class Sim extends Exception implements SimAction {
 
         x = 5;
         y = 3;
+
+        trackUpdates = new Thread(this);
+        trackUpdates.start();
     }
 
+    public int getTimeLastSleep() {return (int)timeLastSleep;}
     public String getName() {return name;}
     public House getHouse() {return simHouse;}
     public House getCurrHouse() {return currHouse;}
@@ -68,29 +77,30 @@ public class Sim extends Exception implements SimAction {
     public String getJob() {return job;}
     public void setJob(String job) {this.job = job;}
     public int getMood() {return mood;}
-    public void setMood(int newMood) {
+    public synchronized void setMood(int newMood) {
+        mood = newMood;
         if (mood > 100) mood = 100;
-        else mood = newMood;
     }
     public int getHunger() {return hunger;}
-    public void setHunger(int newHunger) {
+    public synchronized void setHunger(int newHunger) {
+        hunger = newHunger;
         if (hunger > 100) hunger = 100;
-        else hunger = newHunger;
     }
     public int getHealth() {return health;}
-    public void setHealth(int newHealth) {
+    public synchronized void setHealth(int newHealth) {
+        health = newHealth;
         if (health > 100) health = 100;
-        else health = newHealth;
     }
     public int getMoney() {return money;}
+    public synchronized void setMoney(int newMoney) {
+        money = newMoney;
+    }
 
     public Thread getUpgradeHouse() {
         return upgradeHouse;
     }
+    public Thread getTrackUpdates() {return trackUpdates;}
 
-    public void setMoney(int money) {
-        this.money+= money;
-    }
     public int getX() {return x;}
     public void setX(int newX) {x = newX;}
     public int getY() {return y;}
@@ -172,11 +182,24 @@ public class Sim extends Exception implements SimAction {
     @Override
     public void sleep(int time) {
         /*
+        * PREREQUISITE: time sudah pasti kelipatan 4 menit / 240 detik
         * +30 mood, +20 kesehatan / 4 menit
         */
-        mood+= (30*time/240000);
-        health+= (20*time/240000);
-        Game.moveTime(time);
+        int cycle = time / (60 * 4);
+
+        System.out.println("Sim akan tidur selama " + Angka.secToTime(time));
+
+        for (int i=0; i<cycle; i++) {
+            Game.moveTime(60 * 4 * 1000);
+
+            System.out.println("Sim sudah tidur selama 4 menit, waktu tersisa: " + Angka.secToTime(time-i*4*60));
+            System.out.println("Gila! Tidurnya nyenyak banget! +20 health +30 mood");
+
+            setHealth(getHealth() + 20);
+            setMood(getMood() + 30);
+
+            resetTimeLastSleep();
+        }
 
         updateSim();
     }
@@ -188,6 +211,9 @@ public class Sim extends Exception implements SimAction {
 
     public void killSim() {
         alive = false;
+
+        trackUpdates = null;
+        upgradeHouse = null;
     }
 
     public void updateSim() {
@@ -292,7 +318,7 @@ public class Sim extends Exception implements SimAction {
 
         for (int i=0; i<cycle; i++) {
             Game.moveTime(30 * 1000);
-            System.out.println("\nSim sudah berjalan selama 30 detik, waktu tersisa: " + (visittime-30*cycle) + " detik!");
+            System.out.println("\nSim sudah berjalan selama 30 detik, waktu tersisa: " + Angka.secToTime(visittime-30*i));
             System.out.println("Keren ya ternyata pemandangannya! -10 hunger +10 mood");
             setHunger(getHunger() - 10);
             setMood(getMood() + 10);
@@ -361,5 +387,28 @@ public class Sim extends Exception implements SimAction {
         Game.moveTime(time);
 
         updateSim();
+    }
+
+    @Override
+    public void run() {
+        while (trackUpdates != null) {
+            // System.out.println(timeLastSleep);// track sleep
+            if ((Game.getTime() - timeLastSleep) >= 10*60) {
+                // System.out.println("HIT!");
+                resetTimeLastSleep();
+    
+                setHealth(getHealth() - 5);
+                setMood(getMood() - 5);
+            }
+    
+            if (dayLastSleep < Game.getDay()) {
+                resetTimeLastSleep();
+                dayLastSleep = (int)Game.getDay();
+            }
+        }
+    }
+
+    public void resetTimeLastSleep() {
+        timeLastSleep = Game.getTime();
     }
 }

@@ -40,7 +40,7 @@ public class Game {
 
     public void showGamePanel() {
         // TODO: ini bawah nanti di uncomment
-        ClearScreen.clear();
+        // ClearScreen.clear();
 
         if (currentSim.isDead()) {
             currentSim.killSim();
@@ -49,6 +49,10 @@ public class Game {
         }
 
         else {
+            System.out.println("last sleep: " + (Game.getTime() - currentSim.getTimeLastSleep()));
+            System.out.println("time: " + Game.getTime());
+            System.out.println("::: " + ((Game.getTime() - currentSim.getTimeLastSleep()) >= 60*10));
+            System.out.println(currentSim.getTrackUpdates().isAlive());
             showRender();
             showOverlapAction();
             showOptions();
@@ -212,6 +216,7 @@ public class Game {
 
             case "forwardtime":
                 addTime(val);
+                break;
         }
     }
 
@@ -242,10 +247,10 @@ public class Game {
                 System.out.print("\nApakah anda ingin tidur? (Y/N) ");
                 String input = scan.nextLine();
                 if (input.equals("Y")) {
-                    // TODO : tambahin method buat sleep
+                    simOption.sleep();
                 }
             } else {
-                    // TODO : tambahin method buat sleep
+                simOption.sleep();
 
             }
         }

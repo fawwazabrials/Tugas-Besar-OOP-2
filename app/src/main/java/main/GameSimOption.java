@@ -19,8 +19,30 @@ public class GameSimOption {
     }
 
     public void sleep() {
-        // TODO: Implement ini
+        int input;
+            boolean getInput = true;
 
+            while (getInput) {
+                try {
+                    input = scan.getIntegerInput("MASUKKAN WAKTU (dalam kelipatan 240 detik): ");
+
+                    if (input % 240 == 0 && input != 0) {
+                        System.out.println("\nSim sedang tidur...");
+                        game.currentSim.sleep(input);
+                        System.out.println("\nSim sudah bangun!");
+                        getInput = false;
+                        scan.enterUntukLanjut();
+                    } else {
+                        System.out.println("Masukan waktu dalam kelipatan 240 detik!");
+                    }
+                }
+                catch (NoInputException e) {
+                    getInput = false;
+                }
+                catch (InputMismatchException  e) {
+                    System.out.println("Masukkan angka!");
+                }
+            }
     }
 
     public void eat() {
@@ -41,7 +63,6 @@ public class GameSimOption {
         List<Sim> sims = game.world.getSims();
         int simNum = sims.size();
         int houseNow = 0;
-
 
         if (simNum <= 1) {
             System.out.println("\nTidak ada sim lain! Silahkan buat sim terlebih dahulu!");
