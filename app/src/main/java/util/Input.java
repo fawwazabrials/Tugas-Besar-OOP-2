@@ -69,7 +69,7 @@ public class Input {
         System.out.println(message);
 
         String input = nextLine();
-        if (input.equals("\n")) {
+        if (input.equals("")) {
             throw new NoInputException();
         } else {
             return input;
