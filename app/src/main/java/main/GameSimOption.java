@@ -76,8 +76,10 @@ public class GameSimOption {
         
                         game.currentSim.visit(sims.get(input-1));
                         game.currentHouse = sims.get(input-1).getName();
+                        getInput = false;
         
                         System.out.println("\nSim sudah sampai!");
+                        scan.enterUntukLanjut();
                     }
                 }
                 catch (NoInputException e) {

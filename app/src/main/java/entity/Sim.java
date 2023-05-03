@@ -182,7 +182,7 @@ public class Sim extends Exception implements SimAction {
     }
 
     public boolean isDead() {
-        if (health < 0 || mood < 0 || hunger < 0) return true;
+        if (health <= 0 || mood <= 0 || hunger <= 0 || !alive) return true;
         return false;
     }
 
@@ -282,23 +282,29 @@ public class Sim extends Exception implements SimAction {
 
     @Override
     public void visit(Sim target) {
-        int visittime = (int)(Math.sqrt(Math.pow((this.getHouse().getX() - target.getHouse().getX()), 2) + Math.pow((this.getHouse().getY() - target.getHouse().getY()), 2)));
+        int visittime = (int)(Math.sqrt(Math.pow((this.getCurrHouse().getX() - target.getHouse().getX()), 2) + Math.pow((this.getCurrHouse().getY() - target.getHouse().getY()), 2)));
         int cycle = (int)(visittime / 30);
 
         // DEBUG: INSTANT MOVE
         // Game.moveTime(0);
 
+        System.out.println("\nSim akan berjalan selama " + visittime + " detik!");
+
         for (int i=0; i<cycle; i++) {
             Game.moveTime(30 * 1000);
+            System.out.println("\nSim sudah berjalan selama 30 detik, waktu tersisa: " + (visittime-30*cycle) + " detik!");
+            System.out.println("Keren ya ternyata pemandangannya! -10 hunger +10 mood");
             setHunger(getHunger() - 10);
             setMood(getMood() + 10);
         }
 
         Game.moveTime(visittime%30 * 1000); // sisa waktu
-        bufferedVisitTime += visittime%30 * 1000;
+        bufferedVisitTime += visittime%30;
 
         if (bufferedVisitTime > 30) {
             cycle = (int)(bufferedVisitTime / 30);
+
+            System.out.println("Keren ya ternyata pemandangannya! -"+ 10*cycle +" hunger " + "+" + 10*cycle + " mood");
             setHunger(getHunger()- 10*cycle);
             setMood(getMood()+ 10*cycle);
             bufferedVisitTime %= 30;
