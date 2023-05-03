@@ -14,9 +14,9 @@ public class Angka {
         int minutes = secs / 60;
         int seconds = secs % 60;
 
-        if (minutes >= 0) time += minutes + " menit";
-        if (minutes >= 0 && seconds >= 0) time += " ";
-        if (seconds >= 0) time += seconds + " detik";
+        if (minutes > 0) time += minutes + " menit";
+        if (minutes > 0 && seconds > 0) time += " ";
+        if (seconds > 0) time += seconds + " detik";
 
         return time;
     }

@@ -66,7 +66,7 @@ public class Input {
     }
 
     public String getInput(String message) throws NoInputException {
-        System.out.println(message);
+        System.out.print(message);
 
         String input = nextLine();
         if (input.equals("")) {
