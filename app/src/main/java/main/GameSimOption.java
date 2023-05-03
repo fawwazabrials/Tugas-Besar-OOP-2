@@ -1,8 +1,10 @@
 package main;
 
 import java.util.List;
+import java.util.InputMismatchException;
 
 import entity.Sim;
+import exception.NoInputException;
 import util.Angka;
 import util.Input;
 
@@ -55,22 +57,33 @@ public class GameSimOption {
             }
 
             int input;
-            System.out.print("MASUKKAN SIM YANG INGIN DIKUNJUNGI: ");
-            input = Angka.stringToInt(scan.nextLine());
+            boolean getInput = true;
 
-            if (input <= 0 || input > simNum) {
-                System.out.println("Masukkan angka dalam batas sim! Silahkan coba ulang.");
-                scan.enterUntukLanjut();
-            } else if (input == (houseNow+1)) {
-                System.out.println("Sim tidak bisa mengujungi lokasi dia sekarang! Silahkan coba ulang.");
-                scan.enterUntukLanjut();
-            } else {
-                System.out.println("\nSim sedang berjalan untuk berkunjung...");
+            while (getInput) {
+                try {
+                    input = scan.getIntegerInput("MASUKKAN SIM YANG INGIN DIKUNJUNGI: ");
 
-                game.currentSim.visit(sims.get(input-1));
-                game.currentHouse = sims.get(input-1).getName();
-
-                System.out.println("\nSim sudah sampai!");
+                    if (input <= 0 || input > simNum) {
+                        System.out.println("Masukkan angka dalam batas sim! Silahkan coba ulang.");
+                        scan.enterUntukLanjut();
+                    } else if (input == (houseNow+1)) {
+                        System.out.println("Sim tidak bisa mengujungi lokasi dia sekarang! Silahkan coba ulang.");
+                        scan.enterUntukLanjut();
+                    } else {
+                        System.out.println("\nSim sedang berjalan untuk berkunjung...");
+        
+                        game.currentSim.visit(sims.get(input-1));
+                        game.currentHouse = sims.get(input-1).getName();
+        
+                        System.out.println("\nSim sudah sampai!");
+                    }
+                }
+                catch (NoInputException e) {
+                    getInput = false;
+                }
+                catch (InputMismatchException  e) {
+                    System.out.println("Masukkan angka!");
+                }
             }
         }
 
