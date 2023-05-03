@@ -156,7 +156,11 @@ public class GameSimOption {
 
             System.out.print("\nMASUKKAN NAMA RUANGAN BARU : ");
             String roomName = scan.nextLine();
-            // TODO: Cek nama ruangan ada atau tidak
+            for (Room room: game.currentSim.getHouse().getRooms()) {
+                if (room.getRoomName().equals(roomName)){
+                    throw new IllegalArgumentException("Nama ruangan sudah ada!");
+                }
+            }
 
             System.out.print("MASUKKAN NAMA RUANGAN TARGET : ");
             String target = scan.nextLine();
