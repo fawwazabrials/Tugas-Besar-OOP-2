@@ -8,11 +8,11 @@ public class Inventory {
     private Map<Item, Integer> items;
 
     public Inventory(){
-        this.items = new TreeMap<Item, Integer>();
+        this.items = new HashMap<Item, Integer>();
     }
 
     public Map<Item, Integer> getItems(String category){
-        Map<Item, Integer> wanted = new TreeMap<>();
+        Map<Item, Integer> wanted = new HashMap<>();
         for(Map.Entry<Item, Integer> e : items.entrySet()){
             if(e.getKey().getCategory().equals(category)){
                 wanted.put(e.getKey(), e.getValue());
