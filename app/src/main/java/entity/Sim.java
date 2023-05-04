@@ -49,6 +49,7 @@ public class Sim extends Exception implements SimAction, Runnable {
         currHouse = simHouse;
         
         job = Job.createRandomJob();
+        simItems = new Inventory();
 
         bufferedVisitTime = 0;
         bufferedWorkTime = 0;
