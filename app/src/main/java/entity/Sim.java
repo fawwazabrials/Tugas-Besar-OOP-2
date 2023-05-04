@@ -205,7 +205,7 @@ public class Sim extends Exception implements SimAction, Runnable {
         /*
         * +5 kesehatan, -5 kekenyangan, +10 mood / 20 detik
         */
-        int cycle = time / 20000;
+        int cycle = time / 20000; //belum diimplementasikan
 
 
         health+= (5*time/20000);
@@ -283,7 +283,7 @@ public class Sim extends Exception implements SimAction, Runnable {
         Game.moveTime(time);
     }
     @Override
-    public void cook(Food dish) {
+    public void cook(Dish dish) {
         switch(dish.getName()){
             case "nasi ayam":
             if(simItems.checkItemAvailable("nasi",1) && simItems.checkItemAvailable("ayam",1)){
