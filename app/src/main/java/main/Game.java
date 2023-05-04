@@ -135,15 +135,14 @@ public class Game {
             }
         }
 
-        // TODO: Uncomment kalo udah dibenerin
-        // else if (input.equals("E")) {
-        //     try {
-        //         editRoomOption();
-        //     } catch (Exception e) {
-        //         System.out.println(e.getMessage());
-        //         scan.enterUntukLanjut();
-        //     }
-        // } 
+        else if (input.equals("E")) {
+            try {
+                editRoomOption();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
+            }
+        } 
         
         else if (input.equals("U")) {
             try {
@@ -554,9 +553,7 @@ public class Game {
     }
 
     public void moveRoomOption(){
-        // Belom ada currentHouse di Sim
-        // if (currentSim.getCurrentHouse() == null)
-        if (currentHouse() == null) {
+        if (currentSim.getCurrHouse() == null) {
             throw new IllegalArgumentException("Sim is not in any house.");
         }
 
@@ -583,12 +580,11 @@ public class Game {
     }
 
     public void editRoomOption(){
-        // Belom ada currentHouse di Sim
-        // if (! currentSim.getCurrentHouse().equals(currentSim.getHouse()))
-        if (! currentHouse().equals(currentSim.getHouse())) {
+        if (! currentSim.getCurrHouse().equals(currentSim.getHouse())) {
             throw new IllegalArgumentException("Sim is not in their house.");
         }
 
+        showRender();
         System.out.println("\n(A)dd Furniture  (R)emove Furniture  (M)ove Furniture");
         System.out.print("ENTER COMMAND: ");
         String input = scan.nextLine();
@@ -626,6 +622,7 @@ public class Game {
             int y = scan.nextInt();
 
             currentSim.getRoom().addFurniture(furniture, x, y);
+            currentSim.getSimItems().removeItem(furniture);
         } else if (input.equals("R")) {
             if (currentSim.getRoom().getFurnitures().isEmpty()) {
                 throw new IllegalArgumentException("No furniture found.");
