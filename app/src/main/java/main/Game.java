@@ -694,4 +694,10 @@ public class Game {
         System.out.println("Tumis sayur\t\t5\t\tWortel, Bayam");
         System.out.println("Bistik\t\t\t22\t\tKentang, Sapi");
     }
+
+    public void viewInventory() {
+        System.out.println("\nInventory:");
+        System.out.println("--------------------------------------------------------------------");
+        currentSim.getSimItems().printInv();
+    }
 }
