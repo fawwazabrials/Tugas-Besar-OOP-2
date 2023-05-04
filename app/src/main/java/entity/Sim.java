@@ -390,17 +390,20 @@ public class Sim extends Exception implements SimAction, Runnable {
 
     @Override
     public void buyItem(Item item) {
-        // new Thread(new Runnable() {
-        //     public void run() {
-        //         delay(waktu antar);
-        //         add inventory
-        //     }
-        // }).start();
+        if(item.getPriceValue() > money){
+            throw new IllegalArgumentException("Not enough money");
+        }
+        money -= item.getPriceValue();
+        simItems.addItem(item);
     }
 
     @Override
     public void sellItem(Item item) {
-        
+        if(!simItems.checkItemAvailable(item.getName(), 1)){
+            throw new IllegalArgumentException("Not enough item to sell");
+        }
+        simItems.removeItem(item);
+        money += item.getPriceValue();
     }
 
     @Override
