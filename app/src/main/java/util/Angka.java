@@ -1,5 +1,7 @@
 package util;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Angka {
     public static int stringToInt(String s) {
         try {
@@ -10,14 +12,27 @@ public class Angka {
     }
 
     public static String secToTime(int secs) {
-        String time = "";
+        int hours = secs / 3600;
         int minutes = secs / 60;
         int seconds = secs % 60;
 
-        if (minutes > 0) time += minutes + " menit";
-        if (minutes > 0 && seconds > 0) time += " ";
-        if (seconds > 0) time += seconds + " detik";
+        String hh = "";
+        String mm = "";
+        String ss = "";
 
-        return time;
+        if (hours < 10) hh += "0";
+        hh += hours;
+        
+        if (minutes < 10) mm += "0";
+        mm += minutes;
+
+        if (seconds < 10) ss += "0";
+        ss += seconds;
+
+        return String.format("%s:%s:%s", hh, mm, ss);
+    }
+
+    public static int randint(int lower, int upper) {
+        return ThreadLocalRandom.current().nextInt(lower, upper + 1);
     }
 }
