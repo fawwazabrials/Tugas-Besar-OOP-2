@@ -2,8 +2,11 @@ package main;
 
 public class Clock {
     private int gameTime, day;
+    private Game gm;
 
-    public Clock() {
+    public Clock(Game gm) {
+        this.gm = gm;
+
         gameTime = 0;
         day = 1;
     }
@@ -19,9 +22,9 @@ public class Clock {
         int secs = time / 1000;
 
         for (int i=0; i<secs; i++) {
-            if (!Game.getCurrentSim().isDead()) {
+            if (!gm.getCurrentSim().isDead()) {
                 try {
-                    if (!Cheat.isSkiptime()) {
+                    if (!gm.getCheat().isSkiptime()) {
                         Thread.sleep(1000); // 1 second
                     } forwardTime(1);
                 } catch (InterruptedException e) {
