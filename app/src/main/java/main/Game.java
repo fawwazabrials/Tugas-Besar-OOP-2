@@ -15,15 +15,25 @@ import map.*;
 import java.util.*;
 
 public class Game {
-    Renderable currentView;
-    String currentHouse;
-    static Sim currentSim;
-    World world;
+    // IMPORTANT GAME ATTRIBUTES
+    private static Renderable currentView;
+    private static String currentHouse;
+    private static Sim currentSim;
+    private static World world;
+    private static Clock clock;
+
+    public static Clock getClock() {return clock;}
+    public static World getWorld() {return world;}
+    public static void setWorld(World world) {Game.world = world;}
+    public static void setCurrentView(Renderable currentView) {Game.currentView = currentView;}
+    public static Renderable getCurrentView() {return currentView;}
+    public static void setCurrentSim(Sim currentSim) {Game.currentSim = currentSim;}
+    public static Sim getCurrentSim() {return currentSim;}
+    public static void setCurrentHouse(String currentHouse) {Game.currentHouse = currentHouse;}
+    public static String getCurrentHouse() {return currentHouse;}
+
     private GameSimOption simOption = new GameSimOption(this);
     private static long gameTime, day;
-
-    private boolean isUpgrading, overlapActionShowed;
-    private final Object upgradeLock = new Object();
 
     // CHEAT OPTIONS
     private static boolean skiptime, fastbuild, fastshop, addinfinitesim = false;
@@ -521,23 +531,7 @@ public class Game {
         day = gameTime / 720;
     }
 
-    public static void moveTime(int time) {
-        int secs = time / 1000;
-
-        for (int i=0; i<secs; i++) {
-            if (!currentSim.isDead()) {
-                try {
-                    if (!skiptime) {
-                        Thread.sleep(1000); // 1 second
-                    }
-                    gameTime++;
-                    day = gameTime / 720;
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }    
-            } 
-        }
-    }
+    
 
     public static long getTime() {return gameTime;}
     public static long getDay() {return day;}
@@ -670,5 +664,32 @@ public class Game {
         System.out.println("Susu kacang\t\t5\t\tSusu, Kacang");
         System.out.println("Tumis sayur\t\t5\t\tWortel, Bayam");
         System.out.println("Bistik\t\t\t22\t\tKentang, Sapi");
+    }
+
+    private class Clock {
+        private int gameTime, day;
+
+        public int getGameTime() {return gameTime;}
+        public int getDay() {return day;}
+        
+        public void forwardTime(int time) {
+            gameTime = gameTime+time;
+        }
+        
+        public void moveTime(int time) {
+            int secs = time / 1000;
+    
+            for (int i=0; i<secs; i++) {
+                if (!currentSim.isDead()) {
+                    try {
+                        if (!skiptime) {
+                            Thread.sleep(1000); // 1 second
+                        } forwardTime(1);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }    
+                } 
+            }
+        }
     }
 }
