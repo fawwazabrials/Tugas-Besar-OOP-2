@@ -59,9 +59,9 @@ public class Room implements RoomAction, Renderable {
         if (furniture.getWidth() + x > width || furniture.getLength() + y > length ) {
             return false;
         }
-        for (int i = x; i < furniture.getWidth() + x; i++) {
-            for (int j = y; j < furniture.getLength() + y; j++) {
-                if (roomGrid[x][y] != null) {
+        for (int i = x; i < x + furniture.getWidth(); i++) {
+            for (int j = y; j < y + furniture.getLength(); j++) {
+                if (roomGrid[i][j] != null) {
                     return false;
                 }
             }
