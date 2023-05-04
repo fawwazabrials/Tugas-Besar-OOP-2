@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 
+import entity.Job;
 import entity.Sim;
+import exception.NoInputException;
 import util.Angka;
 import util.ClearScreen;
 import util.Input;
@@ -90,7 +92,7 @@ public class Game {
     }
 
     public void showOptions() {
-        System.out.println("\n(S)im Info        (C)urrent Location  (I)nventory");
+        System.out.println("\n(S)im Info        (C)hange Job  (I)nventory");
         System.out.println("(U)pgrade House   (M)ove Sim          (E)dit Room");
         System.out.println("(Ad)dd Sim        (Ch)ange Sim        (L)ist Object  ");
         System.out.println("(G)o to Object    (A)ction            (S)hop");
@@ -107,6 +109,10 @@ public class Game {
         
         else if (input.equals("S")) {
             showSimInfo();
+        }
+
+        else if (input.equals("C")) {
+            changeJobOption();
         }
         
         else if (input.equals("Ad")) {
@@ -176,6 +182,39 @@ public class Game {
         }
     }
 
+    public void changeJobOption() {
+        System.out.println("\n    Pekerjaan yang ada: ");
+        System.out.println(String.format(" %s ", "--------------------------"));
+        System.out.println(String.format("| %-15s | %-6s |", "Pekerjaan", "Gaji"));
+        System.out.println(String.format("|%s|", "--------------------------"));
+        for (String s : Job.getAvailableJobsList()) {
+            System.out.println(String.format("| %-15s | %-6s |", s, Job.getAvailableJobs().get(s)));
+        }
+        System.out.println(String.format(" %s ", "--------------------------"));
+
+        System.out.println("\nSim hanya bisa mengganti pekerjaan jika sudah bekerja selama minimal 1 hari di pekerjaan lamanya");
+        System.out.println("Sim juga harus membayarkan setengah gaji dari pekerjaan baru untuk mengganti pekerjaan");
+
+        try {
+            String input = scan.getInput("\nMasukkan pekerjaan yang dipilih: ");
+
+            try {
+                currentSim.changeJob(new Job(input));
+                System.out.println("\nPekerjaan sim berhasil diganti!");
+            } catch (NoSuchElementException e) {
+                System.out.println(e.getMessage());
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+
+            scan.enterUntukLanjut();
+
+        } catch (NoInputException e) {
+            // ingoner
+        }   
+        
+    }
+
     public void cheatOptions(String cheat, int val) {
         switch (cheat) {
             case "money":
@@ -223,7 +262,7 @@ public class Game {
     public void showSimInfo() {
         System.out.println("\n------ SIM INFO ------");
         System.out.println("Nama: " + currentSim.getName());
-        System.out.println("Pekerjaan: " + currentSim.getJob());
+        System.out.println("Pekerjaan: " + currentSim.getJobName());
         System.out.println("Kesehatan: " + currentSim.getHealth());
         System.out.println("Kekenyangan: " + currentSim.getHunger());
         System.out.println("Mood: " + currentSim.getMood());
@@ -374,7 +413,7 @@ public class Game {
             } else {
                 switch (input) {
                     case 1:
-                        // TODO: Tambahin simAction work disini
+                        simOption.work();
                         break;
 
                     case 2:
@@ -459,10 +498,6 @@ public class Game {
             // TODO: NANTI INI GANTI dayLastSimAdded = day;
             dayLastSimAdded = -1;
         }
-    }
-
-    public void showSimInfo(Sim s) {
-        
     }
 
     public void startNew() {

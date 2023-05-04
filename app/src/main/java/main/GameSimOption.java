@@ -20,29 +20,29 @@ public class GameSimOption {
 
     public void sleep() {
         int input;
-            boolean getInput = true;
+        boolean getInput = true;
 
-            while (getInput) {
-                try {
-                    input = scan.getIntegerInput("MASUKKAN WAKTU (dalam kelipatan 240 detik): ");
+        while (getInput) {
+            try {
+                input = scan.getIntegerInput("MASUKKAN WAKTU (dalam kelipatan 240 detik): ");
 
-                    if (input % 240 == 0 && input != 0) {
-                        System.out.println("\nSim sedang tidur...");
-                        game.currentSim.sleep(input);
-                        System.out.println("\nSim sudah bangun!");
-                        getInput = false;
-                        scan.enterUntukLanjut();
-                    } else {
-                        System.out.println("Masukan waktu dalam kelipatan 240 detik!");
-                    }
-                }
-                catch (NoInputException e) {
+                if (input % 240 == 0 && input != 0) {
+                    System.out.println("\nSim sedang tidur...");
+                    game.currentSim.sleep(input);
+                    System.out.println("\nSim sudah bangun!");
                     getInput = false;
-                }
-                catch (InputMismatchException  e) {
-                    System.out.println("Masukkan angka!");
+                    scan.enterUntukLanjut();
+                } else {
+                    System.out.println("Masukan waktu dalam kelipatan 240 detik!");
                 }
             }
+            catch (NoInputException e) {
+                getInput = false;
+            }
+            catch (InputMismatchException  e) {
+                System.out.println("Masukkan angka!");
+            }
+        }
     }
 
     public void eat() {
@@ -55,8 +55,35 @@ public class GameSimOption {
     }
 
     public void work() {
-        // TODO: Implement ini
+        int input;
+        boolean getInput = true;
 
+        while (getInput) {
+            try {
+                input = scan.getIntegerInput("MASUKKAN WAKTU (dalam kelipatan 120 detik): ");
+
+                if (input % 120 == 0 && input != 0) {
+                    System.out.println("\nSim sedang bekerja...");
+                    game.currentSim.work(input);
+                    System.out.println("\nSim selesai bekerja!");
+                    getInput = false;
+                    scan.enterUntukLanjut();
+                } else {
+                    System.out.println("Masukan waktu dalam kelipatan 120 detik!");
+                }
+            }
+            catch (NoInputException e) {
+                getInput = false;
+            }
+            catch (InputMismatchException  e) {
+                System.out.println("Masukkan angka!");
+            }
+            catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                getInput = false;
+                scan.enterUntukLanjut();
+            }
+        }
     }
 
     public void visit() {

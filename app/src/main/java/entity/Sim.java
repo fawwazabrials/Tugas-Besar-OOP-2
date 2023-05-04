@@ -27,14 +27,15 @@ public class Sim extends Exception implements SimAction, Runnable {
     private int hunger;
     private int health;
     private int money;
-    private String job;
+    private Job job;
 
     private long timeLastPoop; //belum pake di method poop
     private long timeLastEat;  //belum pake di method eat
     private volatile long timeLastSleep;
-    private int dayLastSleep;
+    private volatile int dayLastSleep;
 
-    private long bufferedVisitTime;
+    private long bufferedVisitTime, bufferedWorkTime;
+    private int timeChangedJob, totalJobTimeWorked;
 
     private Thread upgradeHouse, trackUpdates;
 
@@ -46,8 +47,13 @@ public class Sim extends Exception implements SimAction, Runnable {
         this.currRoom = currRoom;
         this.upgradeHouse = null;
         currHouse = simHouse;
-        // visiting = false;
+        
+        job = Job.createRandomJob();
+
         bufferedVisitTime = 0;
+        bufferedWorkTime = 0;
+        timeChangedJob = -999;
+        totalJobTimeWorked = 0;
 
         resetTimeLastSleep(); dayLastSleep = (int)Game.getDay();
         
@@ -74,8 +80,13 @@ public class Sim extends Exception implements SimAction, Runnable {
     public void setRoom(Room newRoom) {
         currRoom = newRoom;
     }
-    public String getJob() {return job;}
-    public void setJob(String job) {this.job = job;}
+    public Job getJob() {return job;}
+    public String getJobName() {return job.getName();}
+    public void setJob(Job job) {
+        this.job = job;
+        timeChangedJob = (int)Game.getDay();
+        totalJobTimeWorked = 0;
+    }
     public int getMood() {return mood;}
     public synchronized void setMood(int newMood) {
         mood = newMood;
@@ -135,32 +146,57 @@ public class Sim extends Exception implements SimAction, Runnable {
     }
 
     @Override
-    public void work(int time) {
+    public void work(int time) throws IllegalArgumentException {
         /*
+        * PREREQUISITE : time sudah pasti kelipatan 4 menit / 120 detik
         * +X money (X sesuai pekerjaan); -10 kekenyangan, -10 mood / 30 detik
         */
-            hunger-= ((10*time)/30000);
-            mood-= ((10*time)/30000);
-            if(time%4 == 0) {
-                if(job == "badut sulap") {
-                    money += (15*(time%240000));
-                }
-                else if(job == "koki") {
-                    money += (30*(time%240000));
-                }
-                else if(job == "polisi") {
-                    money += (35*(time%240000));
-                }
-                else if(job == "programmer") {
-                    money += (45*(time%240000));
-                }
-                else if(job == "dokter") {
-                    money += (50*(time%240000));
-                }
-            }
-            Game.moveTime(time);
 
-            updateSim();
+        if (Game.getTime() - timeChangedJob < 12*60) {
+            System.out.println(timeChangedJob);
+            System.out.println(Game.getTime() - timeChangedJob);
+
+            throw new IllegalArgumentException(("Sim harus menunggu 1 hari setelah pergantian kerja untuk bekerja! Sisa waktu tunggu " + Angka.secToTime(12*60-timeChangedJob)));
+        }
+        
+        // else
+        int cycle = time / 30;
+
+        System.out.println("\nSim akan bekerja selama " + Angka.secToTime(time));
+
+        for (int i=0; i<cycle; i++) {
+            Game.moveTime(30 * 1000); // waktu jalan 30dtk
+
+            System.out.println("\nSim sudah bekerja selama 30 detik, waktu tersisa: " + Angka.secToTime(time-i*30));
+            System.out.println("Aduh.. capek banget kerja. -10 hunger -10 mood");
+
+            bufferedWorkTime += 30;
+            setMood(getMood() - 10);
+            setHunger(getHunger() - 10);
+            totalJobTimeWorked += 30;
+
+            if (bufferedWorkTime >= 240) {
+                bufferedWorkTime -= 240;
+                
+                System.out.println("\nSetelah 4 jam bekerja, akhirnya tugas selesai juga! +" + job.getPay() + " money");
+                setMoney(getMoney() + job.getPay());
+            }
+        }
+        
+        updateSim();
+    }
+
+    public void changeJob(Job job) throws IllegalArgumentException {
+        if (job.getName().equals(this.job.getName())) {
+            throw new IllegalArgumentException(String.format("%s", "Sim tidak bisa menggati pekerjaan ke pekerjaan yang sama!"));
+        }
+        if (totalJobTimeWorked < 12*60) {
+            throw new IllegalArgumentException(String.format("%s %s", "Sim harus bekerja setidaknya 12 menit terlebih dahulu! Sim baru bekerja selama", Angka.secToTime(totalJobTimeWorked)));
+        }
+        if (getMoney() < Math.round(job.getPay()/2)) throw new IllegalArgumentException("Sim harus membayar uang sebanyak " + Math.round(job.getPay()/2) + " ribu untuk mengganti pekerjaan!");
+        
+        // else
+        setJob(job);
     }
 
     @Override
