@@ -33,10 +33,8 @@ public class Game {
     public static String getCurrentHouse() {return currentHouse;}
 
     private GameSimOption simOption = new GameSimOption(this);
-    private static long gameTime, day;
 
-    // CHEAT OPTIONS
-    private static boolean skiptime, fastbuild, fastshop, addinfinitesim = false;
+    
 
     private long dayLastSimAdded = -1;
     protected Input scan = Input.getInstance();
@@ -223,50 +221,6 @@ public class Game {
             // ingoner
         }   
         
-    }
-
-    public void cheatOptions(String cheat, int val) {
-        switch (cheat) {
-            case "money":
-                currentSim.setMoney(val);
-                break;
-
-            case "mood":
-                currentSim.setMood(val);
-                break;
-
-            case "health":
-                currentSim.setHealth(val);
-                break;
-
-            case "hunger":
-                currentSim.setHunger(val);
-                break;
-
-            case "skiptime":
-                skiptime = !skiptime;
-                break;
-
-            case "fastbuild":
-                fastbuild = !fastbuild; // TODO: implement this cheat
-                break;
-
-            case "fastshop":
-                fastshop = !fastshop; // TODO: implement this cheat
-                break;
-
-            case "killcurrentsim":
-                currentSim.killSim();
-                break;
-
-            case "addinfinitesim":
-                addinfinitesim = !addinfinitesim;
-                break;
-
-            case "forwardtime":
-                addTime(val);
-                break;
-        }
     }
 
     public void showSimInfo() {
@@ -664,32 +618,5 @@ public class Game {
         System.out.println("Susu kacang\t\t5\t\tSusu, Kacang");
         System.out.println("Tumis sayur\t\t5\t\tWortel, Bayam");
         System.out.println("Bistik\t\t\t22\t\tKentang, Sapi");
-    }
-
-    private class Clock {
-        private int gameTime, day;
-
-        public int getGameTime() {return gameTime;}
-        public int getDay() {return day;}
-        
-        public void forwardTime(int time) {
-            gameTime = gameTime+time;
-        }
-        
-        public void moveTime(int time) {
-            int secs = time / 1000;
-    
-            for (int i=0; i<secs; i++) {
-                if (!currentSim.isDead()) {
-                    try {
-                        if (!skiptime) {
-                            Thread.sleep(1000); // 1 second
-                        } forwardTime(1);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }    
-                } 
-            }
-        }
     }
 }
