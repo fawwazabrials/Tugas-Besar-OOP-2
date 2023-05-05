@@ -24,7 +24,7 @@ public class Action {
         allAvailableAction.put("Workout", new Workout());
         allAvailableAction.put("See Time", new SeeTime());
         // allAvailableAction.put("Stargaze", new Sleep()); // TODO: implement this
-        // allAvailableAction.put("Play Game", new PlayGame()); // TODO: implement this
+        allAvailableAction.put("Play Game", new PlayGame()); // TODO: implement this
         // allAvailableAction.put("Watch TV", new SeeTime()); // TODO: implement this
         // allAvailableAction.put("Read", new SeeTime()); // TODO: implement this
         // allAvailableAction.put("Gamble", new SeeTime()); // TODO: implement this

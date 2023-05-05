@@ -474,6 +474,8 @@ public class Sim extends Exception implements Runnable {
         }
 
         updateSim();
+
+        //TODO: ROMBAK INI!
     }
 
     public void read(int time) {
@@ -487,6 +489,8 @@ public class Sim extends Exception implements Runnable {
         }
 
         updateSim();
+        
+        //TODO: ROMBAK INI!
     }
 
     public void run() {
@@ -503,6 +507,30 @@ public class Sim extends Exception implements Runnable {
             if (dayLastSleep < gm.getClock().getDay()) {
                 resetTimeLastSleep();
                 dayLastSleep = (int)gm.getClock().getDay();
+            }
+        }
+    }
+
+    public void playGame(int time) throws SimIsDeadException {
+        // +20 mood -10 hunger -10 kesehatan / 2 menit
+        // cuma bisa kelipatan 2 menit
+
+        int cycle = time / (2*60);
+
+        System.out.println("Sim akan bermain game selama " + Angka.secToTime(time));
+
+        for (int i=0; i<cycle; i++) {
+            try {
+                gm.getClock().moveTime(2 * 60 * 1000);
+
+                System.out.println("\nSim sudah bermain game selama 2 menit, waktu tersisa: " + Angka.secToTime(time-i*20));
+                System.out.println("Letsgo winner winner chicken dinner! -10 health -10 hunger +20 mood");
+                
+                setHealth(getHealth()-10);
+                setHunger(getHunger()-10);
+                setMood(getMood()+20);
+            } catch (SimIsDeadException e) {
+                throw e;
             }
         }
     }

@@ -98,6 +98,9 @@ public class Menu {
                 case "See Time":
                     show += "melihat waktu";
                     break;
+                case "Play Game":
+                    show += "bermain game";
+                    break;
             }
 
             show += "? (Y/N)";
