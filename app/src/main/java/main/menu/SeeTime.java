@@ -1,6 +1,5 @@
 package main.menu;
 
-import main.Clock;
 import main.Game;
 import util.Input;
 

@@ -1,13 +1,8 @@
 package main.menu;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import exception.NoInputException;
-import item.Furniture;
 import main.Game;
-import util.Angka;
 import util.Input;
 
 public class ActionMenu implements Option {
@@ -46,8 +41,8 @@ public class ActionMenu implements Option {
         while (getInput) {
             try {
                 input = scan.getInput("\nMasukkan nama aksi yang ingin dilakukan: ");
-                
                 action.execute(input);
+                getInput = false;
 
             } catch (NoInputException e) {
                 getInput = false;

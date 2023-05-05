@@ -1,495 +1,123 @@
 package main;
 
-import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
-
-import entity.Job;
-import entity.Sim;
-import exception.NoInputException;
-import util.Angka;
-import util.ClearScreen;
-import util.Input;
+import entity.*;
+import util.*;
 import item.*;
+import main.menu.*;
 import map.*;
 import java.util.*;
 
 public class Game {
+
+    private Input scan = Input.getInstance();
+
     // IMPORTANT GAME ATTRIBUTES
-    private static Renderable currentView;
-    private static String currentHouse;
-    private static Sim currentSim;
-    private static World world;
-    private static Clock clock;
-
-    public static Clock getClock() {return clock;}
-    public static World getWorld() {return world;}
-    public static void setWorld(World world) {Game.world = world;}
-    public static void setCurrentView(Renderable currentView) {Game.currentView = currentView;}
-    public static Renderable getCurrentView() {return currentView;}
-    public static void setCurrentSim(Sim currentSim) {Game.currentSim = currentSim;}
-    public static Sim getCurrentSim() {return currentSim;}
-    public static void setCurrentHouse(String currentHouse) {Game.currentHouse = currentHouse;}
-    public static String getCurrentHouse() {return currentHouse;}
-
-    private GameSimOption simOption = new GameSimOption(this);
-
+    private Renderable currentView;
+    private String currentHouse;
+    private Sim currentSim;
+    private World world;
+    private Clock clock;
     
+    private Action action = new Action(this);
+    private Menu menu = new Menu(this);
+    private Cheat cheat = new Cheat(this);
 
-    private long dayLastSimAdded = -1;
-    protected Input scan = Input.getInstance();
+    public Action getAction() {return action;}
+    public Cheat getCheat() {return cheat;}
+    public Clock getClock() {return clock;}
+    public World getWorld() {return world;}
+    public void setWorld(World world) {this.world = world;}
+    public void setCurrentView(Renderable currentView) {this.currentView = currentView;}
+    public Renderable getCurrentView() {return currentView;}
+    public void setCurrentSim(Sim currentSim) {this.currentSim = currentSim;}
+    public Sim getCurrentSim() {return currentSim;}
+    public void setCurrentHouse(String currentHouse) {this.currentHouse = currentHouse;}
+    public String getCurrentHouse() {return currentHouse;}
 
-    public Game() {
-        overlapActionShowed = false;
-        gameTime = 0;
-        day = 0;
-        world = World.getInstance();
-        startNew();
+    public void changeSim(Sim sim) {
+        currentSim = sim;
+        changeView(currentSim.getRoom());
         currentHouse = currentSim.getName();
+    }
+
+    public void moveSim() {
+
+    }
+
+    // GAME CONFIG
+    private int dayLastSimAdded = -1;
+    private boolean overlapActionShowed;
+
+    public boolean isOverlapActionShowed() {return overlapActionShowed;}
+    public void setOverlapActionShowed(boolean overlapActionShowed) {this.overlapActionShowed = overlapActionShowed;}
+    public int getDayLastSimAdded() {return dayLastSimAdded;}
+    public void setDayLastSimAdded(int dayLastSimAdded) {this.dayLastSimAdded = dayLastSimAdded;}
+    
+    public Furniture getOverlapFurniture() {
+        return currentSim.getRoom().getRoomGrid()[currentSim.getY()][currentSim.getX()];
+    }
+
+    // DEFAULT constructor; Start new game
+    public Game() {
+        clock = new Clock(this);
+        world = World.getInstance(this);
+
+        // create new game
+        menu.executeOption("Ad");
+        currentSim = world.getSims().get(0);
+        currentView = currentSim.getRoom();
+        currentHouse = currentSim.getName();
+        overlapActionShowed = false;
     }
 
     public void showGamePanel() {
         // TODO: ini bawah nanti di uncomment
         // ClearScreen.clear();
 
-        if (currentSim.isDead()) {
-            currentSim.killSim();
-            world.getSims().remove(currentSim);
-            showDeadScreen();
-        }
+        // if (currentSim.isDead()) {
+        //     currentSim.killSim();
+        //     world.getSims().remove(currentSim);
+        //     showDeadScreen();
+        // }
 
-        else {
-            System.out.println("last sleep: " + (Game.getTime() - currentSim.getTimeLastSleep()));
-            System.out.println("time: " + Game.getTime());
-            System.out.println("::: " + ((Game.getTime() - currentSim.getTimeLastSleep()) >= 60*10));
-            System.out.println(currentSim.getTrackUpdates().isAlive());
-            showRender();
-            showOverlapAction();
-            showOptions();
-            getInput();
-        }
+        renderCurrentView();
+        menu.askOverlapAction();
+        menu.showOptions();
+        menu.getInput();
     }
 
-    public void showDeadScreen() {
-        System.out.println("\nSim kamu mati!");
+    // public void showDeadScreen() {
+    //     System.out.println("\nSim kamu mati!");
 
-        if (world.getSims().size() == 0) {
-            showGameOverScreen();
-        } else {
-            changeSimOption(true);
-        }
-    }
+    //     if (world.getSims().size() == 0) {
+    //         showGameOverScreen();
+    //     } else {
+    //         menu.;
+    //     }
+    // }
 
-    public void showGameOverScreen() {
-        System.out.println("Semua Sim kamu mati! Kamu kalah!");
-        System.exit(0);
-    }
+    // public void showGameOverScreen() {
+    //     System.out.println("Semua Sim kamu mati! Kamu kalah!");
+    //     System.exit(0);
+    // }
 
-    public void showRender() {
+    public void renderCurrentView() {
         char[][] rendered = currentView.render();
-
+    
         rendered[currentSim.getY()][currentSim.getX()] = 'S'; // tampilin sim
         System.out.println("Rumah " + currentHouse + " - " + currentSim.getRoom().getRoomName());
-
+    
         for (int i=0; i<6; i++) {
             for (int j=0; j<6; j++) {
                 System.out.print(rendered[i][j] + " ");
             }
             System.out.print("\n");
         }
-    }
-
-    public void showOptions() {
-        System.out.println("\n(S)im Info        (C)hange Job  (I)nventory");
-        System.out.println("(U)pgrade House   (M)ove Sim          (E)dit Room");
-        System.out.println("(Ad)dd Sim        (Ch)ange Sim        (L)ist Object  ");
-        System.out.println("(G)o to Object    (A)ction            (S)hop");
-        System.out.println("                 E(X)it");
-    }
-
-    public void getInput() {
-        System.out.print("\nENTER COMMAND: ");
-        String input = scan.nextLine();
-
-        if (input.equals("Ch")) {
-            changeSimOption(false);
-        }
-        
-        else if (input.equals("S")) {
-            showSimInfo();
-        }
-
-        else if (input.equals("C")) {
-            changeJobOption();
-        }
-        
-        else if (input.equals("Ad")) {
-            addSimOption();
-        }
-
-        else if (input.equals("A")) {
-            actionOptions();
-        }
-
-        else if (input.equals("X")) {
-            System.exit(0);
-        } 
-        else if (input.equals("M")){
-            try {
-                moveRoomOption();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                scan.enterUntukLanjut();
-            }
-        }
-
-        // TODO: Uncomment kalo udah dibenerin
-        // else if (input.equals("E")) {
-        //     try {
-        //         editRoomOption();
-        //     } catch (Exception e) {
-        //         System.out.println(e.getMessage());
-        //         scan.enterUntukLanjut();
-        //     }
-        // } 
-        
-        else if (input.equals("U")) {
-            try {
-                simOption.upgradeHouse();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                scan.enterUntukLanjut();
-            }
-        }
-
-        else if (input.equals("L")) {
-            listObjectOption(true);
-        }
-
-        else if (input.equals("G")) {
-            goToObjectOption();
-        }
-
-        else if (input.split(" ")[0].equals("testingcheats")) {
-            try {
-                if (input.split(" ").length == 2) {
-                    cheatOptions(input.split(" ")[1], 0);
-                } 
-    
-                if (input.split(" ").length == 3) { // money/mood/health/hunger cheat
-                    cheatOptions(input.split(" ")[1], Integer.parseInt(input.split(" ")[2]));
-                } 
-            } catch (Exception e) {
-                // ignore
-            }
-        }
-
-        else {
-            System.out.println("\nMasukkan input sesuai dengan opsi diatas!");
-            scan.enterUntukLanjut();
-        }
-    }
-
-    public void changeJobOption() {
-        System.out.println("\n    Pekerjaan yang ada: ");
-        System.out.println(String.format(" %s ", "--------------------------"));
-        System.out.println(String.format("| %-15s | %-6s |", "Pekerjaan", "Gaji"));
-        System.out.println(String.format("|%s|", "--------------------------"));
-        for (String s : Job.getAvailableJobsList()) {
-            System.out.println(String.format("| %-15s | %-6s |", s, Job.getAvailableJobs().get(s)));
-        }
-        System.out.println(String.format(" %s ", "--------------------------"));
-
-        System.out.println("\nSim hanya bisa mengganti pekerjaan jika sudah bekerja selama minimal 1 hari di pekerjaan lamanya");
-        System.out.println("Sim juga harus membayarkan setengah gaji dari pekerjaan baru untuk mengganti pekerjaan");
-
-        try {
-            String input = scan.getInput("\nMasukkan pekerjaan yang dipilih: ");
-
-            try {
-                currentSim.changeJob(new Job(input));
-                System.out.println("\nPekerjaan sim berhasil diganti!");
-            } catch (NoSuchElementException e) {
-                System.out.println(e.getMessage());
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-
-            scan.enterUntukLanjut();
-
-        } catch (NoInputException e) {
-            // ingoner
-        }   
-        
-    }
-
-    public void showSimInfo() {
-        System.out.println("\n------ SIM INFO ------");
-        System.out.println("Nama: " + currentSim.getName());
-        System.out.println("Pekerjaan: " + currentSim.getJobName());
-        System.out.println("Kesehatan: " + currentSim.getHealth());
-        System.out.println("Kekenyangan: " + currentSim.getHunger());
-        System.out.println("Mood: " + currentSim.getMood());
-        System.out.println("Uang: " + currentSim.getMoney());
-
-        scan.enterUntukLanjut();
-    }
-
-    public void showOverlapAction() {
-        Furniture overlap = getOverlapFurniture();
-
-        if (overlap != null && !overlapActionShowed) {
-            overlapAction(overlap, true);
-            overlapActionShowed = true;
-        } else if (overlap == null) overlapActionShowed = false;
-    }
-
-    public void overlapAction(Furniture overlap, boolean ask) {
-        if (overlap.getAction().equals("sleep")) {
-            if (ask) {
-                System.out.print("\nApakah anda ingin tidur? (Y/N) ");
-                String input = scan.nextLine();
-                if (input.equals("Y")) {
-                    simOption.sleep();
-                }
-            } else {
-                simOption.sleep();
-
-            }
-        }
-        else if (overlap.getAction().equals("poop")) {
-            if (ask) {
-                System.out.print("\nApakah anda ingin buang air? (Y/N) ");
-                String input = scan.nextLine();
-                if (input.equals("Y")) {
-                    simOption.poop();
-                }
-            } else {
-                simOption.poop();
-
-            }
-        }
-        else if (overlap.getAction().equals("cook")) {
-            if (ask) {
-                System.out.print("\nApakah anda ingin memasak? (Y/N) ");
-                String input = scan.nextLine();
-                if (input.equals("Y")) {
-                    // TODO : tambahin method buat cook
-                    showDishTable();
-                }
-            } else {
-                // TODO : tambahin method buat cook
-
-            }
-        }
-        else if (overlap.getAction().equals("eat")) {
-            if (ask) {
-                System.out.print("\nApakah anda ingin makan? (Y/N) ");
-                String input = scan.nextLine();
-                if (input.equals("Y")) {
-                    // TODO : tambahin method buat eat
-                }
-            } else {
-                    // TODO : tambahin method buat eat
-            }
-        }
-        else if (overlap.getAction().equals("seetime")) {
-            if (ask) {
-                // apa ini langsung tunjukin waktu aja ya? hmm
-                System.out.print("\nApakah anda ingin melihat waktu? (Y/N) ");
-                String input = scan.nextLine();
-                if (input.equals("Y")) {
-                    simOption.seeTime();
-                }
-            } else {
-                simOption.seeTime();
-            }
-        }
-    }
-
-    public Furniture getOverlapFurniture() {
-        return currentSim.getRoom().getRoomGrid()[currentSim.getY()][currentSim.getX()];
-    }
-
-    public void goToObjectOption() {
-        List<Furniture> furnitures = currentSim.getRoom().getFurnitures();
-        
-        if (furnitures.size() == 0) {
-            System.out.println("\nTidak ada objek di dalam ruangan!");
-            scan.enterUntukLanjut();
-        } else {
-            listObjectOption(false);
-
-            int input = -999;
-            while (input <= 0) {
-                System.out.print("\nENTER OBJEK YANG DITUJU: ");
-                input = Angka.stringToInt(scan.nextLine());
-
-                if (input <= 0 || input > furnitures.size()) {
-                    System.out.println("Masukkan angka dalam batas objek!");
-                } else {
-                    currentSim.goToObject(furnitures.get(input-1).getY(), furnitures.get(input-1).getX());
-                    overlapActionShowed = false;
-                }
-
-            }
-        }
-    }
-
-    public void listObjectOption(boolean enter) {
-        List<Furniture> furnitures = currentSim.getRoom().getFurnitures();
-        
-        if (furnitures.size() == 0) {
-            System.out.println("\nTidak ada objek di dalam ruangan!");
-            scan.enterUntukLanjut();
-        } else {
-            System.out.println("\nBerikut adalah objek yang ada di dalam ruangan");
-            for (int i=0; i<furnitures.size(); i++) {
-                System.out.println((i+1) + ". " + furnitures.get(i).getName());
-            }
-            if (enter) scan.enterUntukLanjut();
-        }
-
-    }
-
-    public void actionOptions() {
-        int actionNum = 4;
-
-        System.out.println("\n----- AKSI YANG BISA DILAKUKAN -----");
-        System.out.println("1. Work");
-        System.out.println("2. Workout");
-        System.out.println("3. Visit");
-        System.out.println("4. Stargaze");
-
-        Furniture furniture = getOverlapFurniture();
-        if (furniture != null) {
-            actionNum++;
-            System.out.println(actionNum + ". " + furniture.getAction());
-        }
-
-        int input = -999;
-        while (input <= 0) {
-            System.out.print("\nMASUKKAN AKSI YANG INGIN DILAKUKAN: ");
-            input = Angka.stringToInt(scan.nextLine());
-
-            if (input <= 0 || input > actionNum) {
-                System.out.println("Masukkan angka dalam batas aksi!");
-            } else {
-                switch (input) {
-                    case 1:
-                        simOption.work();
-                        break;
-
-                    case 2:
-                        simOption.workout();
-                        break;
-                    
-                    case 3:
-                        simOption.visit();
-                        break;
-                    
-                    case 4:
-                        // TODO: Tambahin simAction stargaze disini
-                        break;
-
-                    case 5:
-                        overlapAction(furniture, false);
-                        break;
-                }
-            }
-        }
-
-    }
-
-    public void changeSimOption(boolean deadscreen) {
-        int simNum = world.getSims().size();
-
-        if (simNum <= 1 && !deadscreen) {
-            System.out.println("\nKamu hanya memiliki 1 sim! Silahkan buat sim lain untuk dimainkan.");
-            scan.enterUntukLanjut();
-        } else {
-            System.out.println("\nPilih sim mana yang ingin dimainkan: ");
-            int cnt = 1;
-            for (int i=0; i<simNum; i++) {
-                if (world.getSims().get(i) == currentSim) { // Bukan sim yang sekarang lagi dimainin
-                    System.out.println(cnt + ". " + world.getSims().get(i).getName() + " (Sim sekarang)");
-                } else {
-                    System.out.println(cnt + ". " + world.getSims().get(i).getName());
-                }
-                cnt++;
-            }
-
-            int input = -999;
-            while (input <= 0) {
-                System.out.print("PILIH SIM: ");
-                input = Angka.stringToInt(scan.nextLine());
-
-                if (input <= 0 || input > simNum) {
-                    System.out.println("\nMasukan angka di dalam batas sim!");
-                    input = -1;
-                } else {
-                    if (world.getSims().get(input-1) == currentSim) {
-                        System.out.println("\nTidak bisa mengganti ke sim yang sedang dimainkan!");
-                        scan.enterUntukLanjut();
-                    } else {
-                        changeSim(world.getSims().get(input-1));
-                    }
-                }
-            }
-        }
-    }
-
-    public void addSimOption() {
-        if (day <= dayLastSimAdded) {
-            System.out.println("\nSim tidak bisa ditambahkan! Sim hanya bisa ditambahkan setiap 1 hari.");
-            System.out.println(day + " <= " + dayLastSimAdded);
-            scan.enterUntukLanjut();
-        } else {
-            System.out.print("ENTER SIM NAME: ");
-            String simName = scan.nextLine();
-
-            boolean found = false;
-            while (!found) {
-                try {
-                    world.addHouse(ThreadLocalRandom.current().nextInt(0, 64 + 1), ThreadLocalRandom.current().nextInt(0, 64 + 1), simName);
-                    found = true;
-                } catch (Exception e) {
-                    
-                }
-            }
-
-            // DEBUG: ganti day jadi -1; 
-            // TODO: NANTI INI GANTI dayLastSimAdded = day;
-            dayLastSimAdded = -1;
-        }
-    }
-
-    public void startNew() {
-        addSimOption();
-        currentSim = world.getSims().get(0);
-        currentView = currentSim.getRoom();
-    }
-
-    public void changeSim(Sim newSim) {
-        currentSim = newSim;
-        changeView(currentSim.getRoom());
-        currentHouse = currentSim.getName();
-    }
+    }    
 
     public void changeView(Renderable newView) {
         currentView = newView;
     }
-
-    public void addTime(int secs) {
-        gameTime += secs;
-        day = gameTime / 720;
-    }
-
-    
-
-    public static long getTime() {return gameTime;}
-    public static long getDay() {return day;}
-
 
     public House currentHouse() {
         House house = null;
