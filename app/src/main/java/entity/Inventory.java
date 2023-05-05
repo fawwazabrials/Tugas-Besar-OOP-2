@@ -21,6 +21,10 @@ public class Inventory {
         return wanted;
     }
 
+    public Map<Item, Integer> getItems() {
+        return items;
+    }
+
     public Item getItemsByName(String name){
         for(Map.Entry<Item, Integer> e : items.entrySet()){
             if(e.getKey().getName().equals(name)){
@@ -56,6 +60,46 @@ public class Inventory {
                 System.out.println(String.format("| %-15s | %-15s | %-15s |", e.getKey().getName(), e.getKey().getCategory(), e.getValue()));
             }
         }
+        System.out.println(String.format(" %s ", "-----------------------------------------------------"));
+    }
+
+    public void print(String category) {
+        Map<Item, Integer> items = getItems(category);
+
+        System.out.println(String.format(" %s ", "--------------------- INVENTORY ---------------------"));
+        System.out.println(String.format("%s", "|                                                     |"));
+        
+        if (items.isEmpty())
+        System.out.println(String.format("| %-51s |" , "No items in inventory."));
+        
+        else {
+            System.out.println(String.format("| %-15s | %-15s | %-15s |", "Item Name", "Category", "Amount"));
+            System.out.println(String.format(" %s ", "-----------------------------------------------------"));
+            for(Map.Entry<Item, Integer> e : items.entrySet()){
+                System.out.println(String.format("| %-15s | %-15s | %-15s |", e.getKey().getName(), e.getKey().getCategory(), e.getValue()));
+            }
+        }
+
+        System.out.println(String.format(" %s ", "-----------------------------------------------------"));
+    }
+
+    public void print() {
+        Map<Item, Integer> items = getItems();
+
+        System.out.println(String.format(" %s ", "--------------------- INVENTORY ---------------------"));
+        System.out.println(String.format("%s", "|                                                     |"));
+        
+        if (items.isEmpty())
+        System.out.println(String.format("| %-51s |" , "No items in inventory."));
+        
+        else {
+            System.out.println(String.format("| %-15s | %-15s | %-15s |", "Item Name", "Category", "Amount"));
+            System.out.println(String.format(" %s ", "-----------------------------------------------------"));
+            for(Map.Entry<Item, Integer> e : items.entrySet()){
+                System.out.println(String.format("| %-15s | %-15s | %-15s |", e.getKey().getName(), e.getKey().getCategory(), e.getValue()));
+            }
+        }
+
         System.out.println(String.format(" %s ", "-----------------------------------------------------"));
     }
 
