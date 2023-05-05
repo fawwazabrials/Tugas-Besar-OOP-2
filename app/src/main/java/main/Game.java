@@ -102,7 +102,10 @@ public class Game {
         rendered[currentSim.getY()][currentSim.getX()] = 'S'; // tampilin sim
         System.out.println("Rumah " + currentHouse + " - " + currentSim.getRoom().getRoomName());
     
+        System.out.println("  0 1 2 3 4 5");
+
         for (int i=0; i<6; i++) {
+            System.out.print(i + " ");
             for (int j=0; j<6; j++) {
                 System.out.print(rendered[i][j] + " ");
             }
