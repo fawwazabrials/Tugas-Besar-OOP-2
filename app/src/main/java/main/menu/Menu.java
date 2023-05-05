@@ -21,15 +21,15 @@ public class Menu {
         availableMenuOptions.put("S", new SimInfo());
         availableMenuOptions.put("C", new ChangeJob());
         // availableMenuOptions.put("I", new Inventory());  // TODO: Route this
-        // availableMenuOptions.put("U", new UpgradeHouse());  // TODO: Route this
-        // availableMenuOptions.put("M", new MoveSim());  // TODO: Route this
-        // availableMenuOptions.put("E", new EditRoom());  // TODO: Route this
+        availableMenuOptions.put("U", new UpgradeHouse());  // TODO: Route this
+        availableMenuOptions.put("M", new MoveSim());
+        availableMenuOptions.put("E", new EditRoom());
         availableMenuOptions.put("Ad", new AddSim());
         availableMenuOptions.put("Ch", new ChangeSim());
         availableMenuOptions.put("L", new ListObject());
         availableMenuOptions.put("G", new GoToObject());
-        availableMenuOptions.put("A", new ActionMenu(new Action(gm)));  // TODO: Route this
-        // availableMenuOptions.put("S", new Shop());  // TODO: Route this
+        availableMenuOptions.put("A", new ActionMenu(new Action(gm)));
+        // availableMenuOptions.put("Sh", new Shop());  // TODO: Route this
         availableMenuOptions.put("E", new Exit());
     }
 
