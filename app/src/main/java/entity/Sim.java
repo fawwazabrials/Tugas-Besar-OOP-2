@@ -8,7 +8,6 @@ import map.Room;
 import util.Angka;
 import map.Direction;
 import item.*;
-import item.Item;
 import main.Game;
 
 public class Sim extends Exception implements Runnable {
@@ -45,6 +44,11 @@ public class Sim extends Exception implements Runnable {
 
         // Set basic sim info
         this.simItems = new Inventory();
+        simItems.addItem(new Furniture("kasur single", -1, -1));
+        simItems.addItem(new Ingredients("kentang"));
+        simItems.addItem(new Dish("nasi ayam"));
+        simItems.addItem(new Other("Sheet QnA"));
+
 
         this.name = name;
         this.simHouse = house;
