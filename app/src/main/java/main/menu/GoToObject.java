@@ -6,7 +6,6 @@ import java.util.List;
 import exception.NoInputException;
 import item.Furniture;
 import main.Game;
-import util.Angka;
 import util.Input;
 
 public class GoToObject implements Option {

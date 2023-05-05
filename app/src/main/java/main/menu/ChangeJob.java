@@ -13,7 +13,7 @@ public class ChangeJob implements Option {
 
     @Override
     public void execute(Game gm) {
-        System.out.println("\n    Pekerjaan yang ada: ");
+        // Print pekerjaan yang ada
         System.out.println(String.format(" %s ", "--------------------------"));
         System.out.println(String.format("| %-15s | %-6s |", "Pekerjaan", "Gaji"));
         System.out.println(String.format("|%s|", "--------------------------"));
@@ -22,11 +22,15 @@ public class ChangeJob implements Option {
         }
         System.out.println(String.format(" %s ", "--------------------------"));
 
-        System.out.println("\nSim hanya bisa mengganti pekerjaan jika sudah bekerja selama minimal 1 hari di pekerjaan lamanya");
-        System.out.println("Sim juga harus membayarkan setengah gaji dari pekerjaan baru untuk mengganti pekerjaan");
+        // Print disclaimer
+        System.out.println("----------------------------- DISLAIMER -----------------------------");
+        System.out.println(String.format("| %-65s |", "Sim hanya bisa mengganti pekerjaan jika sudah bekerja selama"));
+        System.out.println(String.format("| %-65s |", "minimal 1 hari di pekerjaan lamanya. Sim juga harus membayarkan "));
+        System.out.println(String.format("| %-65s |", "setengah gaji dari pekerjaan baru untuk mengganti pekerjaan"));
+        System.out.println("---------------------------------------------------------------------");
 
         try {
-            String input = scan.getInput("\nMasukkan pekerjaan yang dipilih: ");
+            String input = scan.getInput("\nMasukkan nama pekerjaan yang dipilih: ");
 
             try {
                 gm.getCurrentSim().changeJob(new Job(input));
