@@ -45,7 +45,7 @@ public class Sim extends Exception implements Runnable {
 
         // Set basic sim info
         this.simItems = new Inventory();
-        simItems.addItem(new Other("HP"));
+
         this.name = name;
         this.simHouse = house;
         this.currRoom = currRoom;
@@ -583,5 +583,35 @@ public class Sim extends Exception implements Runnable {
         else System.out.println(String.format("Entah beruntung atau gimana tapi kamu gak hilang atau dapat duit!"));
 
         setMoney(getMoney() + gain);
+    }
+
+    public void readQnA() throws SimIsDeadException {
+        // random dapet buff / debuff, jalan otomatis 3 menit
+        // 80% jelek, 20% bagus
+        // bagus -> +30 mood, +10 health, -10 hunger
+        // jelek -> -40 mood, -20 health, -30 hunger
+
+        try {
+            System.out.println("Sim akan membaca sheet QnA selama " + Angka.secToTime(3*60));
+            gm.getClock().moveTime(3 * 60 * 1000);
+            
+            int chance = Angka.randint(0, 100);
+    
+            if (chance >= 0 && chance < 20) { // bad
+                System.out.println("Wah! Tumben banget ini QnA bagus jawabannya. Sim kamu jadi semangat tubes! +30 mood +10 health -10 hunger");
+    
+                setMood(getMood()+30);
+                setHealth(getHealth()+10);
+                setHunger(getHunger()-10);
+            } else { // good
+                System.out.println("ANJIR! INI QNA KOK NGACO BANGET. AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA! -40 mood -20 health -30 hunger");
+                
+                setMood(getMood()-40);
+                setHealth(getHealth()-20);
+                setHunger(getHunger()-30);
+            }
+        } catch (SimIsDeadException e) {
+            throw e;
+        }
     }
 }

@@ -28,7 +28,7 @@ public class Action {
         allAvailableAction.put("Watch TV", new WatchTV());
         allAvailableAction.put("Read", new Read());
         allAvailableAction.put("Gamble", new Gamble()); // TODO: implement this
-        // allAvailableAction.put("Read QnA", new ReadQnA()); // TODO: implement this
+        allAvailableAction.put("Read QnA", new ReadQnA()); // TODO: implement this
     }
 
     public Option getOverlapAction() {
@@ -48,7 +48,7 @@ public class Action {
 
         if (gm.getCurrentSim().getSimItems().checkItemAvailable("HP", 1)) availableAction.add("Gamble");
 
-        if (gm.getCurrentSim().getSimItems().checkItemAvailable("Read QnA", 1)) availableAction.add("Read QnA");
+        if (gm.getCurrentSim().getSimItems().checkItemAvailable("Sheet QnA", 1)) availableAction.add("Read QnA");
 
         System.out.println(gm.getCurrentSim().getSimItems().checkItemAvailable("HP", 1));
 
