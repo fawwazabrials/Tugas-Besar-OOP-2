@@ -1,5 +1,7 @@
 package main;
 
+import exception.SimIsDeadException;
+
 public class Clock {
     private int gameTime, day;
     private Game gm;
@@ -18,7 +20,7 @@ public class Clock {
         gameTime = gameTime+time;
     }
     
-    public void moveTime(int time) {
+    public void moveTime(int time) throws SimIsDeadException {
         int secs = time / 1000;
 
         for (int i=0; i<secs; i++) {
@@ -30,7 +32,9 @@ public class Clock {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }    
-            } 
+            } else {
+                throw new SimIsDeadException();
+            }
         }
     }
 }

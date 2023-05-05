@@ -1,5 +1,7 @@
 package main;
 
+import exception.SimIsDeadException;
+
 public class Cheat {
     Game gm;
 
@@ -68,7 +70,11 @@ public class Cheat {
                 break;
 
             case "forwardtime":
-                gm.getClock().moveTime(val);
+                try {
+                    gm.getClock().moveTime(val);
+                } catch (SimIsDeadException e) {
+                    System.out.println("Damn ternyata setelah majuin waktu Sim kamu mati!");
+                }
                 break;
         }
     }
