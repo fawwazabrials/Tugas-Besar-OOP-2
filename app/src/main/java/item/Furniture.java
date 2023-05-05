@@ -11,13 +11,16 @@ public class Furniture extends Item {
         // value : [Action, price, length, width, renderchar]
         availableFurniture = new HashMap<String, String[]>();
         availableFurniture.put("kasur single", new String[]     {"Sleep", "50", "4", "1", "b"});
-        availableFurniture.put("kasur queen size", new String[] {"Sleep", "100", "4", "1", "b"});
-        availableFurniture.put("kasur king size", new String[]  {"Sleep", "150", "4", "1", "b"});
-        availableFurniture.put("toilet", new String[]           {"Poop", "50", "4", "1", "b"});
-        availableFurniture.put("kompor gas", new String[]       {"Cook", "100", "4", "1", "b"});
-        availableFurniture.put("kompor listrik", new String[]   {"Cook", "200", "4", "1", "b"});
-        availableFurniture.put("meja dan kursi", new String[]   {"Eat", "50", "4", "1", "b"});
-        availableFurniture.put("jam", new String[]              {"See Time", "10", "4", "1", "b"});
+        availableFurniture.put("kasur queen size", new String[] {"Sleep", "100", "4", "2", "b"});
+        availableFurniture.put("kasur king size", new String[]  {"Sleep", "150", "5", "2", "b"});
+        availableFurniture.put("toilet", new String[]           {"Poop", "50", "1", "1", "t"});
+        availableFurniture.put("kompor gas", new String[]       {"Cook", "100", "2", "1", "k"});
+        availableFurniture.put("kompor listrik", new String[]   {"Cook", "200", "2", "1", "k"});
+        availableFurniture.put("meja dan kursi", new String[]   {"Eat", "50", "3", "3", "m"});
+        availableFurniture.put("jam", new String[]              {"See Time", "10", "1", "1", "j"});
+        availableFurniture.put("komputer", new String[]         {"Play Game", "30", "1", "1", "c"});
+        availableFurniture.put("tv", new String[]               {"Watch TV", "20", "1", "1", "v"});
+        availableFurniture.put("rak buku", new String[]         {"Read", "15", "1", "1", "r"});
     }
 
     public static Map<String, String[]> getAvailableFurniture() {return availableFurniture;}
@@ -63,18 +66,18 @@ public class Furniture extends Item {
     }
 
     private void setPrice(String name) {
-        this.action = getAvailableFurniture().get(name)[1];
+        this.priceValue = Integer.parseInt(getAvailableFurniture().get(name)[1]);
     }
 
     private void setLength(String name) {
-        this.action = getAvailableFurniture().get(name)[2];
+        this.length = Integer.parseInt(getAvailableFurniture().get(name)[2]);
     }
 
     private void setWidth(String name) {
-        this.action = getAvailableFurniture().get(name)[3];
+        this.width = Integer.parseInt(getAvailableFurniture().get(name)[3]);
     }
 
     private void setRenderChar(String name) {
-        this.action = getAvailableFurniture().get(name)[4];
+        this.renderChar = getAvailableFurniture().get(name)[4];
     }
 }
