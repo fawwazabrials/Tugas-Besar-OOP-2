@@ -84,6 +84,9 @@ public class Room implements RoomAction, Renderable {
             }
         }
 
+        furniture.setX(-1);
+        furniture.setY(-1);
+
         return furniture;
     }
 
@@ -141,6 +144,9 @@ public class Room implements RoomAction, Renderable {
         if (! isPlaceable(furniture, x, y)) {
             throw new IllegalArgumentException("Furniture cannot be placed");
         }
+        furniture.setX(x);
+        furniture.setY(y);
+
         furnitures.add(furniture);
         for (int i = x; i < x + furniture.getWidth(); i++) {
             for (int j = y; j < y + furniture.getLength(); j++) {
