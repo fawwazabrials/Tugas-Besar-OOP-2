@@ -125,13 +125,15 @@ public class Game {
     }
 
     public void showDishTable() {
-        System.out.println("\nList of Dish:");
-        System.out.println("--------------------------------------------------------------------");
-        System.out.println("Dish Name\t\tHunger Point\tRecipe");
-        System.out.println("1. Nasi ayam\t\t16\t\tNasi, Ayam");
-        System.out.println("2. Nasi kari\t\t30\t\tNasi, Kentang, Wortel, Sapi");
-        System.out.println("3. Susu kacang\t\t5\t\tSusu, Kacang");
-        System.out.println("4. Tumis sayur\t\t5\t\tWortel, Bayam");
-        System.out.println("5. Bistik\t\t22\t\tKentang, Sapi");
+        System.out.println("\n    List of Dish:");
+        System.out.println(String.format(" %s ", "--------------------------------------------------------------------"));
+        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Dish Name", "Hunger Point", "Recipe"));
+        System.out.println(String.format("|%s|", "--------------------------------------------------------------------"));
+        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Nasi Ayam", "16", "Nasi, Ayam"));
+        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Nasi Kari", "30", "Nasi, Kentang, Wortel, Sapi"));
+        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Susu Kacang", "5", "Susu, Kacang"));
+        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Tumis Sayur", "5", "Wortel, Bayam"));
+        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Bistik", "22", "Kentang, Sapi"));
+        System.out.println(String.format(" %s ", "--------------------------------------------------------------------"));
     }
 }

@@ -50,20 +50,13 @@ public class Inventory {
     
     public void printInv(){
         if (items.isEmpty()) {
-            System.out.println("No items in inventory.");
+            System.out.println(String.format("| %-51s |" , "No items in inventory."));
         } else {
             for(Map.Entry<Item, Integer> e : items.entrySet()){
-                if (e.getKey().getName().length() >= 16) {
-                    System.out.println(e.getKey().getName()+"\t"+e.getKey().getCategory()+"\t\t"+e.getValue());
-                }
-                else if (e.getKey().getName().length() >= 8) {
-                    System.out.println(e.getKey().getName()+"\t\t"+e.getKey().getCategory()+"\t\t"+e.getValue());
-                }
-                else {
-                    System.out.println(e.getKey().getName()+"\t\t\t"+e.getKey().getCategory()+"\t\t"+e.getValue());
-                }
+                System.out.println(String.format("| %-15s | %-15s | %-15s |", e.getKey().getName(), e.getKey().getCategory(), e.getValue()));
             }
         }
+        System.out.println(String.format(" %s ", "-----------------------------------------------------"));
     }
 
     public boolean checkItemAvailable(String name, int num){

@@ -10,7 +10,7 @@ import util.Input;
 
 public class Menu {
     private Game gm;
-    private Input scan = Input.getInstance();
+    private Input scan = Input.getInstance();   
 
     private Map<String, Option> availableMenuOptions;
 
@@ -47,7 +47,7 @@ public class Menu {
         System.out.println("\n(S)im Info        (C)hange Job  (I)nventory");
         System.out.println("(U)pgrade House   (M)ove Sim          (E)dit Room");
         System.out.println("(Ad)dd Sim        (Ch)ange Sim        (L)ist Object  ");
-        System.out.println("(G)o to Object    (A)ction            (S)hop");
+        System.out.println("(G)o to Object    (A)ction            (Sh)op");
         System.out.println("                 E(X)it");
     }
 

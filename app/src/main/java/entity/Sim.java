@@ -35,9 +35,7 @@ public class Sim extends Exception implements Runnable {
     private long bufferedVisitTime, bufferedWorkTime;
     private int timeChangedJob, totalJobTimeWorked;
 
-
-    // THREADs
-    private Thread upgradeHouse, trackUpdates;
+    private Thread upgradeHouse, trackUpdates, shopQueue;
 
     public Sim(Game gm, House house, Room currRoom, String name) {
         this.gm = gm;
@@ -314,7 +312,7 @@ public class Sim extends Exception implements Runnable {
                 simItems.addItem(dish);
             }
             else{
-                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
             }
             break;
             case "nasi kari":
@@ -326,7 +324,7 @@ public class Sim extends Exception implements Runnable {
                 simItems.addItem(dish);
             }
             else{
-                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
             }
             break;
             case "susu kacang":
@@ -336,7 +334,7 @@ public class Sim extends Exception implements Runnable {
                 simItems.addItem(dish);
             }
             else{
-                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
             }
             break;
             case "tumis sayur":
@@ -346,7 +344,7 @@ public class Sim extends Exception implements Runnable {
                 simItems.addItem(dish);
             }
             else{
-                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
             }
             break;
             case "bistik":
@@ -426,11 +424,31 @@ public class Sim extends Exception implements Runnable {
     }
 
     public void buyItem(Item item) {
-        if(item.getPriceValue() > money){
-            throw new IllegalArgumentException("\nNot enough money");
+        if (shopQueue == null) {
+            if(item.getPriceValue() > money){
+                throw new IllegalArgumentException("\nNot enough money");
+            }
+            money -= item.getPriceValue();
+            shopQueue = new Thread(new Runnable() {
+                long timeLastOrdered = gm.getClock().getGameTime();
+                public void run(){
+                    while (shopQueue != null) {
+                        try {
+                            if (gm.getClock().getGameTime() - timeLastOrdered >= 18 * 60) {
+                                shopQueue = null;
+                            }
+                            Thread.sleep(3000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    simItems.addItem(item);
+                }
+            });
+            shopQueue.start();
+        } else {
+            throw new IllegalArgumentException("\nAnother order is in place.");
         }
-        money -= item.getPriceValue();
-        simItems.addItem(item);
     }
 
     public void sellItem(Item item) {
