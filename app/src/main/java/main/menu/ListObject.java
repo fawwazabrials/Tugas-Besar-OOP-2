@@ -9,6 +9,11 @@ import util.Input;
 public class ListObject implements Option {
 
     Input scan = Input.getInstance();
+    private boolean showEnter;
+
+    public ListObject(boolean showEnter) {
+        this.showEnter = showEnter;
+    }
 
     @Override
     public void execute(Game gm) {

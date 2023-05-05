@@ -26,7 +26,7 @@ public class Menu {
         availableMenuOptions.put("E", new EditRoom());
         availableMenuOptions.put("Ad", new AddSim());
         availableMenuOptions.put("Ch", new ChangeSim());
-        availableMenuOptions.put("L", new ListObject());
+        availableMenuOptions.put("L", new ListObject(false));
         availableMenuOptions.put("G", new GoToObject());
         availableMenuOptions.put("A", new ActionMenu(new Action(gm)));
         // availableMenuOptions.put("Sh", new Shop());  // TODO: Route this

@@ -4,7 +4,6 @@ import java.util.InputMismatchException;
 
 import exception.NoInputException;
 import main.Game;
-import util.Angka;
 import util.Input;
 
 public class ChangeSim implements Option {

@@ -1,7 +1,9 @@
 package main.menu;
 
+import java.util.InputMismatchException;
 import java.util.List;
 
+import exception.NoInputException;
 import item.Furniture;
 import main.Game;
 import util.Angka;
@@ -19,20 +21,29 @@ public class GoToObject implements Option {
             System.out.println("\nTidak ada objek di dalam ruangan!");
             scan.enterUntukLanjut();
         } else {
-            (new ListObject()).execute(gm);
+            (new ListObject(true)).execute(gm);
 
             int input = -999;
-            while (input <= 0) {
-                System.out.print("\nENTER OBJEK YANG DITUJU: ");
-                input = Angka.stringToInt(scan.nextLine());
+            boolean getInput = true;
 
-                if (input <= 0 || input > furnitures.size()) {
-                    System.out.println("Masukkan angka dalam batas objek!");
-                } else {
-                    gm.getCurrentSim().setCoordinates(furnitures.get(input-1).getY(), furnitures.get(input-1).getX());
-                    gm.setOverlapActionShowed(false);
+            while (getInput) {
+                try {
+                    input = scan.getIntegerInput("Masukkan angka objek yang dituju: ");
+
+                    if (input <= 0 || input > furnitures.size()) {
+                        System.out.println("Masukkan angka dalam batas objek!");
+                    } else {
+                        gm.getCurrentSim().setCoordinates(furnitures.get(input-1).getY(), furnitures.get(input-1).getX());
+                        gm.setOverlapActionShowed(false);
+                        getInput = false;
+                    }
                 }
-
+                catch (NoInputException e) {
+                    getInput = false;
+                }
+                catch (InputMismatchException e) {
+                    System.out.println("Masukkan angka!");
+                }
             }
         }
     }
