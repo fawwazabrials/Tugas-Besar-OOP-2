@@ -35,7 +35,7 @@ public class Sim extends Exception implements SimAction, Runnable {
     private long bufferedVisitTime, bufferedWorkTime;
     private int timeChangedJob, totalJobTimeWorked;
 
-    private Thread upgradeHouse, trackUpdates;
+    private Thread upgradeHouse, trackUpdates, shopQueue;
 
     // private boolean visiting;
 
@@ -290,7 +290,7 @@ public class Sim extends Exception implements SimAction, Runnable {
                 simItems.addItem(dish);
             }
             else{
-                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
             }
             break;
             case "nasi kari":
@@ -302,7 +302,7 @@ public class Sim extends Exception implements SimAction, Runnable {
                 simItems.addItem(dish);
             }
             else{
-                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
             }
             break;
             case "susu kacang":
@@ -312,7 +312,7 @@ public class Sim extends Exception implements SimAction, Runnable {
                 simItems.addItem(dish);
             }
             else{
-                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
             }
             break;
             case "tumis sayur":
@@ -322,7 +322,7 @@ public class Sim extends Exception implements SimAction, Runnable {
                 simItems.addItem(dish);
             }
             else{
-                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
             }
             break;
             case "bistik":
@@ -388,11 +388,31 @@ public class Sim extends Exception implements SimAction, Runnable {
 
     @Override
     public void buyItem(Item item) {
-        if(item.getPriceValue() > money){
-            throw new IllegalArgumentException("\nNot enough money");
+        if (shopQueue == null) {
+            if(item.getPriceValue() > money){
+                throw new IllegalArgumentException("\nNot enough money");
+            }
+            money -= item.getPriceValue();
+            shopQueue = new Thread(new Runnable() {
+                long timeLastOrdered = Game.getTime();
+                public void run(){
+                    while (shopQueue != null) {
+                        try {
+                            if (Game.getTime() - timeLastOrdered >= 18 * 60) {
+                                shopQueue = null;
+                            }
+                            Thread.sleep(3000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    simItems.addItem(item);
+                }
+            });
+            shopQueue.start();
+        } else {
+            throw new IllegalArgumentException("\nAnother order is in place.");
         }
-        money -= item.getPriceValue();
-        simItems.addItem(item);
     }
 
     @Override
