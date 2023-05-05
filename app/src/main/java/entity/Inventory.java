@@ -62,7 +62,7 @@ public class Inventory {
     public boolean checkItemAvailable(String name, int num){
         for(Map.Entry<Item, Integer> e : items.entrySet()){
             if(e.getKey().getName().equals(name)){
-                return num < e.getValue();
+                return num >= e.getValue();
             }
         }
         return false;
