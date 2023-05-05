@@ -1,5 +1,8 @@
 package main.menu;
 
+import java.util.InputMismatchException;
+
+import exception.NoInputException;
 import main.Game;
 import util.Angka;
 import util.Input;
@@ -29,23 +32,34 @@ public class ChangeSim implements Option {
             }
 
             int input = -999;
-            while (input <= 0) {
-                System.out.print("PILIH SIM: ");
-                input = Angka.stringToInt(scan.nextLine());
+            boolean getInput = true;
 
-                if (input <= 0 || input > simNum) {
-                    System.out.println("\nMasukan angka di dalam batas sim!");
-                    input = -1;
-                } else {
-                    if (gm.getWorld().getSims().get(input-1) == gm.getCurrentSim()) {
-                        System.out.println("\nTidak bisa mengganti ke sim yang sedang dimainkan!");
-                        scan.enterUntukLanjut();
-                    } else {
-                        gm.changeSim(gm.getWorld().getSims().get(input-1));
+            while (getInput) {
+                try {
+                    input = scan.getIntegerInput("\nPilih sim yang ingin dimainkan (dalam angka): ");
+
+                    if (input <=0 || input > simNum) {
+                        System.out.println("Masukan angka di dalam batas sim!");
                     }
+
+                    else {
+                        if (gm.getWorld().getSims().get(input-1) == gm.getCurrentSim()) {
+                            System.out.println("\nTidak bisa mengganti ke sim yang sedang dimainkan!");
+                            scan.enterUntukLanjut();
+                        } else {
+                            gm.changeSim(gm.getWorld().getSims().get(input-1));
+                        }
+
+                        getInput = false;
+                    }
+                }
+                catch (NoInputException e) {
+                    getInput = false;
+                }
+                catch (InputMismatchException e) {
+                    System.out.println("Masukkan angka!");
                 }
             }
         }
     }
-
 }
