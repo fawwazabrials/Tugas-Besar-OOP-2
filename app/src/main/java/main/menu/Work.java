@@ -3,6 +3,7 @@ package main.menu;
 import java.util.InputMismatchException;
 
 import exception.NoInputException;
+import exception.SimIsDeadException;
 import main.Game;
 import util.Input;
 
@@ -38,6 +39,10 @@ public class Work implements Option {
             catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
                 getInput = false;
+                scan.enterUntukLanjut();
+            }
+            catch (SimIsDeadException e) {
+                System.out.println("Wah sim kamu mati waktu kerja!");
                 scan.enterUntukLanjut();
             }
         }

@@ -1,5 +1,6 @@
 package main.menu;
 
+import main.Clock;
 import main.Game;
 import util.Input;
 
@@ -9,7 +10,7 @@ public class SeeTime implements Option {
 
     @Override
     public void execute(Game gm) {
-        long secInDay = (Game.getTime() - Game.getDay()*720)*2;
+        long secInDay = (gm.getClock().getGameTime() - gm.getClock().getDay()*720)*2;
         int hour = (int)secInDay / 60;
         int minute = (int)secInDay % 60;
         // System.out.println(secInDay);
@@ -25,7 +26,7 @@ public class SeeTime implements Option {
             showMinute = "0" + ((Integer)minute).toString();
         } else showMinute = ((Integer)minute).toString();
 
-        System.out.println("\nWaktu sekarang adalah hari ke-" + (Game.getDay()+1) + " jam " + showHour + "." + showMinute);
+        System.out.println("\nWaktu sekarang adalah hari ke-" + (gm.getClock().getDay()) + " jam " + showHour + "." + showMinute);
         scan.enterUntukLanjut();
     }
 

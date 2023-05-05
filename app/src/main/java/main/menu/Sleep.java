@@ -3,6 +3,7 @@ package main.menu;
 import java.util.InputMismatchException;
 
 import exception.NoInputException;
+import exception.SimIsDeadException;
 import main.Game;
 import util.Input;
 
@@ -34,6 +35,9 @@ public class Sleep implements Option {
             }
             catch (InputMismatchException  e) {
                 System.out.println("Masukkan angka!");
+            }
+            catch (SimIsDeadException e) {
+                
             }
         }
     }

@@ -3,6 +3,7 @@ package main.menu;
 import java.util.InputMismatchException;
 
 import exception.NoInputException;
+import exception.SimIsDeadException;
 import main.Game;
 import util.Input;
 
@@ -39,6 +40,9 @@ public class Workout implements Option {
                 System.out.println(e.getMessage());
                 getInput = false;
                 scan.enterUntukLanjut();
+            }
+            catch (SimIsDeadException e) {
+                System.out.println("Sakit semangatnya olahraga, simnya lupa makan! Sim kamu mati!");
             }
         }
     }

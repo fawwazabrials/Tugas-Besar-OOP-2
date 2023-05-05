@@ -5,6 +5,7 @@ import java.util.List;
 
 import entity.Sim;
 import exception.NoInputException;
+import exception.SimIsDeadException;
 import main.Game;
 import util.Input;
 
@@ -64,6 +65,9 @@ public class Visit implements Option {
                 }
                 catch (InputMismatchException  e) {
                     System.out.println("Masukkan angka!");
+                }
+                catch (SimIsDeadException e) {
+                    System.out.println("Waktu lagi jalan, sim kamu jatoh kecapean! Sim kamu mati!");
                 }
             }
         }
