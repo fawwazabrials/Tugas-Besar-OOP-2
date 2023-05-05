@@ -104,6 +104,9 @@ public class Menu {
                 case "Watch TV":
                     show += "menonton TV";
                     break;
+                case "Read":
+                    show += "membaca";
+                    break;
             }
 
             show += "? (Y/N) ";

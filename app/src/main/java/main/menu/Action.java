@@ -23,12 +23,12 @@ public class Action {
         allAvailableAction.put("Work", new Work());
         allAvailableAction.put("Workout", new Workout());
         allAvailableAction.put("See Time", new SeeTime());
-        // allAvailableAction.put("Stargaze", new Sleep()); // TODO: implement this
-        allAvailableAction.put("Play Game", new PlayGame()); // TODO: implement this
-        allAvailableAction.put("Watch TV", new WatchTV()); // TODO: implement this
-        // allAvailableAction.put("Read", new SeeTime()); // TODO: implement this
-        // allAvailableAction.put("Gamble", new SeeTime()); // TODO: implement this
-        // allAvailableAction.put("Read QnA", new SeeTime()); // TODO: implement this
+        // allAvailableAction.put("Stargaze", new Stargaze()); // TODO: implement this
+        allAvailableAction.put("Play Game", new PlayGame());
+        allAvailableAction.put("Watch TV", new WatchTV());
+        allAvailableAction.put("Read", new Read()); // TODO: implement this
+        // allAvailableAction.put("Gamble", new Gamble()); // TODO: implement this
+        // allAvailableAction.put("Read QnA", new ReadQnA()); // TODO: implement this
     }
 
     public Option getOverlapAction() {
