@@ -1,7 +1,5 @@
 package main;
 
-import java.util.Scanner;
-
 import util.ClearScreen;
 import util.Input;
 
