@@ -215,7 +215,7 @@ public class Sim extends Exception implements Runnable {
 
         for (int i=0; i<cycle; i++) {
             try {
-                gm.getClock().moveTime(time);
+                gm.getClock().moveTime(20 * 1000);
             } catch (SimIsDeadException e) {
                 throw e;
             }
