@@ -33,7 +33,7 @@ public class ListObject implements Option {
             }
             System.out.println(String.format(" %s ", "--------------------------"));
 
-            scan.enterUntukLanjut();
+            if (showEnter) scan.enterUntukLanjut();
         }
     }
 
