@@ -8,11 +8,11 @@ public class Inventory {
     private Map<Item, Integer> items;
 
     public Inventory(){
-        this.items = new TreeMap<Item, Integer>();
+        this.items = new HashMap<Item, Integer>();
     }
 
     public Map<Item, Integer> getItems(String category){
-        Map<Item, Integer> wanted = new TreeMap<>();
+        Map<Item, Integer> wanted = new HashMap<>();
         for(Map.Entry<Item, Integer> e : items.entrySet()){
             if(e.getKey().getCategory().equals(category)){
                 wanted.put(e.getKey(), e.getValue());
@@ -49,9 +49,14 @@ public class Inventory {
     }
     
     public void printInv(){
-        for(Map.Entry<Item, Integer> e : items.entrySet()){
-            System.out.println(e.getKey().getName()+" - "+e.getKey().getCategory()+" - "+e.getValue());
+        if (items.isEmpty()) {
+            System.out.println(String.format("| %-51s |" , "No items in inventory."));
+        } else {
+            for(Map.Entry<Item, Integer> e : items.entrySet()){
+                System.out.println(String.format("| %-15s | %-15s | %-15s |", e.getKey().getName(), e.getKey().getCategory(), e.getValue()));
+            }
         }
+        System.out.println(String.format(" %s ", "-----------------------------------------------------"));
     }
 
     public boolean checkItemAvailable(String name, int num){

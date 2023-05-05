@@ -2,22 +2,26 @@ package map;
 import java.util.*;
 
 import entity.Sim;
+import main.Game;
 
 public class World implements WorldAction{
     private static World instance = null;
+    private Game gm;
     private List<Sim> sims = new ArrayList<>();
     private Sim[][] worldMap;
 
     // Private Constructor
-    public World() {
+    public World(Game gm) {
+        this.gm = gm;
+
         int width = 64;
         int length = 64;
         worldMap = new Sim[width][length];
     }
 
-    public static World getInstance() {
+    public static World getInstance(Game gm) {
         if (instance == null) {
-            instance = new World();
+            instance = new World(gm);
         }
         return instance;
     }
@@ -30,7 +34,7 @@ public class World implements WorldAction{
             throw new IllegalArgumentException("House already exists");
         }
         House newHouse = new House(x, y);
-        Sim newSim = new Sim(newHouse, newHouse.getRooms().get(0), simName);
+        Sim newSim = new Sim(gm, newHouse, newHouse.getRooms().get(0), simName);
         sims.add(newSim);
         worldMap[x][y] = newSim;
     }

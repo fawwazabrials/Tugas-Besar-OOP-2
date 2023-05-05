@@ -27,21 +27,21 @@ public class Furniture extends Item {
 
     private void setAction(String name) {
         if (name.equals("kasur single")) {
-            this.action = "sleep";
+            this.action = "Sleep";
         } else if (name.equals("kasur queen size")) {
-            this.action = "sleep";
+            this.action = "Sleep";
         } else if (name.equals("kasur king size")) {
-            this.action = "sleep";
+            this.action = "Sleep";
         } else if (name.equals("toilet")) {
-            this.action = "poop";
+            this.action = "Poop";
         } else if (name.equals("kompor gas")) {
-            this.action = "cook";
+            this.action = "Cook";
         } else if (name.equals("kompor listrik")) {
-            this.action = "cook";
+            this.action = "Cook";
         } else if (name.equals("meja dan kursi")) {
-            this.action = "eat";
+            this.action = "Eat";
         } else if (name.equals("jam")) {
-            this.action = "seetime";
+            this.action = "See Time";
         }
     }
 
