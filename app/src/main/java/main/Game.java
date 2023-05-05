@@ -216,8 +216,10 @@ public class Game {
                 System.out.println("\nPekerjaan sim berhasil diganti!");
             } catch (NoSuchElementException e) {
                 System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
             }
 
             scan.enterUntukLanjut();
@@ -323,8 +325,39 @@ public class Game {
                 System.out.print("\nApakah anda ingin memasak? (Y/N) ");
                 String input = scan.nextLine();
                 if (input.equals("Y")) {
-                    // TODO : tambahin method buat cook
                     showDishTable();
+
+                    int in = 0;
+                    while (in <= 0 || in > 5) {
+                        System.out.print("\nENTER DISH NUMBER TO COOK: ");
+                        in = Angka.stringToInt(scan.nextLine());
+                        if (in <= 0 || in > 5) {
+                            System.out.println("Masukkan angka dalam batas opsi!");
+                        } else {
+                            try {
+                                switch(in) {
+                                    case 1: 
+                                        currentSim.cook(new Dish("nasi ayam"));
+                                        break;
+                                    case 2: 
+                                        currentSim.cook(new Dish("nasi kari"));
+                                        break;
+                                    case 3: 
+                                        currentSim.cook(new Dish("susu kacang"));
+                                        break;
+                                    case 4: 
+                                        currentSim.cook(new Dish("tumis sayur"));
+                                        break;
+                                    case 5: 
+                                        currentSim.cook(new Dish("bistik"));
+                                        break;
+                                }
+                            } catch(Exception e) {
+                                System.out.println(e.getMessage());
+                                scan.enterUntukLanjut();
+                            }
+                        }
+                    }
                 }
             } else {
                 // TODO : tambahin method buat cook
@@ -417,7 +450,7 @@ public class Game {
         }
 
         int input = -999;
-        while (input <= 0) {
+        while (input <= 0 || input > actionNum) {
             System.out.print("\nMASUKKAN AKSI YANG INGIN DILAKUKAN: ");
             input = Angka.stringToInt(scan.nextLine());
 
@@ -638,6 +671,7 @@ public class Game {
                 y = scan.getIntegerInput("ENTER X COORDINATE: ");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
             }
 
             currentSim.getRoom().addFurniture(furniture, x, y);
@@ -657,6 +691,7 @@ public class Game {
                     y = scan.getIntegerInput("ENTER X COORDINATE: ");
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
+                    scan.enterUntukLanjut();
                 }
 
                 currentSim.getSimItems().addItem(currentSim.getRoom().removeFurniture(x, y));    
@@ -676,6 +711,7 @@ public class Game {
                     y = scan.getIntegerInput("ENTER X COORDINATE: ");
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
+                    scan.enterUntukLanjut();
                 }
 
                 System.out.println("\nNew coordinate:");
@@ -687,6 +723,7 @@ public class Game {
                     newY = scan.getIntegerInput("ENTER NEW X COORDINATE: ");
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
+                    scan.enterUntukLanjut();
                 }
 
                 currentSim.getRoom().moveFurniture(x, y, newX, newY);
@@ -702,11 +739,11 @@ public class Game {
         System.out.println("\nList of Dish:");
         System.out.println("--------------------------------------------------------------------");
         System.out.println("Dish Name\t\tHunger Point\tRecipe");
-        System.out.println("Nasi ayam\t\t16\t\tNasi, Ayam");
-        System.out.println("Nasi kari\t\t30\t\tNasi, Kentang, Wortel, Sapi");
-        System.out.println("Susu kacang\t\t5\t\tSusu, Kacang");
-        System.out.println("Tumis sayur\t\t5\t\tWortel, Bayam");
-        System.out.println("Bistik\t\t\t22\t\tKentang, Sapi");
+        System.out.println("1. Nasi ayam\t\t16\t\tNasi, Ayam");
+        System.out.println("2. Nasi kari\t\t30\t\tNasi, Kentang, Wortel, Sapi");
+        System.out.println("3. Susu kacang\t\t5\t\tSusu, Kacang");
+        System.out.println("4. Tumis sayur\t\t5\t\tWortel, Bayam");
+        System.out.println("5. Bistik\t\t22\t\tKentang, Sapi");
     }
 
     public void shopOption() {
@@ -716,11 +753,12 @@ public class Game {
 
         int input = 0;
         boolean isFurniture = false;
-        while (input <= 0) {
+        while (input <= 0 || input > 2) {
             System.out.print("\nMASUKKAN ITEM YANG INGIN DIBELI: ");
             input = Angka.stringToInt(scan.nextLine());
             if (input <= 0 || input > 2) {
                 System.out.println("Masukkan angka dalam batas aksi!");
+                scan.enterUntukLanjut();
             } else {
                 if (input == 2) {
                     isFurniture = true;
@@ -752,73 +790,77 @@ public class Game {
             System.out.println("8. Susu\t\t\t2\t\tHunger point: 1");
         }
 
-        System.out.print("\nENTER ITEM NUMBER: ");
         input = 0;
-        input = Angka.stringToInt(scan.nextLine());
-        if (input <= 0 || input > 8) {
-            System.out.println("Masukkan angka dalam batas indeks!");
-        } else {
-            try {
-                switch(input) {
-                    case 1: 
-                        if (isFurniture) {
-                            currentSim.buyItem(new Furniture("kasur single", -1, -1));
-                        } else {
-                            currentSim.buyItem(new Ingredients("nasi"));
-                        }
-                        break;
-                    case 2: 
-                        if (isFurniture) {
-                            currentSim.buyItem(new Furniture("kasur queen size", -1, -1));
-                        } else {
-                            currentSim.buyItem(new Ingredients("kentang"));
-                        }
-                        break;
-                    case 3: 
-                        if (isFurniture) {
-                            currentSim.buyItem(new Furniture("kasur king size", -1, -1));
-                        } else {
-                            currentSim.buyItem(new Ingredients("ayam"));
-                        }
-                        break;
-                    case 4: 
-                        if (isFurniture) {
-                            currentSim.buyItem(new Furniture("toilet", -1, -1));
-                        } else {
-                            currentSim.buyItem(new Ingredients("sapi"));
-                        }
-                        break;
-                    case 5: 
-                        if (isFurniture) {
-                            currentSim.buyItem(new Furniture("kompor gas", -1, -1));
-                        } else {
-                            currentSim.buyItem(new Ingredients("wortel"));
-                        }
-                        break;
-                    case 6: 
-                        if (isFurniture) {
-                            currentSim.buyItem(new Furniture("kompor listrik", -1, -1));
-                        } else {
-                            currentSim.buyItem(new Ingredients("bayam"));
-                        }
-                        break;
-                    case 7: 
-                        if (isFurniture) {
-                            currentSim.buyItem(new Furniture("meja dan kursi", -1, -1));
-                        } else {
-                            currentSim.buyItem(new Ingredients("kacang"));
-                        }
-                        break;
-                    case 8: 
-                        if (isFurniture) {
-                            currentSim.buyItem(new Furniture("jam", -1, -1));
-                        } else {
-                            currentSim.buyItem(new Ingredients("susu"));
-                        }
-                        break;
+        while (input <= 0 || input > 8) {
+            System.out.print("\nENTER ITEM NUMBER: ");
+            input = Angka.stringToInt(scan.nextLine());
+            if (input <= 0 || input > 8) {
+                System.out.println("Masukkan angka dalam batas indeks!");
+                scan.enterUntukLanjut();
+            } else {
+                try {
+                    switch(input) {
+                        case 1: 
+                            if (isFurniture) {
+                                currentSim.buyItem(new Furniture("kasur single", -1, -1));
+                            } else {
+                                currentSim.buyItem(new Ingredients("nasi"));
+                            }
+                            break;
+                        case 2: 
+                            if (isFurniture) {
+                                currentSim.buyItem(new Furniture("kasur queen size", -1, -1));
+                            } else {
+                                currentSim.buyItem(new Ingredients("kentang"));
+                            }
+                            break;
+                        case 3: 
+                            if (isFurniture) {
+                                currentSim.buyItem(new Furniture("kasur king size", -1, -1));
+                            } else {
+                                currentSim.buyItem(new Ingredients("ayam"));
+                            }
+                            break;
+                        case 4: 
+                            if (isFurniture) {
+                                currentSim.buyItem(new Furniture("toilet", -1, -1));
+                            } else {
+                                currentSim.buyItem(new Ingredients("sapi"));
+                            }
+                            break;
+                        case 5: 
+                            if (isFurniture) {
+                                currentSim.buyItem(new Furniture("kompor gas", -1, -1));
+                            } else {
+                                currentSim.buyItem(new Ingredients("wortel"));
+                            }
+                            break;
+                        case 6: 
+                            if (isFurniture) {
+                                currentSim.buyItem(new Furniture("kompor listrik", -1, -1));
+                            } else {
+                                currentSim.buyItem(new Ingredients("bayam"));
+                            }
+                            break;
+                        case 7: 
+                            if (isFurniture) {
+                                currentSim.buyItem(new Furniture("meja dan kursi", -1, -1));
+                            } else {
+                                currentSim.buyItem(new Ingredients("kacang"));
+                            }
+                            break;
+                        case 8: 
+                            if (isFurniture) {
+                                currentSim.buyItem(new Furniture("jam", -1, -1));
+                            } else {
+                                currentSim.buyItem(new Ingredients("susu"));
+                            }
+                            break;
+                    }
+                } catch(Exception e) {
+                    System.out.println(e.getMessage());
+                    scan.enterUntukLanjut();
                 }
-            } catch(Exception e) {
-                System.out.println(e.getMessage());
             }
         }
     }

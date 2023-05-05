@@ -6,9 +6,7 @@ import map.House;
 import map.Room;
 import util.Angka;
 import map.Direction;
-import item.Food;
-import item.Dish;
-import item.Ingredients;
+import item.*;
 import item.Item;
 import main.Game;
 
@@ -273,7 +271,7 @@ public class Sim extends Exception implements SimAction, Runnable {
         * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
         */
         if(!simItems.getItems("food").containsKey(food)){
-            throw new IllegalArgumentException("No food in inventory.");
+            throw new IllegalArgumentException("\nNo food in inventory.");
         }
         for(Map.Entry<Item, Integer> e : simItems.getItems("food").entrySet()){
             if(e.getKey().getName().equals(food.getName())){
@@ -334,10 +332,10 @@ public class Sim extends Exception implements SimAction, Runnable {
                 simItems.addItem(dish);
             }
             else{
-                throw new IllegalArgumentException("Not enough ingredients in inventory.");
+                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
             }
             break;
-            default: throw new IllegalArgumentException("No such dish to cook.");
+            default: throw new IllegalArgumentException("\nNo such dish to cook.");
         }
         mood += 10;
         Game.moveTime((int) 1.5*dish.getHungerPoint());
@@ -391,7 +389,7 @@ public class Sim extends Exception implements SimAction, Runnable {
     @Override
     public void buyItem(Item item) {
         if(item.getPriceValue() > money){
-            throw new IllegalArgumentException("Not enough money");
+            throw new IllegalArgumentException("\nNot enough money");
         }
         money -= item.getPriceValue();
         simItems.addItem(item);
@@ -400,7 +398,7 @@ public class Sim extends Exception implements SimAction, Runnable {
     @Override
     public void sellItem(Item item) {
         if(!simItems.checkItemAvailable(item.getName(), 1)){
-            throw new IllegalArgumentException("Not enough item to sell");
+            throw new IllegalArgumentException("\nNot enough item to sell");
         }
         simItems.removeItem(item);
         money += item.getPriceValue();
