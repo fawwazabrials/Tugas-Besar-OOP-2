@@ -11,7 +11,7 @@ public class AddSim implements Option {
 
     @Override
     public void execute(Game gm) {
-        if (gm.getClock().getDay() <= gm.getDayLastSimAdded()) {
+        if (gm.getClock().getDay() <= gm.getDayLastSimAdded() && !gm.getCheat().isAddinfinitesim()) {
             System.out.println("\nSim tidak bisa ditambahkan! Sim hanya bisa ditambahkan setiap 1 hari.");
             scan.enterUntukLanjut();
         } 
