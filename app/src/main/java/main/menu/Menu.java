@@ -30,7 +30,7 @@ public class Menu {
         availableMenuOptions.put("G", new GoToObject());
         availableMenuOptions.put("A", new ActionMenu(new Action(gm)));
         // availableMenuOptions.put("Sh", new Shop());  // TODO: Route this
-        availableMenuOptions.put("E", new Exit());
+        availableMenuOptions.put("X", new Exit());
     }
 
     public void executeOption(String optionKey) throws IllegalArgumentException {
