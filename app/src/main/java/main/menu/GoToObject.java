@@ -21,7 +21,7 @@ public class GoToObject implements Option {
             System.out.println("\nTidak ada objek di dalam ruangan!");
             scan.enterUntukLanjut();
         } else {
-            (new ListObject(true)).execute(gm);
+            (new ListObject(false)).execute(gm);
 
             int input = -999;
             boolean getInput = true;
