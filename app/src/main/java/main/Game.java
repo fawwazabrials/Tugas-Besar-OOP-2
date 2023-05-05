@@ -668,7 +668,7 @@ public class Game {
 
             try {
                 x = scan.getIntegerInput("ENTER X COORDINATE: ");
-                y = scan.getIntegerInput("ENTER X COORDINATE: ");
+                y = scan.getIntegerInput("ENTER Y COORDINATE: ");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 scan.enterUntukLanjut();
@@ -688,7 +688,7 @@ public class Game {
 
                 try {
                     x = scan.getIntegerInput("ENTER X COORDINATE: ");
-                    y = scan.getIntegerInput("ENTER X COORDINATE: ");
+                    y = scan.getIntegerInput("ENTER Y COORDINATE: ");
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                     scan.enterUntukLanjut();
@@ -708,7 +708,7 @@ public class Game {
 
                 try {
                     x = scan.getIntegerInput("ENTER X COORDINATE: ");
-                    y = scan.getIntegerInput("ENTER X COORDINATE: ");
+                    y = scan.getIntegerInput("ENTER Y COORDINATE: ");
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                     scan.enterUntukLanjut();
@@ -720,7 +720,7 @@ public class Game {
 
                 try {
                     newX = scan.getIntegerInput("ENTER NEW X COORDINATE: ");
-                    newY = scan.getIntegerInput("ENTER NEW X COORDINATE: ");
+                    newY = scan.getIntegerInput("ENTER NEW Y COORDINATE: ");
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                     scan.enterUntukLanjut();
