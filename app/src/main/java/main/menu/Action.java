@@ -26,8 +26,8 @@ public class Action {
         // allAvailableAction.put("Stargaze", new Stargaze()); // TODO: implement this
         allAvailableAction.put("Play Game", new PlayGame());
         allAvailableAction.put("Watch TV", new WatchTV());
-        allAvailableAction.put("Read", new Read()); // TODO: implement this
-        // allAvailableAction.put("Gamble", new Gamble()); // TODO: implement this
+        allAvailableAction.put("Read", new Read());
+        allAvailableAction.put("Gamble", new Gamble()); // TODO: implement this
         // allAvailableAction.put("Read QnA", new ReadQnA()); // TODO: implement this
     }
 
@@ -45,7 +45,12 @@ public class Action {
         if (gm.getOverlapFurniture() != null) availableAction.add(gm.getOverlapFurniture().getAction());
 
         // TODO: Tambah conditional stargaze
-        // TODO: Tambah conditional QnA
+
+        if (gm.getCurrentSim().getSimItems().checkItemAvailable("HP", 1)) availableAction.add("Gamble");
+
+        if (gm.getCurrentSim().getSimItems().checkItemAvailable("Read QnA", 1)) availableAction.add("Read QnA");
+
+        System.out.println(gm.getCurrentSim().getSimItems().checkItemAvailable("HP", 1));
 
         return availableAction;
     }

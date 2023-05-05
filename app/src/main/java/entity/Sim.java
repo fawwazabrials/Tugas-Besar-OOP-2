@@ -45,6 +45,7 @@ public class Sim extends Exception implements Runnable {
 
         // Set basic sim info
         this.simItems = new Inventory();
+        simItems.addItem(new Other("HP"));
         this.name = name;
         this.simHouse = house;
         this.currRoom = currRoom;
@@ -569,5 +570,18 @@ public class Sim extends Exception implements Runnable {
                 throw e;
             }
         }
+    }
+
+    public void gamble(int money) {
+        // random dapet duit/kurang duit
+
+        int modifier = Angka.randint(-100, 100);
+        int gain = money * modifier / 100;
+
+        if (gain > 0) System.out.println(String.format("Selamat! Kamu dapet untung %s", gain));
+        else if (gain < 0) System.out.println(String.format("Yahh! Kamu hilang %s", Math.abs(gain)));
+        else System.out.println(String.format("Entah beruntung atau gimana tapi kamu gak hilang atau dapat duit!"));
+
+        setMoney(getMoney() + gain);
     }
 }
