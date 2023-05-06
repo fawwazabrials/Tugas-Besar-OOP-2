@@ -34,7 +34,7 @@ public class House implements HouseAction{
         }
 
         Room newRoom = new Room(roomName);
-        benchmarkRoom.getConnectedRooms().put(direction, newRoom);
+        benchmarkRoom.getConnectedRooms().put(direction, newRoom.getRoomName());
         switch(direction) {
             case NORTH:
                 roomMap.put(new Point((int)coordinate.getX() - 1, (int)coordinate.getY()), newRoom);
@@ -59,20 +59,20 @@ public class House implements HouseAction{
         }
 
         if (roomMap.containsKey(new Point((int)newRoomCoordinate.getX() - 1, (int)newRoomCoordinate.getY()))) {
-            newRoom.getConnectedRooms().put(Direction.NORTH, roomMap.get(new Point((int)newRoomCoordinate.getX() - 1, (int)newRoomCoordinate.getY())));
-            roomMap.get(new Point((int)newRoomCoordinate.getX() - 1, (int)newRoomCoordinate.getY())).getConnectedRooms().put(Direction.SOUTH, newRoom);
+            newRoom.getConnectedRooms().put(Direction.NORTH, roomMap.get(new Point((int)newRoomCoordinate.getX() - 1, (int)newRoomCoordinate.getY())).getRoomName());
+            roomMap.get(new Point((int)newRoomCoordinate.getX() - 1, (int)newRoomCoordinate.getY())).getConnectedRooms().put(Direction.SOUTH, newRoom.getRoomName());
         }
         if (roomMap.containsKey(new Point((int)newRoomCoordinate.getX() + 1, (int)newRoomCoordinate.getY()))) {
-            newRoom.getConnectedRooms().put(Direction.SOUTH, roomMap.get(new Point((int)newRoomCoordinate.getX() + 1, (int)newRoomCoordinate.getY())));
-            roomMap.get(new Point((int)newRoomCoordinate.getX() + 1, (int)newRoomCoordinate.getY())).getConnectedRooms().put(Direction.NORTH, newRoom);
+            newRoom.getConnectedRooms().put(Direction.SOUTH, roomMap.get(new Point((int)newRoomCoordinate.getX() + 1, (int)newRoomCoordinate.getY())).getRoomName());
+            roomMap.get(new Point((int)newRoomCoordinate.getX() + 1, (int)newRoomCoordinate.getY())).getConnectedRooms().put(Direction.NORTH, newRoom.getRoomName());
         }
         if (roomMap.containsKey(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() - 1))) {
-            newRoom.getConnectedRooms().put(Direction.WEST, roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() - 1)));
-            roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() - 1)).getConnectedRooms().put(Direction.EAST, newRoom);
+            newRoom.getConnectedRooms().put(Direction.WEST, roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() - 1)).getRoomName());
+            roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() - 1)).getConnectedRooms().put(Direction.EAST, newRoom.getRoomName());
         }
         if (roomMap.containsKey(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() + 1))) {
-            newRoom.getConnectedRooms().put(Direction.EAST, roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() + 1)));
-            roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() + 1)).getConnectedRooms().put(Direction.WEST, newRoom);
+            newRoom.getConnectedRooms().put(Direction.EAST, roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() + 1)).getRoomName());
+            roomMap.get(new Point((int)newRoomCoordinate.getX(), (int)newRoomCoordinate.getY() + 1)).getConnectedRooms().put(Direction.WEST, newRoom.getRoomName());
         }
 
         rooms.add(newRoom);
@@ -91,7 +91,7 @@ public class House implements HouseAction{
         }
 
         for (Map.Entry<Point, Room> entry : roomMap.entrySet()) {
-            for (Map.Entry<Direction, Room> connectedRoom : entry.getValue().getConnectedRooms().entrySet()) {
+            for (Map.Entry<Direction, String> connectedRoom : entry.getValue().getConnectedRooms().entrySet()) {
                 if (connectedRoom.getValue() != null && connectedRoom.getValue().equals(room)) {
                     entry.getValue().getConnectedRooms().remove(connectedRoom.getKey());
                 }
@@ -148,12 +148,12 @@ public class House implements HouseAction{
             throw new IllegalArgumentException("Room already exists!");
         }
         
-        for (Map.Entry<Direction, Room> entry : room.getConnectedRooms().entrySet()) {
+        for (Map.Entry<Direction, String> entry : room.getConnectedRooms().entrySet()) {
             entry.setValue(null);
         }
 
         for (Map.Entry<Point, Room> entry : roomMap.entrySet()) {
-            for (Map.Entry<Direction, Room> connectedRoom : entry.getValue().getConnectedRooms().entrySet()) {
+            for (Map.Entry<Direction, String> connectedRoom : entry.getValue().getConnectedRooms().entrySet()) {
                 if (connectedRoom.getValue() != null && connectedRoom.getValue().equals(room)) {
                     entry.getValue().getConnectedRooms().remove(connectedRoom.getKey());
                 }
@@ -165,16 +165,16 @@ public class House implements HouseAction{
         roomMap.put(newCoord, room);
 
         if (roomMap.containsKey(new Point((int)newCoord.getX() - 1, (int)newCoord.getY()))) {
-            room.getConnectedRooms().put(Direction.SOUTH, roomMap.get(new Point((int)newCoord.getX() - 1, (int)newCoord.getY())));
+            room.getConnectedRooms().put(Direction.SOUTH, roomMap.get(new Point((int)newCoord.getX() - 1, (int)newCoord.getY())).getRoomName());
         }
         if (roomMap.containsKey(new Point((int)newCoord.getX() + 1, (int)newCoord.getY()))) {
-            room.getConnectedRooms().put(Direction.NORTH, roomMap.get(new Point((int)newCoord.getX() + 1, (int)newCoord.getY())));
+            room.getConnectedRooms().put(Direction.NORTH, roomMap.get(new Point((int)newCoord.getX() + 1, (int)newCoord.getY())).getRoomName());
         }
         if (roomMap.containsKey(new Point((int)newCoord.getX(), (int)newCoord.getY() - 1))) {
-            room.getConnectedRooms().put(Direction.WEST, roomMap.get(new Point((int)newCoord.getX(), (int)newCoord.getY() - 1)));
+            room.getConnectedRooms().put(Direction.WEST, roomMap.get(new Point((int)newCoord.getX(), (int)newCoord.getY() - 1)).getRoomName());
         }
         if (roomMap.containsKey(new Point((int)newCoord.getX(), (int)newCoord.getY() + 1))) {
-            room.getConnectedRooms().put(Direction.EAST, roomMap.get(new Point((int)newCoord.getX(), (int)newCoord.getY() + 1)));
+            room.getConnectedRooms().put(Direction.EAST, roomMap.get(new Point((int)newCoord.getX(), (int)newCoord.getY() + 1)).getRoomName());
         }
     }
 
