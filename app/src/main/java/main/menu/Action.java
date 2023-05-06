@@ -16,7 +16,7 @@ public class Action {
 
         allAvailableAction = new LinkedHashMap<String, Option>();
         allAvailableAction.put("Sleep", new Sleep());
-        // allAvailableAction.put("Cook", new Sleep()); // TODO: route this
+        allAvailableAction.put("Cook", new Cook());
         // allAvailableAction.put("Eat", new Sleep()); // TODO: route this
         allAvailableAction.put("Poop", new Poop());
         allAvailableAction.put("Visit", new Visit());
@@ -27,8 +27,8 @@ public class Action {
         allAvailableAction.put("Play Game", new PlayGame());
         allAvailableAction.put("Watch TV", new WatchTV());
         allAvailableAction.put("Read", new Read());
-        allAvailableAction.put("Gamble", new Gamble()); // TODO: implement this
-        allAvailableAction.put("Read QnA", new ReadQnA()); // TODO: implement this
+        allAvailableAction.put("Gamble", new Gamble());
+        allAvailableAction.put("Read QnA", new ReadQnA());
     }
 
     public Option getOverlapAction() {
