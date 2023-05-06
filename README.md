@@ -21,6 +21,6 @@ BNMO (dibaca: Binomo) adalah sebuah robot game milik Indra dan Doni yang membant
 ## Setup program
 Tugas besar ini dibuat dengan menggunakan Gradle sebagai build tool-nya. Untuk mengetahui lebih lanjut tentang Grandle, kunjungi [link ini](https://guides.gradle.org/creating-new-gradle-builds/)!
 
-- Pastikan Gradle sudah terinstall di OS anda!
+- Clone repository ini
 - Pindah ke directory ini README.md ini berada
-- Jalankan command `./gradlew -q run --console-plain` untuk Linux dan `gradlew -q run --console=plain` untuk Windows
+- Jalankan command `./gradlew -q run --console=plain` untuk Linux dan `gradlew -q run --console=plain` untuk Windows
