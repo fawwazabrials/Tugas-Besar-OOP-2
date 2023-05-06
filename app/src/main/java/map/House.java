@@ -197,15 +197,26 @@ public class House implements HouseAction{
                 maxY = (int)entry.getKey().getY();
             }
         }
+
         for (int i = minX; i <= maxX; i++) {
-            for (int j = minY; j <= maxY; j++) {
-                if (roomMap.containsKey(new Point(i, j))) {
-                    System.out.print(roomMap.get(new Point(i, j)).getRoomName() + " ");
-                } else {
-                    System.out.print("X ");
-                }
+            System.out.printf(String.format("%s", "-----------------------"));
+            for (int k = maxY-minY; k > 0; k--) {
+                System.out.printf(String.format("%s", "----------------------"));
             }
             System.out.println();
+            for (int j = minY; j <= maxY; j++) {
+                if (roomMap.containsKey(new Point(i, j))) {
+                    System.out.printf(String.format("|%-21s", roomMap.get(new Point(i, j)).getRoomName()));
+                } else {
+                    System.out.printf(String.format("|%-21s", ""));
+                }
+            }
+            System.out.println("|");
         }
+        System.out.printf(String.format("%s", "-----------------------"));
+        for (int i = maxY-minY; i > 0; i--) {
+            System.out.printf(String.format("%s", "----------------------"));
+        }
+        System.out.println();
     }
 }
