@@ -16,20 +16,26 @@ public class ChangeSim implements Option {
         boolean deadscreen = gm.getCurrentSim().isDead();
 
         if (simNum <= 1 && !deadscreen) {
-            System.out.println("\nKamu hanya memiliki 1 sim! Silahkan buat sim lain untuk dimainkan.");
+            System.out.println("Kamu hanya memiliki 1 sim! Silahkan buat sim lain untuk dimainkan.");
             scan.enterUntukLanjut();
-        } else {
-            System.out.println("\nPilih sim mana yang ingin dimainkan: ");
-            int cnt = 1;
-            for (int i=0; i<simNum; i++) {
-                if (gm.getWorld().getSims().get(i) == gm.getCurrentSim()) { // Bukan sim yang sekarang lagi dimainin
-                    System.out.println(cnt + ". " + gm.getWorld().getSims().get(i).getName() + " (Sim sekarang)");
-                } else {
-                    System.out.println(cnt + ". " + gm.getWorld().getSims().get(i).getName());
-                }
-                cnt++;
+        } 
+        
+        else {
+            // Print available sims
+            System.out.println(String.format(" %s ", "---------------------- SIM YANG ADA ----------------------"));
+            System.out.println(String.format("| %-3s | %-50s |", "No", "Sim"));
+            System.out.println(String.format(" %s ", "----------------------------------------------------------"));
+
+            for (int i=0; i<gm.getWorld().getSims().size(); i++) {
+                if (gm.getWorld().getSims().get(i) == gm.getCurrentSim())
+                    System.out.println(String.format("| %-3s | %-50s |", i+1, (gm.getWorld().getSims().get(i).getName() + " (Sim sekarang)")));
+                else
+                    System.out.println(String.format("| %-3s | %-50s |", i+1, gm.getWorld().getSims().get(i).getName()));
             }
 
+            System.out.println(String.format(" %s ", "----------------------------------------------------------"));
+
+            // Get input
             int input = -999;
             boolean getInput = true;
 

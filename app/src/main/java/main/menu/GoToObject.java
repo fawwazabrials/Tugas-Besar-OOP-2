@@ -6,7 +6,6 @@ import java.util.List;
 import exception.NoInputException;
 import item.Furniture;
 import main.Game;
-import util.Angka;
 import util.Input;
 
 public class GoToObject implements Option {
@@ -21,7 +20,7 @@ public class GoToObject implements Option {
             System.out.println("\nTidak ada objek di dalam ruangan!");
             scan.enterUntukLanjut();
         } else {
-            (new ListObject(true)).execute(gm);
+            (new ListObject(false)).execute(gm);
 
             int input = -999;
             boolean getInput = true;

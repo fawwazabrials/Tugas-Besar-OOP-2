@@ -26,7 +26,7 @@ public class Menu {
         availableMenuOptions.put("E", new EditRoom());
         availableMenuOptions.put("Ad", new AddSim());
         availableMenuOptions.put("Ch", new ChangeSim());
-        availableMenuOptions.put("L", new ListObject(false));
+        availableMenuOptions.put("L", new ListObject(true));
         availableMenuOptions.put("G", new GoToObject());
         availableMenuOptions.put("A", new ActionMenu(new Action(gm)));
         availableMenuOptions.put("Sh", new Shop());  // TODO: Route this
@@ -74,6 +74,7 @@ public class Menu {
         }
         catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
+            scan.enterUntukLanjut();
         }
     }
 
@@ -98,9 +99,18 @@ public class Menu {
                 case "See Time":
                     show += "melihat waktu";
                     break;
+                case "Play Game":
+                    show += "bermain game";
+                    break;
+                case "Watch TV":
+                    show += "menonton TV";
+                    break;
+                case "Read":
+                    show += "membaca";
+                    break;
             }
 
-            show += "? (Y/N)";
+            show += "? (Y/N) ";
 
             try {
                 String input = scan.getInput(show);

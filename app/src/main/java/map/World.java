@@ -4,7 +4,7 @@ import java.util.*;
 import entity.Sim;
 import main.Game;
 
-public class World implements WorldAction{
+public class World{
     private static World instance = null;
     private Game gm;
     private List<Sim> sims = new ArrayList<>();
@@ -33,7 +33,7 @@ public class World implements WorldAction{
         if (worldMap[x][y] != null) {
             throw new IllegalArgumentException("House already exists");
         }
-        House newHouse = new House(x, y);
+        House newHouse = new House(x, y, simName);
         Sim newSim = new Sim(gm, newHouse, newHouse.getRooms().get(0), simName);
         sims.add(newSim);
         worldMap[x][y] = newSim;

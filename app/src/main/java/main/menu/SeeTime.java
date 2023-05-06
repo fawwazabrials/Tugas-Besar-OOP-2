@@ -1,6 +1,7 @@
 package main.menu;
 
 import main.Game;
+import util.Angka;
 import util.Input;
 
 public class SeeTime implements Option {
@@ -9,23 +10,21 @@ public class SeeTime implements Option {
 
     @Override
     public void execute(Game gm) {
-        long secInDay = (gm.getClock().getGameTime() - gm.getClock().getDay()*720)*2;
-        int hour = (int)secInDay / 60;
-        int minute = (int)secInDay % 60;
-        // System.out.println(secInDay);
-        // System.out.println(Game.getDay());
-        // System.out.println(Game.getTime());
+        System.out.println(String.format("Hari: %s", gm.getClock().getDay()));
+        System.out.println(String.format("Jam: %s", gm.getClock().getDayTime()));
 
-        String showHour, showMinute;
-        if ((double)hour / 10 < 1) {
-            showHour = "0" + ((Integer)hour).toString();
-        } else showHour = ((Integer)hour).toString();
+        System.out.println(String.format("\nSim terakhir kali makan %s lalu", Angka.secToTime(gm.getClock().getGameTime() - gm.getCurrentSim().getTimeLastEat())));
+        System.out.println(String.format("Sim terakhir kali tidur %s lalu\n", Angka.secToTime(gm.getClock().getGameTime() - gm.getCurrentSim().getTimeLastSleep())));
 
-        if ((double)minute / 10 < 1) {
-            showMinute = "0" + ((Integer)minute).toString();
-        } else showMinute = ((Integer)minute).toString();
+        if (gm.getCurrentSim().isUpgradingHouse()) 
+            System.out.println(String.format("Tersisa waktu %s sampai rumah selesai di-upgrade", Angka.secToTime(18*60 - (gm.getClock().getGameTime() - gm.getCurrentSim().getTimeUpgradeHouse()))));        
+        else System.out.println("Sim tidak sedang upgrade rumah.");
 
-        System.out.println("\nWaktu sekarang adalah hari ke-" + (gm.getClock().getDay()) + " jam " + showHour + "." + showMinute);
+        if (gm.getCurrentSim().isShoppingQueue())
+            System.out.println(String.format("Tersisa waktu %s sampai barang yang dibeli sampai", Angka.secToTime(gm.getCurrentSim().getDeliveryTime() - (gm.getClock().getGameTime() - gm.getCurrentSim().getTimeShopQueue()))));
+        else System.out.println("Sim tidak sedang membeli barang.");
+
+
         scan.enterUntukLanjut();
     }
 

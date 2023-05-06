@@ -9,11 +9,11 @@ public class Inventory implements Option {
 
     @Override
     public void execute(Game gm) {
-        System.out.println("\n    Inventory:");
-        System.out.println(String.format(" %s ", "-----------------------------------------------------"));
-        System.out.println(String.format("| %-15s | %-15s | %-15s |", "Item Name", "Category", "Amount"));
-        System.out.println(String.format("|%s|", "-----------------------------------------------------"));
-        gm.getCurrentSim().getSimItems().printInv();
+        // System.out.println("\n    Inventory:");
+        // System.out.println(String.format(" %s ", "-----------------------------------------------------"));
+        // System.out.println(String.format("| %-15s | %-15s | %-15s |", "Item Name", "Category", "Amount"));
+        // System.out.println(String.format("|%s|", "-----------------------------------------------------"));
+        gm.getCurrentSim().getSimItems().print();
         scan.enterUntukLanjut(); 
     }
 }

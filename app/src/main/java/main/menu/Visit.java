@@ -50,7 +50,6 @@ public class Visit implements Option {
                         System.out.println("Sim tidak bisa mengujungi lokasi dia sekarang! Silahkan coba ulang.");
                         scan.enterUntukLanjut();
                     } else {
-                        System.out.println("\nSim sedang berjalan untuk berkunjung...");
         
                         gm.getCurrentSim().visit(sims.get(input-1));
                         gm.setCurrentHouse(sims.get(input-1).getName());
@@ -67,7 +66,8 @@ public class Visit implements Option {
                     System.out.println("Masukkan angka!");
                 }
                 catch (SimIsDeadException e) {
-                    System.out.println("Waktu lagi jalan, sim kamu jatoh kecapean! Sim kamu mati!");
+                    System.out.println(e.getMessage());
+                    getInput = false;
                 }
             }
         }

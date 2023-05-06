@@ -16,14 +16,19 @@ public class Action {
 
         allAvailableAction = new LinkedHashMap<String, Option>();
         allAvailableAction.put("Sleep", new Sleep());
-        // allAvailableAction.put("Cook", new Sleep()); // TODO: route this
-        // allAvailableAction.put("Eat", new Sleep()); // TODO: route this
+        allAvailableAction.put("Cook", new Cook());
+        allAvailableAction.put("Eat", new Eat());
         allAvailableAction.put("Poop", new Poop());
         allAvailableAction.put("Visit", new Visit());
-        // allAvailableAction.put("Stargaze", new Sleep()); // TODO: implement this
         allAvailableAction.put("Work", new Work());
         allAvailableAction.put("Workout", new Workout());
         allAvailableAction.put("See Time", new SeeTime());
+        allAvailableAction.put("Stargaze", new Stargaze());
+        allAvailableAction.put("Play Game", new PlayGame());
+        allAvailableAction.put("Watch TV", new WatchTV());
+        allAvailableAction.put("Read", new Read());
+        allAvailableAction.put("Gamble", new Gamble());
+        allAvailableAction.put("Read QnA", new ReadQNA());
     }
 
     public Option getOverlapAction() {
@@ -39,8 +44,18 @@ public class Action {
 
         if (gm.getOverlapFurniture() != null) availableAction.add(gm.getOverlapFurniture().getAction());
 
-        // TODO: Tambah conditional stargaze
-        // TODO: Tambah conditional QnA
+        // cuma dari jam 8 malem (menit ke 10 hari) - jam 2 pagi (menit ke 1 hari)
+        if (720-gm.getClock().getDayTimeInSec() <= 120 || 720-gm.getClock().getDayTimeInSec() >= 660) availableAction.add("Stargaze");
+        System.out.println(720-gm.getClock().getDayTimeInSec());
+        System.out.println(720-gm.getClock().getDayTimeInSec() <= 60);
+        System.out.println(720-gm.getClock().getDayTimeInSec() >= 600);
+
+
+        if (gm.getCurrentSim().getSimItems().checkItemAvailable("HP", 1)) availableAction.add("Gamble");
+
+        if (gm.getCurrentSim().getSimItems().checkItemAvailable("Sheet QnA", 1)) availableAction.add("Read QnA");
+
+        // System.out.println(gm.getCurrentSim().getSimItems().checkItemAvailable("HP", 1));
 
         return availableAction;
     }

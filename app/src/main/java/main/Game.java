@@ -1,9 +1,14 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import entity.*;
+import exception.SimIsDeadException;
 import item.*;
 import main.menu.*;
 import map.*;
+import util.*;
 
 public class Game {
     // IMPORTANT GAME ATTRIBUTES
@@ -16,6 +21,8 @@ public class Game {
     private Action action = new Action(this);
     private Menu menu = new Menu(this);
     private Cheat cheat = new Cheat(this);
+    Input scan = Input.getInstance();
+
 
     public Action getAction() {return action;}
     public Cheat getCheat() {return cheat;}
@@ -32,15 +39,11 @@ public class Game {
     public void changeSim(Sim sim) {
         currentSim = sim;
         changeView(currentSim.getRoom());
-        currentHouse = currentSim.getName();
-    }
-
-    public void moveSim() {
-        // TODO
+        currentHouse = currentSim.getCurrHouse().getOwnerName();
     }
 
     // GAME CONFIG
-    private int dayLastSimAdded = -1;
+    private int dayLastSimAdded = 0;
     private boolean overlapActionShowed;
 
     public boolean isOverlapActionShowed() {return overlapActionShowed;}
@@ -67,42 +70,48 @@ public class Game {
 
     public void showGamePanel() {
         // TODO: ini bawah nanti di uncomment
-        // ClearScreen.clear();
+        ClearScreen.clear();
 
-        // if (currentSim.isDead()) {
-        //     currentSim.killSim();
-        //     world.getSims().remove(currentSim);
-        //     showDeadScreen();
-        // }
+        removeAllDeadSim();
+        if (currentSim.isDead()) {
+            showDeadScreen();
+        }
 
+        printCurrentLocation();
         renderCurrentView();
         menu.askOverlapAction();
         menu.showOptions();
         menu.getInput();
     }
 
-    // public void showDeadScreen() {
-    //     System.out.println("\nSim kamu mati!");
+    public void showDeadScreen() {
+        System.out.println("\nSim kamu mati!");
 
-    //     if (world.getSims().size() == 0) {
-    //         showGameOverScreen();
-    //     } else {
-    //         menu.;
-    //     }
-    // }
+        if (world.getSims().size() == 0) {
+            showGameOverScreen();
+        } else {
+            menu.executeOption("Ch");;
+        }
+    }
 
-    // public void showGameOverScreen() {
-    //     System.out.println("Semua Sim kamu mati! Kamu kalah!");
-    //     System.exit(0);
-    // }
+    public void showGameOverScreen() {
+        System.out.println("Semua Sim kamu mati! Kamu kalah!");
+        System.exit(0);
+    }
+
+    public void printCurrentLocation() {
+        System.out.println("Rumah " + currentHouse + " - " + currentSim.getRoom().getRoomName() + "\n");
+    }
 
     public void renderCurrentView() {
         char[][] rendered = currentView.render();
     
         rendered[currentSim.getY()][currentSim.getX()] = 'S'; // tampilin sim
-        System.out.println("Rumah " + currentHouse + " - " + currentSim.getRoom().getRoomName());
     
+        System.out.println("  0 1 2 3 4 5");
+
         for (int i=0; i<6; i++) {
+            System.out.print(i + " ");
             for (int j=0; j<6; j++) {
                 System.out.print(rendered[i][j] + " ");
             }
@@ -124,16 +133,30 @@ public class Game {
         return house;
     }
 
-    public void showDishTable() {
-        System.out.println("\n    List of Dish:");
-        System.out.println(String.format(" %s ", "--------------------------------------------------------------------"));
-        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Dish Name", "Hunger Point", "Recipe"));
-        System.out.println(String.format("|%s|", "--------------------------------------------------------------------"));
-        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Nasi Ayam", "16", "Nasi, Ayam"));
-        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Nasi Kari", "30", "Nasi, Kentang, Wortel, Sapi"));
-        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Susu Kacang", "5", "Susu, Kacang"));
-        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Tumis Sayur", "5", "Wortel, Bayam"));
-        System.out.println(String.format("| %-15s | %-15s | %-30s |", "Bistik", "22", "Kentang, Sapi"));
-        System.out.println(String.format(" %s ", "--------------------------------------------------------------------"));
+    public void removeAllDeadSim() {
+        List<String> deadSims = new ArrayList<String>();
+        List<Sim> clone = new ArrayList<Sim>(getWorld().getSims());
+
+        for (Sim s : clone) {
+            if (s.isDead()) {
+                s.killSim();
+                deadSims.add(s.getName());
+                getWorld().removeHouse(s.getHouse().getX(), s.getHouse().getY());
+
+                if (s.getHouse() == currentSim.getCurrHouse() && currentSim != getCurrentSim()) {
+                    try {
+                        System.out.println("Karena sim yang dikunjungin udah mati, sim akan pergi kembali ke rumahnya.");
+                        currentSim.visit(currentSim);
+                        scan.enterUntukLanjut();
+                    } catch (SimIsDeadException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+        }
+
+        if (deadSims.size() > 0) {
+            System.out.println(String.format("Sim yang mati %s", deadSims));
+        }
     }
 }

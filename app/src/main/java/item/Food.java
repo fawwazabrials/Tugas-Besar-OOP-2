@@ -1,16 +1,13 @@
 package item;
 
+@SuppressWarnings("unused")
 public abstract class Food extends Item {
-    private String name;
-    private String category;
-    private int hungerPoint;
-    private int priceValue;
+    protected int hungerPoint;
 
-    public abstract String getName();
-    
-    public abstract String getCategory();
+    public Food(String name, String category, int priceValue, int hungerPoint) {
+        super(name, category, priceValue);
+        this.hungerPoint = hungerPoint;
+    }
 
     public abstract int getHungerPoint();
-
-    public abstract int getPriceValue();
 }

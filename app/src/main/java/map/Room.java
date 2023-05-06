@@ -3,12 +3,12 @@ import java.util.*;
 
 import item.Furniture;
 
-public class Room implements RoomAction, Renderable {
+public class Room implements Renderable {
     // Attributes
     private String roomName;
     private final int width = 6;
     private final int length = 6;
-    private Map<Direction, Room> connectedRooms;
+    private Map<Direction, String> connectedRooms;
 
     private List<Furniture> furnitures;
     private Furniture[][] roomGrid;
@@ -37,7 +37,7 @@ public class Room implements RoomAction, Renderable {
     public String getRoomName() {return roomName;}
     public int getWidth() {return width;}
     public int getLength() {return length;}
-    public Map<Direction, Room> getConnectedRooms() {return connectedRooms;}
+    public Map<Direction, String> getConnectedRooms() {return connectedRooms;}
     public List<Furniture> getFurnitures() {return furnitures;}
     public Furniture[][] getRoomGrid() {return roomGrid;}
 
@@ -69,11 +69,10 @@ public class Room implements RoomAction, Renderable {
         return true;
     }
     
-    @Override
     public Furniture removeFurniture(int x, int y) {
         Furniture furniture = roomGrid[x][y];
         if (furniture == null) {
-            throw new IllegalArgumentException("No furniture at (" + x + ", " + y + ")");
+            throw new IllegalArgumentException("\nTidak ada furniture di koordinat ini!");
         }
         furnitures.remove(furniture);
         for (int i = 0; i < width; i++) {
@@ -90,11 +89,10 @@ public class Room implements RoomAction, Renderable {
         return furniture;
     }
 
-    @Override
      public void moveFurniture(int oldX, int oldY, int newX, int newY) {
         Furniture furniture = roomGrid[oldX][oldY];
         if (furniture == null) {
-            throw new IllegalArgumentException("No furniture at (" + oldX + ", " + oldY + ")");
+            throw new IllegalArgumentException("\nTidak ada furniture di koordinat ini!");
         }
 
         int topLeftX = -1;
@@ -124,7 +122,7 @@ public class Room implements RoomAction, Renderable {
 
         // Mengatasi jika topLeft tidak diinisalisasi akan throw error
         if (topLeftX == -1 || topLeftY == -1) {
-            throw new IllegalArgumentException("No furniture at (" + oldX + ", " + oldY + ")");
+            throw new IllegalArgumentException("\nTidak ada furniture di koordinat ini!");
         }
 
         int x = newX - (oldX - topLeftX);
@@ -134,15 +132,14 @@ public class Room implements RoomAction, Renderable {
             
             roomGrid = tempRoomGrid;
             furnitures.add(furniture);
-            throw new IllegalArgumentException("Cannot move furniture to the new location");
+            throw new IllegalArgumentException("\nFurniture tidak bisa dipindahkan ke lokasi baru!");
         }
         addFurniture(furniture, x, y);
     }
-
-    @Override
+    
     public void addFurniture(Furniture furniture, int x, int y) {
         if (! isPlaceable(furniture, x, y)) {
-            throw new IllegalArgumentException("Furniture cannot be placed");
+            throw new IllegalArgumentException("\nFurniture tidak bisa ditambahkan!");
         }
         furniture.setX(x);
         furniture.setY(y);

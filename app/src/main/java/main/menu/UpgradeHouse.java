@@ -1,5 +1,6 @@
 package main.menu;
 
+import exception.NoInputException;
 import main.Game;
 import map.Direction;
 import map.Room;
@@ -18,17 +19,48 @@ public class UpgradeHouse implements Option {
         if (gm.getCurrentSim().getMoney() >= 1500) {
             gm.getCurrentSim().getHouse().printHouse();
 
-            System.out.print("\nMASUKKAN NAMA RUANGAN BARU : ");
-            String roomName = scan.nextLine();
+            String roomName = "";
+            String target = "";
+            boolean getInput = true;
+            while (getInput) {
+                try {
+                    roomName = scan.getInput("\nMasukkan nama ruangan baru: ");
+                    boolean isExist = false;
+                    for (Room room: gm.getCurrentSim().getHouse().getRooms()) {
+                        if (room.getRoomName().equals(roomName)){
+                            isExist = true;
+                        }
+                    }
+                    if (!isExist) {
+                        if (roomName.length() <= 21) {
+                            target = scan.getInput("\nMasukkan nama ruangan target: ");
+                            if (target.length() <= 21) {
+                                getInput = false;
+                            } else {
+                                System.out.println("\nNama ruangan target terlalu panjang!");
+                            }
+                        } else {
+                            System.out.println("\nNama ruangan terlalu panjang!");
+                        }
+                    } else {
+                        System.out.println("\nNama ruangan sudah ada!");
+                    }
+
+                } catch (NoInputException e) {
+                    getInput = false;
+                    return;
+                } catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
+                    scan.enterUntukLanjut();
+                }
+            }
+
             for (Room room: gm.getCurrentSim().getHouse().getRooms()) {
                 if (room.getRoomName().equals(roomName)){
                     throw new IllegalArgumentException("Nama ruangan sudah ada!");
                 }
             }
 
-            System.out.print("MASUKKAN NAMA RUANGAN TARGET : ");
-            String target = scan.nextLine();
-            
             Room targetRoom = null;
             for (Room room : gm.getCurrentSim().getHouse().getRooms()) {
                 if (room.getRoomName().equals(target)) {
@@ -40,9 +72,28 @@ public class UpgradeHouse implements Option {
                 throw new IllegalArgumentException("\nRuangan target tidak ditemukan!");
             }
             
-            System.out.println("\nDirection : (N)orth  (S)outh  (E)ast  (W)est");
-            System.out.print("MASUKKAN ARAH RUANGAN BERDASARKAN TARGET : ");
-            Direction direction = Direction.strToDirection(scan.nextLine());
+            Direction direction = null;
+
+            String directionStr = "";
+            getInput = true;
+            try {
+                while (getInput) {
+                    System.out.println("\nDirection : (N)orth  (S)outh  (E)ast  (W)est");
+                    directionStr = scan.getInput("\nMasukkan arah ruangan baru: ");
+                    if (directionStr.length() <= 1) {
+                        direction = Direction.strToDirection(directionStr);
+                        getInput = false;
+                    } else {
+                        System.out.println("\nMasukkan arah yang benar!");
+                    }
+                }
+            } catch (NoInputException e) {
+                getInput = false;
+                return;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
+            }
 
             if (targetRoom.getConnectedRooms().get(direction) != null) {
                 throw new IllegalArgumentException("\nAda ruangan lain!");

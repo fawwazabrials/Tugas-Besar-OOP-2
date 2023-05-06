@@ -7,7 +7,7 @@ import exception.SimIsDeadException;
 import main.Game;
 import util.Input;
 
-public class Work implements Option {
+public class PlayGame implements Option {
 
     Input scan = Input.getInstance();
 
@@ -18,12 +18,12 @@ public class Work implements Option {
 
         while (getInput) {
             try {
-                input = scan.getIntegerInput("\nMASUKKAN WAKTU (dalam kelipatan 120 detik): ");
+                input = scan.getIntegerInput("MASUKKAN WAKTU (dalam kelipatan 120 detik): ");
 
                 if (input % 120 == 0 && input >= 0) {
-                    
-                    gm.getCurrentSim().work(input);
-                    System.out.println("\nSim selesai bekerja!");
+
+                    gm.getCurrentSim().playGame(input);
+                    System.out.println("\nSim sudah selesai nge-game!");
                     getInput = false;
                     scan.enterUntukLanjut();
                 } else {
@@ -33,20 +33,14 @@ public class Work implements Option {
             catch (NoInputException e) {
                 getInput = false;
             }
-            catch (InputMismatchException  e) {
+            catch (InputMismatchException e) {
                 System.out.println("Masukkan angka!");
-            }
-            catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-                getInput = false;
-                scan.enterUntukLanjut();
             }
             catch (SimIsDeadException e) {
                 System.out.println(e.getMessage());
                 getInput = false;
             }
         }
-    
     }
-
+    
 }
