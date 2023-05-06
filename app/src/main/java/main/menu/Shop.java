@@ -132,8 +132,8 @@ public class Shop implements Option {
                     System.out.println(String.format(" %s ", "------------------------------------------------------"));
                     System.out.println(String.format("| %-21s | %-6s | %-19s |", "Item name", "Price", "Description"));
                     System.out.println(String.format("|%s|", "------------------------------------------------------"));
-                    System.out.println(String.format("| %-21s | %-6s | %-19s |", "HP", "5", "Aksi: gamble"));
-                    System.out.println(String.format("| %-21s | %-6s | %-19s |", "Sheet QnA", "3", "Aksi: read QnA"));
+                    System.out.println(String.format("| %-21s | %-6s | %-19s |", "HP", "50", "Aksi: gamble"));
+                    System.out.println(String.format("| %-21s | %-6s | %-19s |", "Sheet QnA", "1", "Aksi: read QnA"));
                     System.out.println(String.format(" %s ", "------------------------------------------------------"));
 
                     input = scan.getInput("Masukkan nama item yang ingin dibeli: ");

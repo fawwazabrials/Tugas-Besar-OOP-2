@@ -43,7 +43,7 @@ public class Game {
     }
 
     // GAME CONFIG
-    private int dayLastSimAdded = -1;
+    private int dayLastSimAdded = 0;
     private boolean overlapActionShowed;
 
     public boolean isOverlapActionShowed() {return overlapActionShowed;}
@@ -70,13 +70,14 @@ public class Game {
 
     public void showGamePanel() {
         // TODO: ini bawah nanti di uncomment
-        // ClearScreen.clear();
+        ClearScreen.clear();
 
         removeAllDeadSim();
         if (currentSim.isDead()) {
             showDeadScreen();
         }
 
+        printCurrentLocation();
         renderCurrentView();
         menu.askOverlapAction();
         menu.showOptions();
@@ -98,11 +99,14 @@ public class Game {
         System.exit(0);
     }
 
+    public void printCurrentLocation() {
+        System.out.println("Rumah " + currentHouse + " - " + currentSim.getRoom().getRoomName() + "\n");
+    }
+
     public void renderCurrentView() {
         char[][] rendered = currentView.render();
     
         rendered[currentSim.getY()][currentSim.getX()] = 'S'; // tampilin sim
-        System.out.println("Rumah " + currentHouse + " - " + currentSim.getRoom().getRoomName());
     
         System.out.println("  0 1 2 3 4 5");
 

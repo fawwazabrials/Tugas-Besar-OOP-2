@@ -17,7 +17,7 @@ public class Clock {
     public int getDay() {return day;}
 
     public String getDayTime() {
-        int secsInDay = (gameTime - (day-1)*720)*2; // 1 menit di dunia asli -> 2 jam di dunia sim
+        int secsInDay = getDayTimeInSec();
         int hour = secsInDay / 60;
         int minute = secsInDay % 60;
 
@@ -34,12 +34,12 @@ public class Clock {
     }
 
     public int getDayTimeInSec() {
-        return (gameTime - (day-1)*720); // 1 menit di dunia asli -> 2 jam di dunia sim
+        return (gameTime - (day-1)*720);
     }
     
     public void forwardTime(int time) {
         gameTime = gameTime+time;
-        day = gameTime / 720;
+        day = (gameTime / 720) + 1;
     }
     
     public void moveTime(int time) throws SimIsDeadException {
