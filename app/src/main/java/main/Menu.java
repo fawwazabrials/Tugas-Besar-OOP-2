@@ -44,7 +44,7 @@ public class Menu {
     }
 
     public void showOptions() {
-        System.out.println("\n(S)im Info        (C)hange Job  (I)nventory");
+        System.out.println("\n(S)im Info        (C)hange Job        (I)nventory");
         System.out.println("(U)pgrade House   (M)ove Sim          (E)dit Room");
         System.out.println("(Ad)dd Sim        (Ch)ange Sim        (L)ist Object  ");
         System.out.println("(G)o to Object    (A)ction            (Sh)op");
