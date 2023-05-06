@@ -4,10 +4,9 @@ public class Dish extends Food {
 
     // Constructor
     public Dish(String name) {
+        super(name, "dish", setPriceValue(name), setHungerPoint(name));
         this.name = name;
         this.category = "dish";
-        this.setPriceValue(name);
-        this.setHungerPoint(name);
     }
 
     public String getName() {
@@ -26,34 +25,34 @@ public class Dish extends Food {
         return priceValue;
     }
 
-    public void setPriceValue(String name) {
+    public static int setPriceValue(String name) {
         /* price value dari dish merupakan penjumlahan seluruh price value 
          * dari setiap ingredientsnya
          */
         if (name.equals("nasi ayam")) {
-            this.priceValue = 15;
+            return 15;
         } else if (name.equals("nasi kari")) {
-            this.priceValue = 28;
+            return 28;
         } else if (name.equals("susu kacang")) {
-            this.priceValue = 4;
+            return 4;
         } else if (name.equals("tumis sayur")) {
-            this.priceValue = 6;
+            return 6;
         } else if (name.equals("bistik")) {
-            this.priceValue = 15;
-        }
+            return 15;
+        } return 0;
     }
 
-    public void setHungerPoint(String name) {
+    public static int setHungerPoint(String name) {
         if (name.equals("nasi ayam")) {
-            this.hungerPoint = 16;
+            return 16;
         } else if (name.equals("nasi kari")) {
-            this.hungerPoint = 30;
+            return 30;
         } else if (name.equals("susu kacang")) {
-            this.hungerPoint = 5;
+            return 5;
         } else if (name.equals("tumis sayur")) {
-            this.hungerPoint = 5;
+            return 5;
         } else if (name.equals("bistik")) {
-            this.hungerPoint = 22;
-        }
+            return 22;
+        } return 0;
     }
 }

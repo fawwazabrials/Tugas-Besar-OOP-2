@@ -24,9 +24,7 @@ public class Other extends Item {
     public int getPriceValue() {return priceValue;}
 
     public Other(String name) {
-        this.name = name;
-        this.category = "other";
-        this.priceValue = Integer.parseInt(availableOther.get(name)[0]);
+        super(name, "other", Integer.parseInt(availableOther.get(name)[0]));
         this.action = availableOther.get(name)[1];
     }
     

@@ -34,12 +34,11 @@ public class Furniture extends Item {
 
     // Constructor
     public Furniture(String name, int x, int y) {
+        super(name, "furniture", setPrice(name));
+        
         this.x = x;
         this.y = y;
 
-        this.name = name;
-        this.category = "furniture";
-        this.setPrice(name);
         this.setLength(name);
         this.setWidth(name);
         this.setRenderChar(name);
@@ -62,8 +61,8 @@ public class Furniture extends Item {
         this.action = getAvailableFurniture().get(name)[0];
     }
 
-    private void setPrice(String name) {
-        this.priceValue = Integer.parseInt(getAvailableFurniture().get(name)[1]);
+    private static int setPrice(String name) {
+        return Integer.parseInt(getAvailableFurniture().get(name)[1]);
     }
 
     private void setLength(String name) {

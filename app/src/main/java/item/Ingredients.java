@@ -3,10 +3,7 @@ package item;
 public class Ingredients extends Food {
     // Constructor
     public Ingredients(String name) {
-        this.name = name;
-        this.category = "ingredients";
-        this.setPriceValue(name);
-        this.setHungerPoint(name);
+        super(name, "ingredients", setPriceValue(name), setHungerPoint(name));
     }
 
     public String getName() {
@@ -25,39 +22,39 @@ public class Ingredients extends Food {
         return hungerPoint;
     }
 
-    public void setPriceValue(String name) {
+    public static int setPriceValue(String name) {
         if (name.equals("nasi")) {
-            this.priceValue = 5;
+            return 5;
         } else if (name.equals("kentang")) {
-            this.priceValue = 3;
+            return 3;
         } else if (name.equals("ayam")) {
-            this.priceValue = 10;
+            return 10;
         } else if (name.equals("sapi")) {
-            this.priceValue = 12;
+            return 12;
         } else if (name.equals("wortel")) {
-            this.priceValue = 3;
+            return 3;
         } else if (name.equals("kacang")) {
-            this.priceValue = 2;
+            return 2;
         } else if (name.equals("susu")) {
-            this.priceValue = 2;
-        }
+            return 2;
+        } return 0;
     }
 
-    public void setHungerPoint(String name) {
+    public static int setHungerPoint(String name) {
         if (name.equals("nasi")) {
-            this.hungerPoint = 5;
+            return 5;
         } else if (name.equals("kentang")) {
-            this.hungerPoint = 4;
+            return 4;
         } else if (name.equals("ayam")) {
-            this.hungerPoint = 8;
+            return 8;
         } else if (name.equals("sapi")) {
-            this.hungerPoint = 15;
+            return 15;
         } else if (name.equals("wortel")) {
-            this.hungerPoint = 2;
+            return 2;
         } else if (name.equals("kacang")) {
-            this.hungerPoint = 2;
+            return 2;
         } else if (name.equals("susu")) {
-            this.hungerPoint = 1;
-        }
+            return 1;
+        } return 0;
     }
 }
