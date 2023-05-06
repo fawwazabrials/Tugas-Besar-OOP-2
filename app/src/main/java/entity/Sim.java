@@ -26,9 +26,9 @@ public class Sim extends Exception implements Runnable {
     private Inventory simItems;
 
     // CONFIG ATTRIBUTES
-    private long timeLastPoop; //belum pake di method poop
-    private long timeLastEat;  //belum pake di method eat
-    private volatile long timeLastSleep;
+    private volatile boolean hasPoop;
+    private volatile int timeLastEat;  //belum pake di method eat
+    private volatile int timeLastSleep;
     private volatile int dayLastSleep;
 
     private long bufferedVisitTime, bufferedWorkTime;
@@ -75,6 +75,8 @@ public class Sim extends Exception implements Runnable {
         timeChangedJob = -999;
         totalJobTimeWorked = 0;
         resetTimeLastSleep(); dayLastSleep = gm.getClock().getDay();
+        timeLastEat = 0;
+        hasPoop = true;
         
         this.upgradeHouse = null;
         trackUpdates = new Thread(this);
@@ -230,6 +232,29 @@ public class Sim extends Exception implements Runnable {
         }
     }
 
+    public void eat(String food) throws SimIsDeadException, IllegalArgumentException {
+        int waktumakan = 30;
+
+        if (!simItems.checkItemAvailable(food.toLowerCase(), 1)) {
+            throw new IllegalArgumentException("Tidak ada makanan dengan nama tersebut di dalam inventory sim!");
+        }
+
+        System.out.println(String.format("Sim akan makan selama %s", Angka.secToTime(waktumakan)));
+
+        try {
+            gm.getClock().moveTime(waktumakan * 1000);
+        } catch (SimIsDeadException e) {
+            throw new SimIsDeadException("Sim kamu keselek waktu lagi makan!");
+        }
+
+        System.out.println(String.format("\"Abis makan gini enaknya rebahan kali ya...\" +%s hunger", ((Food)simItems.getItemsByName(food.toLowerCase())).getHungerPoint()));
+        setHunger(getHunger()+ ((Food)simItems.getItemsByName(food.toLowerCase())).getHungerPoint());
+        simItems.removeItem(food.toLowerCase());
+
+        timeLastEat = gm.getClock().getGameTime();
+        hasPoop = false;
+    }
+
     public void gamble(int money) {
         // random dapet duit/kurang duit
 
@@ -378,29 +403,7 @@ public class Sim extends Exception implements Runnable {
         //         setMood(getMood()+10*times);
         //         setHunger(getHunger()-10*times);
         //     }
-        }
-
-    public void eat(int time, Food food){
-        /*
-        * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
-        */
-        if(!simItems.getItems("food").containsKey(food)){
-            throw new IllegalArgumentException("\nNo food in inventory.");
-        }
-        for(Map.Entry<Item, Integer> e : simItems.getItems("food").entrySet()){
-            if(e.getKey().getName().equals(food.getName())){
-                hunger += (food.getHungerPoint()*(time%30000));
-            }
-        }
-
-        try {
-            gm.getClock().moveTime(time);
-        } catch (SimIsDeadException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-    }
-    
+        }    
 
     public void visit(Sim target) throws SimIsDeadException {
         int visittime = (int)(Math.sqrt(Math.pow((this.getCurrHouse().getX() - target.getHouse().getX()), 2) + Math.pow((this.getCurrHouse().getY() - target.getHouse().getY()), 2)));

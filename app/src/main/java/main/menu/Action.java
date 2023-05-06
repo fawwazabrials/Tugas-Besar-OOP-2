@@ -17,7 +17,7 @@ public class Action {
         allAvailableAction = new LinkedHashMap<String, Option>();
         allAvailableAction.put("Sleep", new Sleep());
         allAvailableAction.put("Cook", new Cook());
-        // allAvailableAction.put("Eat", new Sleep()); // TODO: route this
+        allAvailableAction.put("Eat", new Eat());
         allAvailableAction.put("Poop", new Poop());
         allAvailableAction.put("Visit", new Visit());
         allAvailableAction.put("Work", new Work());

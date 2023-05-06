@@ -16,7 +16,7 @@ public class Cook implements Option{
         try {
             String input = scan.getInput("Masukkan nama dish yang ingin dimasak: ");
             gm.getCurrentSim().cook(input);
-
+            scan.enterUntukLanjut();
         } catch (NoInputException e) {
             // ignore
         } catch (SimIsDeadException e) {
