@@ -32,6 +32,10 @@ public class Clock {
 
         return String.format("%s:%s", showHour, showMinute);
     }
+
+    public int getDayTimeInSec() {
+        return (gameTime - (day-1)*720); // 1 menit di dunia asli -> 2 jam di dunia sim
+    }
     
     public void forwardTime(int time) {
         gameTime = gameTime+time;

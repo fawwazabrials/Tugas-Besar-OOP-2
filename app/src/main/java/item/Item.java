@@ -1,5 +1,6 @@
 package item;
 
+@SuppressWarnings("unused")
 public abstract class Item {
     private String name;
     private String category;

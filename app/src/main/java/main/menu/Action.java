@@ -23,7 +23,7 @@ public class Action {
         allAvailableAction.put("Work", new Work());
         allAvailableAction.put("Workout", new Workout());
         allAvailableAction.put("See Time", new SeeTime());
-        // allAvailableAction.put("Stargaze", new Stargaze()); // TODO: implement this
+        allAvailableAction.put("Stargaze", new Stargaze());
         allAvailableAction.put("Play Game", new PlayGame());
         allAvailableAction.put("Watch TV", new WatchTV());
         allAvailableAction.put("Read", new Read());
@@ -44,13 +44,18 @@ public class Action {
 
         if (gm.getOverlapFurniture() != null) availableAction.add(gm.getOverlapFurniture().getAction());
 
-        // TODO: Tambah conditional stargaze
+        // cuma dari jam 8 malem (menit ke 10 hari) - jam 2 pagi (menit ke 1 hari)
+        if (720-gm.getClock().getDayTimeInSec() <= 120 || 720-gm.getClock().getDayTimeInSec() >= 660) availableAction.add("Stargaze");
+        System.out.println(720-gm.getClock().getDayTimeInSec());
+        System.out.println(720-gm.getClock().getDayTimeInSec() <= 60);
+        System.out.println(720-gm.getClock().getDayTimeInSec() >= 600);
+
 
         if (gm.getCurrentSim().getSimItems().checkItemAvailable("HP", 1)) availableAction.add("Gamble");
 
         if (gm.getCurrentSim().getSimItems().checkItemAvailable("Sheet QnA", 1)) availableAction.add("Read QnA");
 
-        System.out.println(gm.getCurrentSim().getSimItems().checkItemAvailable("HP", 1));
+        // System.out.println(gm.getCurrentSim().getSimItems().checkItemAvailable("HP", 1));
 
         return availableAction;
     }

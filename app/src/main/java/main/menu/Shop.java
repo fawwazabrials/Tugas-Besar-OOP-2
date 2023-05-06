@@ -1,13 +1,10 @@
 package main.menu;
 
 import exception.NoInputException;
-import item.Dish;
 import item.Furniture;
 import item.Ingredients;
-import item.Item;
 import item.Other;
 import main.Game;
-import util.Angka;
 import util.Input;
 
 public class Shop implements Option {

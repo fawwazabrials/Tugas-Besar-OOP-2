@@ -1,5 +1,6 @@
 package item;
 
+@SuppressWarnings("unused")
 public abstract class Food extends Item {
     private String name;
     private String category;
@@ -7,10 +8,7 @@ public abstract class Food extends Item {
     private int priceValue;
 
     public abstract String getName();
-    
     public abstract String getCategory();
-
     public abstract int getHungerPoint();
-
     public abstract int getPriceValue();
 }

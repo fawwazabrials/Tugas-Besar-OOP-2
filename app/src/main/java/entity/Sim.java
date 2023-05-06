@@ -507,6 +507,22 @@ public class Sim extends Exception implements Runnable {
         }
     }
 
+    public void stargaze() throws SimIsDeadException {
+        // jalan otomatis 1 menit aja
+        // +10 mood -5 hunger / 1 menit
+
+        try {
+            System.out.println("Sim akan melihat bintang selama " + Angka.secToTime(1*60));
+            gm.getClock().moveTime(1 * 60 * 1000);
+            System.out.println("Akhirnya bisa submit asling. +10 mood -5 hunger");
+    
+            setMood(getMood()+10);
+            setHunger(getHunger()-5);
+        } catch (SimIsDeadException e) {
+            throw new SimIsDeadException("Stres karena banyak jawaban yang beda, sim kamu kena stroke...");
+        }
+    }
+
     public void visit(Sim target) throws SimIsDeadException {
         int visittime = (int) Math.round(Math.sqrt(Math.pow((this.getCurrHouse().getX() - target.getHouse().getX()), 2) + Math.pow((this.getCurrHouse().getY() - target.getHouse().getY()), 2)));
         int cycle = (int) Math.round(visittime / 30);
@@ -638,15 +654,5 @@ public class Sim extends Exception implements Runnable {
     }
 
     
-    public void stargaze(int time) {
-        mood += (20*time/60000);
-        hunger -= (15*time/60000);
-        try {
-            gm.getClock().moveTime(time);
-        } catch (SimIsDeadException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        };
-        //TODO: ROMBAK INI!
-    }
+
 }
