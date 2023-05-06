@@ -145,7 +145,7 @@ public class Sim extends Exception implements Runnable {
                 public void run() {
                     while (upgradeHouse != null) {
                         try {
-                            if (gm.getClock().getGameTime() - getTimeUpgradeHouse() >= 18 * 60) {
+                            if (gm.getClock().getGameTime() - getTimeUpgradeHouse() >= 18 * 60 || gm.getCheat().isFastbuild()) {
                                 upgradeHouse = null;
                             }
                             Thread.sleep(3000);
@@ -453,7 +453,7 @@ public class Sim extends Exception implements Runnable {
                 public void run(){
                     while (shopQueue != null) {
                         try {
-                            if (gm.getClock().getGameTime() - getTimeShopQueue() >= deliveryTime) {
+                            if (gm.getClock().getGameTime() - getTimeShopQueue() >= deliveryTime || gm.getCheat().isFastshop()) {
                                 shopQueue = null;
                             }
                             Thread.sleep(3000);
