@@ -1,7 +1,9 @@
 package main.menu;
 
+import java.util.InputMismatchException;
 import java.util.Map;
 
+import exception.NoInputException;
 import item.Furniture;
 import item.Item;
 import main.Game;
@@ -24,17 +26,11 @@ public class EditRoom implements Option {
         String input = scan.nextLine();
 
         if (input.equals("A")) {
-            System.out.println("\nList of Furnitures:");
-            System.out.println("==========================");
-            
             if (gm.getCurrentSim().getSimItems().getItems("furniture").isEmpty()) {
                 throw new IllegalArgumentException("No furniture found.");
-            } else {
-                for (Map.Entry<Item, Integer> item : gm.getCurrentSim().getSimItems().getItems("furniture").entrySet()) {
-                        System.out.println(item.getKey().getName());
-                        System.out.println("--------------------------");
-                }
             }
+
+            gm.getCurrentSim().getSimItems().print("furniture");
 
             System.out.print("\nENTER FURNITURE NAME: ");
             String itemName = scan.nextLine();
@@ -52,73 +48,81 @@ public class EditRoom implements Option {
 
             int x = -999;
             int y = -999;
+            boolean getInput = true;
 
-            try {
-                x = scan.getIntegerInput("ENTER X COORDINATE: ");
-                y = scan.getIntegerInput("ENTER Y COORDINATE: ");
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                scan.enterUntukLanjut();
+            while (getInput) {
+                try {
+                    y = scan.getIntegerInput("ENTER Y COORDINATE: ");
+                    x = scan.getIntegerInput("ENTER X COORDINATE: ");
+                    gm.getCurrentSim().getRoom().addFurniture(furniture, x, y);
+                    gm.getCurrentSim().getSimItems().removeItem(furniture);
+                    System.out.println("\nFurniture berhasil ditambahkan!");
+                    scan.enterUntukLanjut();
+                    getInput = false;
+                } catch (NoInputException e) {
+                    getInput = false;
+                } catch (InputMismatchException e) {
+                    System.out.println("Masukkan angka!");
+                }
             }
-
-            gm.getCurrentSim().getRoom().addFurniture(furniture, x, y);
-            gm.getCurrentSim().getSimItems().removeItem(furniture);
-            System.out.println("\nFurniture berhasil ditambahkan!");
-            scan.enterUntukLanjut();
         } else if (input.equals("R")) {
             if (gm.getCurrentSim().getRoom().getFurnitures().isEmpty()) {
                 throw new IllegalArgumentException("No furniture found.");
             } else {
-                System.out.println("\nFurniture want to remove:");
                 int x = -999;
                 int y = -999;
+                boolean getInput = true;
 
-                try {
-                    x = scan.getIntegerInput("ENTER X COORDINATE: ");
-                    y = scan.getIntegerInput("ENTER Y COORDINATE: ");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    scan.enterUntukLanjut();
+                while (getInput) {
+                    try {
+                        System.out.println("\nFurniture want to remove:");
+                        y = scan.getIntegerInput("ENTER Y COORDINATE: ");
+                        x = scan.getIntegerInput("ENTER X COORDINATE: ");
+                        gm.getCurrentSim().getSimItems().addItem(gm.getCurrentSim().getRoom().removeFurniture(x, y));    
+                        System.out.println("\nFurniture berhasil dihapus!"); 
+                        scan.enterUntukLanjut(); 
+                        getInput = false;
+                    } catch (NoInputException e) {
+                        getInput = false;
+                    } catch (InputMismatchException e) {
+                        System.out.println("Masukkan angka!");
+                    }
                 }
-
-                gm.getCurrentSim().getSimItems().addItem(gm.getCurrentSim().getRoom().removeFurniture(x, y));    
-                System.out.println("\nFurniture berhasil dihapus!"); 
-                scan.enterUntukLanjut(); 
             }
         } else if (input.equals("M")) {
             if (gm.getCurrentSim().getRoom().getFurnitures().isEmpty()) {
                 throw new IllegalArgumentException("No furniture found.");
             } else {
-                System.out.println("\nFurniture want to move:");
                 int x = -999;
                 int y = -999;
-
-                try {
-                    x = scan.getIntegerInput("ENTER X COORDINATE: ");
-                    y = scan.getIntegerInput("ENTER Y COORDINATE: ");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    scan.enterUntukLanjut();
-                }
-
-                System.out.println("\nNew coordinate:");
                 int newX = -999;
                 int newY = -999;
 
-                try {
-                    newX = scan.getIntegerInput("ENTER NEW X COORDINATE: ");
-                    newY = scan.getIntegerInput("ENTER NEW Y COORDINATE: ");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    scan.enterUntukLanjut();
-                }
+                boolean getInput = true;
 
-                gm.getCurrentSim().getRoom().moveFurniture(x, y, newX, newY);
-                System.out.println("\nFurniture berhasil dipindahkan!");
-                scan.enterUntukLanjut();
+                while (getInput) {
+                    try {
+                        System.out.println("\nFurniture want to move:");
+                        y = scan.getIntegerInput("ENTER Y COORDINATE: ");
+                        x = scan.getIntegerInput("ENTER X COORDINATE: ");
+
+                        System.out.println("\nNew coordinate:");
+                        newY = scan.getIntegerInput("ENTER NEW Y COORDINATE: ");
+                        newX = scan.getIntegerInput("ENTER NEW X COORDINATE: ");
+                        gm.getCurrentSim().getRoom().moveFurniture(y, x, newY, newX);
+                        System.out.println("\nFurniture berhasil dipindahkan!");
+                        scan.enterUntukLanjut();
+                        getInput = false;
+                    } catch (NoInputException e) {
+                        getInput = false;
+                    } catch (InputMismatchException e) {
+                        System.out.println("Masukkan angka!");
+                    }
+                }
             }
         } else {
-            throw new IllegalArgumentException("Invalid input.");
+            System.out.println("\nMasukkan Salah!");
+            scan.enterUntukLanjut();
         }
     }
 }
