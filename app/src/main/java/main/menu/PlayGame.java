@@ -20,8 +20,8 @@ public class PlayGame implements Option {
             try {
                 input = scan.getIntegerInput("MASUKKAN WAKTU (dalam kelipatan 120 detik): ");
 
-                if (input % 120 == 0 && input != 0) {
-                    System.out.println("\nSim sedang bermain game...");
+                if (input % 120 == 0 && input <= 0) {
+
                     gm.getCurrentSim().playGame(input);
                     System.out.println("\nSim sudah selesai nge-game!");
                     getInput = false;
@@ -33,11 +33,12 @@ public class PlayGame implements Option {
             catch (NoInputException e) {
                 getInput = false;
             }
-            catch (InputMismatchException  e) {
+            catch (InputMismatchException e) {
                 System.out.println("Masukkan angka!");
             }
             catch (SimIsDeadException e) {
-                
+                System.out.println(e.getMessage());
+                getInput = false;
             }
         }
     }

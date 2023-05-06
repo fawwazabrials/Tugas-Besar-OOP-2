@@ -20,8 +20,8 @@ public class Work implements Option {
             try {
                 input = scan.getIntegerInput("\nMASUKKAN WAKTU (dalam kelipatan 120 detik): ");
 
-                if (input % 120 == 0 && input != 0) {
-                    System.out.println("\nSim sedang bekerja...");
+                if (input % 120 == 0 && input <= 0) {
+                    
                     gm.getCurrentSim().work(input);
                     System.out.println("\nSim selesai bekerja!");
                     getInput = false;
@@ -42,8 +42,8 @@ public class Work implements Option {
                 scan.enterUntukLanjut();
             }
             catch (SimIsDeadException e) {
-                System.out.println("Wah sim kamu mati waktu kerja!");
-                scan.enterUntukLanjut();
+                System.out.println(e.getMessage());
+                getInput = false;
             }
         }
     

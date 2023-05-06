@@ -20,8 +20,8 @@ public class Workout implements Option {
             try {
                 input = scan.getIntegerInput("\nMASUKKAN WAKTU (dalam kelipatan 20 detik): ");
 
-                if (input % 20 == 0 && input != 0) {
-                    System.out.println("\nSim sedang berolahraga...");
+                if (input % 20 == 0 && input <= 0) {
+                    
                     gm.getCurrentSim().workout(input);
                     System.out.println("\nSim selesai berolahraga!");
                     getInput = false;
@@ -42,7 +42,8 @@ public class Workout implements Option {
                 scan.enterUntukLanjut();
             }
             catch (SimIsDeadException e) {
-                System.out.println("Sakit semangatnya olahraga, simnya lupa makan! Sim kamu mati!");
+                System.out.println(e.getMessage());
+                getInput = false;
             }
         }
     }
