@@ -20,7 +20,7 @@ public class WatchTV implements Option {
             try {
                 input = scan.getIntegerInput("MASUKKAN WAKTU (dalam kelipatan 60 detik): ");
 
-                if (input % 60 == 0 && input <= 0) {
+                if (input % 60 == 0 && input >= 0) {
                     
                     gm.getCurrentSim().watchTV(input);
                     System.out.println("\nSim sudah selesai nonton TV!");

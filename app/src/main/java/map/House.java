@@ -6,12 +6,14 @@ public class House implements HouseAction{
     // House coordinate
     private int x;
     private int y;
+    private String ownerName;
     private List<Room> rooms;
     private Map<Point, Room> roomMap;
 
-    public House(int x, int y) {
+    public House(int x, int y, String ownerName) {
         this.x = x;
         this.y = y;
+        this.ownerName = ownerName;
         rooms = new ArrayList<Room>();
         rooms.add(Room.makeDefaultRoom());
         roomMap = new HashMap<>();
@@ -21,6 +23,7 @@ public class House implements HouseAction{
     // Getter Methods
     public int getX() {return x;}
     public int getY() {return y;}
+    public String getOwnerName() {return ownerName;}
     public List<Room> getRooms() {return rooms;}
 
     @Override

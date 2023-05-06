@@ -20,7 +20,7 @@ public class PlayGame implements Option {
             try {
                 input = scan.getIntegerInput("MASUKKAN WAKTU (dalam kelipatan 120 detik): ");
 
-                if (input % 120 == 0 && input <= 0) {
+                if (input % 120 == 0 && input >= 0) {
 
                     gm.getCurrentSim().playGame(input);
                     System.out.println("\nSim sudah selesai nge-game!");

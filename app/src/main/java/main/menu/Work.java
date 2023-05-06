@@ -20,7 +20,7 @@ public class Work implements Option {
             try {
                 input = scan.getIntegerInput("\nMASUKKAN WAKTU (dalam kelipatan 120 detik): ");
 
-                if (input % 120 == 0 && input <= 0) {
+                if (input % 120 == 0 && input >= 0) {
                     
                     gm.getCurrentSim().work(input);
                     System.out.println("\nSim selesai bekerja!");

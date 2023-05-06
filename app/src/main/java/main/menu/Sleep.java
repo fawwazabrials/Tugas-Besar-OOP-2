@@ -20,7 +20,7 @@ public class Sleep implements Option {
             try {
                 input = scan.getIntegerInput("MASUKKAN WAKTU (dalam kelipatan 240 detik): ");
 
-                if (input % 240 == 0 && input <= 0) {
+                if (input % 240 == 0 && input >= 0) {
                     
                     gm.getCurrentSim().sleep(input);
                     System.out.println("\nSim sudah bangun!");

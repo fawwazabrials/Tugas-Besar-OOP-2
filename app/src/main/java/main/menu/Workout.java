@@ -20,7 +20,7 @@ public class Workout implements Option {
             try {
                 input = scan.getIntegerInput("\nMASUKKAN WAKTU (dalam kelipatan 20 detik): ");
 
-                if (input % 20 == 0 && input <= 0) {
+                if (input % 20 == 0 && input >= 0) {
                     
                     gm.getCurrentSim().workout(input);
                     System.out.println("\nSim selesai berolahraga!");

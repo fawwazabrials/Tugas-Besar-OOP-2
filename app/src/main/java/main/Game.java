@@ -1,9 +1,14 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import entity.*;
+import exception.SimIsDeadException;
 import item.*;
 import main.menu.*;
 import map.*;
+import util.*;
 
 public class Game {
     // IMPORTANT GAME ATTRIBUTES
@@ -16,6 +21,8 @@ public class Game {
     private Action action = new Action(this);
     private Menu menu = new Menu(this);
     private Cheat cheat = new Cheat(this);
+    Input scan = Input.getInstance();
+
 
     public Action getAction() {return action;}
     public Cheat getCheat() {return cheat;}
@@ -32,11 +39,7 @@ public class Game {
     public void changeSim(Sim sim) {
         currentSim = sim;
         changeView(currentSim.getRoom());
-        currentHouse = currentSim.getName();
-    }
-
-    public void moveSim() {
-        // TODO
+        currentHouse = currentSim.getCurrHouse().getOwnerName();
     }
 
     // GAME CONFIG
@@ -69,11 +72,10 @@ public class Game {
         // TODO: ini bawah nanti di uncomment
         // ClearScreen.clear();
 
-        // if (currentSim.isDead()) {
-        //     currentSim.killSim();
-        //     world.getSims().remove(currentSim);
-        //     showDeadScreen();
-        // }
+        removeAllDeadSim();
+        if (currentSim.isDead()) {
+            showDeadScreen();
+        }
 
         renderCurrentView();
         menu.askOverlapAction();
@@ -81,20 +83,20 @@ public class Game {
         menu.getInput();
     }
 
-    // public void showDeadScreen() {
-    //     System.out.println("\nSim kamu mati!");
+    public void showDeadScreen() {
+        System.out.println("\nSim kamu mati!");
 
-    //     if (world.getSims().size() == 0) {
-    //         showGameOverScreen();
-    //     } else {
-    //         menu.;
-    //     }
-    // }
+        if (world.getSims().size() == 0) {
+            showGameOverScreen();
+        } else {
+            menu.executeOption("Ch");;
+        }
+    }
 
-    // public void showGameOverScreen() {
-    //     System.out.println("Semua Sim kamu mati! Kamu kalah!");
-    //     System.exit(0);
-    // }
+    public void showGameOverScreen() {
+        System.out.println("Semua Sim kamu mati! Kamu kalah!");
+        System.exit(0);
+    }
 
     public void renderCurrentView() {
         char[][] rendered = currentView.render();
@@ -125,5 +127,32 @@ public class Game {
             }
         }
         return house;
+    }
+
+    public void removeAllDeadSim() {
+        List<String> deadSims = new ArrayList<String>();
+        List<Sim> clone = new ArrayList(getWorld().getSims());
+
+        for (Sim s : clone) {
+            if (s.isDead()) {
+                s.killSim();
+                deadSims.add(s.getName());
+                getWorld().removeHouse(s.getHouse().getX(), s.getHouse().getY());
+
+                if (s.getHouse() == currentSim.getCurrHouse()) {
+                    try {
+                        System.out.println("Karena sim yang dikunjungin udah mati, sim akan pergi kembali ke rumahnya.");
+                        currentSim.visit(currentSim);
+                        scan.enterUntukLanjut();
+                    } catch (SimIsDeadException e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+        }
+
+        if (deadSims.size() > 0) {
+            System.out.println(String.format("Sim yang mati %s", deadSims));
+        }
     }
 }
