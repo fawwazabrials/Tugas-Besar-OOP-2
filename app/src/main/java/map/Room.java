@@ -8,7 +8,7 @@ public class Room implements RoomAction, Renderable {
     private String roomName;
     private final int width = 6;
     private final int length = 6;
-    private Map<Direction, Room> connectedRooms;
+    private Map<Direction, String> connectedRooms;
 
     private List<Furniture> furnitures;
     private Furniture[][] roomGrid;
@@ -37,7 +37,7 @@ public class Room implements RoomAction, Renderable {
     public String getRoomName() {return roomName;}
     public int getWidth() {return width;}
     public int getLength() {return length;}
-    public Map<Direction, Room> getConnectedRooms() {return connectedRooms;}
+    public Map<Direction, String> getConnectedRooms() {return connectedRooms;}
     public List<Furniture> getFurnitures() {return furnitures;}
     public Furniture[][] getRoomGrid() {return roomGrid;}
 
