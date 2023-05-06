@@ -1,5 +1,6 @@
 package main.menu;
 
+import exception.SimIsDeadException;
 import main.Game;
 import util.Input;
 
@@ -10,10 +11,14 @@ public class Poop implements Option {
     @Override
     public void execute(Game gm) {
         // 1 siklus = 10 detik
-        System.out.println("\nSim sedang buang air...");
-        gm.getCurrentSim().poop(10000); // 10 DETIK
-        System.out.println("\nSim selesai buang air!");
-        scan.enterUntukLanjut();
+
+        try {
+            gm.getCurrentSim().poop();
+            System.out.println("Sim selesai buang air!");
+            scan.enterUntukLanjut();
+        } catch (SimIsDeadException e) {
+            System.out.println(e.getMessage());
+        } 
     }
     
 }

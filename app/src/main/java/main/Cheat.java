@@ -71,7 +71,10 @@ public class Cheat {
 
             case "forwardtime":
                 try {
-                    gm.getClock().moveTime(val);
+                    boolean old = skiptime;
+                    skiptime = true;
+                    gm.getClock().moveTime(val*1000);
+                    skiptime = old;
                 } catch (SimIsDeadException e) {
                     System.out.println("Damn ternyata setelah majuin waktu Sim kamu mati!");
                 }

@@ -27,9 +27,14 @@ public class Sim extends Exception implements Runnable {
 
     // CONFIG ATTRIBUTES
     private volatile boolean hasPoop;
-    private volatile int timeLastEat;  //belum pake di method eat
+    private volatile int timeLastEat, timeLastSubtractPoop, poopMultiplier;  //belum pake di method eat
     private volatile int timeLastSleep;
     private volatile int dayLastSleep;
+    
+    public int getTimeLastEat() {return timeLastEat;}
+    public void resetTimeLastSleep() {
+        timeLastSleep = gm.getClock().getGameTime();
+    }
 
     private long bufferedVisitTime, bufferedWorkTime;
     private int timeChangedJob, totalJobTimeWorked;
@@ -76,7 +81,9 @@ public class Sim extends Exception implements Runnable {
         totalJobTimeWorked = 0;
         resetTimeLastSleep(); dayLastSleep = gm.getClock().getDay();
         timeLastEat = 0;
+        timeLastSubtractPoop = 0;
         hasPoop = true;
+        poopMultiplier = 1;
         
         this.upgradeHouse = null;
         trackUpdates = new Thread(this);
@@ -251,8 +258,29 @@ public class Sim extends Exception implements Runnable {
         setHunger(getHunger()+ ((Food)simItems.getItemsByName(food.toLowerCase())).getHungerPoint());
         simItems.removeItem(food.toLowerCase());
 
-        timeLastEat = gm.getClock().getGameTime();
-        hasPoop = false;
+        if (hasPoop) {
+            hasPoop = false;
+            timeLastEat = gm.getClock().getGameTime();
+            timeLastSubtractPoop = timeLastEat;
+            poopMultiplier = 1;            
+        }
+    }
+
+    public void poop() throws SimIsDeadException {
+        // selalu 10 detik
+
+        System.out.println(String.format("Sim akan buang air selama %s", Angka.secToTime(10)));
+        
+        try {
+            gm.getClock().moveTime(10 *1000);
+        } catch (SimIsDeadException e) {
+            throw new SimIsDeadException("... sim mati waktu lagi berak.");
+        }
+        
+        System.out.println(String.format("Ahh... enaknya~. +10 moode -20 hunger"));
+        setHunger(getHunger()-20);
+        setMood(getMood()+10);
+        hasPoop = true;
     }
 
     public void gamble(int money) {
@@ -343,7 +371,7 @@ public class Sim extends Exception implements Runnable {
             System.out.println("\nSim sudah berolahraga selama 20 detik, waktu tersisa: " + Angka.secToTime(time-i*20));
             System.out.println("UWOughh, si sim jadi lebih kuat! +5 health -5 hunger +10 mood");
 
-            setHealth(getHealth()-5);
+            setHealth(getHealth()+5);
             setHunger(getHunger()-5);
             setMood(getMood()+10);
         }
@@ -447,19 +475,6 @@ public class Sim extends Exception implements Runnable {
         updateSim();
     }
 
-    public void poop(int time) {
-        hunger-= (20*time/10000);
-        mood+= (10*time/10000);
-        try {
-            gm.getClock().moveTime(time);
-        } catch (SimIsDeadException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        updateSim();
-    }
-
     public void buyItem(Item item) throws IllegalArgumentException {
         if (shopQueue == null) {
             if(item.getPriceValue() > money){
@@ -522,18 +537,29 @@ public class Sim extends Exception implements Runnable {
 
     public void run() {
         while (trackUpdates != null) {
-            // System.out.println(timeLastSleep);// track sleep
+            // track sleep
             if ((gm.getClock().getGameTime() - timeLastSleep) >= 10*60) {
-                // System.out.println("HIT!");
                 resetTimeLastSleep();
     
                 setHealth(getHealth() - 5);
                 setMood(getMood() - 5);
             }
     
+            // sleep tiap ganti hari ke-reset
             if (dayLastSleep < gm.getClock().getDay()) {
                 resetTimeLastSleep();
                 dayLastSleep = (int)gm.getClock().getDay();
+            }
+
+            // track poop
+            if (!hasPoop) {
+                if (gm.getClock().getGameTime() - timeLastSubtractPoop >= 4*60) {
+                    timeLastSubtractPoop = gm.getClock().getGameTime();
+
+                    setMood(getMood()-5*poopMultiplier);
+                    setHealth(getHealth()-5*poopMultiplier);
+                    poopMultiplier++;
+                }
             }
         }
     }
@@ -562,9 +588,7 @@ public class Sim extends Exception implements Runnable {
         }
     }
 
-    public void resetTimeLastSleep() {
-        timeLastSleep = gm.getClock().getGameTime();
-    }
+    
 
     public void watchTV(int time) throws SimIsDeadException {
         // +10 mood -10 hunger -5 health
