@@ -20,6 +20,18 @@ public class UpgradeHouse implements Option {
 
             System.out.print("\nMASUKKAN NAMA RUANGAN BARU : ");
             String roomName = scan.nextLine();
+            boolean getInput = true;
+
+            while (getInput) {
+                if (roomName.length() > 21) {
+                    System.out.println("\nNama ruangan terlalu panjang!");
+                    System.out.print("\nMASUKKAN NAMA RUANGAN BARU : ");
+                    roomName = scan.nextLine();
+                } else {
+                    getInput = false;
+                }
+            }
+
             for (Room room: gm.getCurrentSim().getHouse().getRooms()) {
                 if (room.getRoomName().equals(roomName)){
                     throw new IllegalArgumentException("Nama ruangan sudah ada!");
