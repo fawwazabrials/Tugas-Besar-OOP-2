@@ -11,7 +11,9 @@ public class MoveSim implements Option {
     @Override
     public void execute(Game gm) {
         if (gm.getCurrentHouse() == null) {
-            throw new IllegalArgumentException("Sim is not in any house.");
+            System.out.println("Sim sedang tidak di dalam rumah.");
+            scan.enterUntukLanjut();
+            return;
         }
 
         System.out.println("\nHouse Map :");
@@ -29,7 +31,9 @@ public class MoveSim implements Option {
         }
 
         if (room == null) {
-            throw new IllegalArgumentException("Room not found.");
+            System.out.println("Ruangan tidak ditemukan!");
+            scan.enterUntukLanjut();
+            return;
         }
 
         gm.getCurrentSim().move(room);
