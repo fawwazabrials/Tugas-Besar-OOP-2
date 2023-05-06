@@ -13,9 +13,18 @@ public class Inventory {
 
     public synchronized Map<Item, Integer> getItems(String category){
         Map<Item, Integer> wanted = new HashMap<>();
-        for(Map.Entry<Item, Integer> e : items.entrySet()){
-            if(e.getKey().getCategory().equals(category)){
-                wanted.put(e.getKey(), e.getValue());
+
+        if (category == "food") {
+            for(Map.Entry<Item, Integer> e : items.entrySet()){
+                if(e.getKey().getCategory().equals("ingredients") || e.getKey().getCategory().equals("dish")){
+                    wanted.put(e.getKey(), e.getValue());
+                }
+            }
+        } else {
+            for(Map.Entry<Item, Integer> e : items.entrySet()){
+                if(e.getKey().getCategory().equals(category)){
+                    wanted.put(e.getKey(), e.getValue());
+                }
             }
         }
         return wanted;

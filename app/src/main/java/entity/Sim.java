@@ -26,9 +26,9 @@ public class Sim extends Exception implements Runnable {
     private Inventory simItems;
 
     // CONFIG ATTRIBUTES
-    private long timeLastPoop; //belum pake di method poop
-    private long timeLastEat;  //belum pake di method eat
-    private volatile long timeLastSleep;
+    private volatile boolean hasPoop;
+    private volatile int timeLastEat;  //belum pake di method eat
+    private volatile int timeLastSleep;
     private volatile int dayLastSleep;
 
     private long bufferedVisitTime, bufferedWorkTime;
@@ -75,6 +75,8 @@ public class Sim extends Exception implements Runnable {
         timeChangedJob = -999;
         totalJobTimeWorked = 0;
         resetTimeLastSleep(); dayLastSleep = gm.getClock().getDay();
+        timeLastEat = 0;
+        hasPoop = true;
         
         this.upgradeHouse = null;
         trackUpdates = new Thread(this);
@@ -158,6 +160,112 @@ public class Sim extends Exception implements Runnable {
             });
             upgradeHouse.start();
         }
+    }
+
+    public void cook(String dish) throws SimIsDeadException, IllegalArgumentException {
+        switch(dish.toLowerCase()){
+            case "nasi ayam":
+                if(simItems.checkItemAvailable("nasi",1) && simItems.checkItemAvailable("ayam",1)){
+                    simItems.removeItem(simItems.getItemsByName("nasi"));
+                    simItems.removeItem(simItems.getItemsByName("ayam"));
+                    simItems.addItem((new Dish(dish.toLowerCase())));
+                }
+                else{
+                    throw new IllegalArgumentException("Bahan tidak cukup untuk memasak makanan tersebut!");
+                }
+                break;
+            case "nasi kari":
+                if(simItems.checkItemAvailable("nasi",1) && simItems.checkItemAvailable("kentang",1) && simItems.checkItemAvailable("wortel",1) && simItems.checkItemAvailable("sapi",1)){
+                    simItems.removeItem(simItems.getItemsByName("nasi"));
+                    simItems.removeItem(simItems.getItemsByName("kentang"));
+                    simItems.removeItem(simItems.getItemsByName("wortel"));
+                    simItems.removeItem(simItems.getItemsByName("sapi"));
+                    simItems.addItem((new Dish(dish.toLowerCase())));
+                }
+                else{
+                    throw new IllegalArgumentException("Bahan tidak cukup untuk memasak makanan tersebut!");
+                }
+                break;
+            case "susu kacang":
+                if(simItems.checkItemAvailable("susu",1) && simItems.checkItemAvailable("kacang",1)){
+                    simItems.removeItem(simItems.getItemsByName("susu"));
+                    simItems.removeItem(simItems.getItemsByName("kacang"));
+                    simItems.addItem((new Dish(dish.toLowerCase())));
+                }
+                else{
+                    throw new IllegalArgumentException("Bahan tidak cukup untuk memasak makanan tersebut!");
+                }
+                break;
+            case "tumis sayur":
+                if(simItems.checkItemAvailable("wortel",1) && simItems.checkItemAvailable("bayam",1)){
+                    simItems.removeItem(simItems.getItemsByName("wortel"));
+                    simItems.removeItem(simItems.getItemsByName("bayam"));
+                    simItems.addItem((new Dish(dish.toLowerCase())));
+                }
+                else{
+                    throw new IllegalArgumentException("Bahan tidak cukup untuk memasak makanan tersebut!");
+                }
+                break;
+            case "bistik":
+                if(simItems.checkItemAvailable("kentang",1) && simItems.checkItemAvailable("sapi",1)){
+                    simItems.removeItem(simItems.getItemsByName("kentang"));
+                    simItems.removeItem(simItems.getItemsByName("sapi"));
+                    simItems.addItem((new Dish(dish.toLowerCase())));
+                }
+                else{
+                    throw new IllegalArgumentException("Bahan tidak cukup untuk memasak makanan tersebut!");
+                }
+                break;
+            default: throw new IllegalArgumentException("Tidak ada masakan dengan nama tersebut!");
+        }
+
+        int waktumasak = (int) Math.round(1.5*(new Dish(dish.toLowerCase())).getHungerPoint());
+        setMood(getMood() + 10);
+
+        System.out.println(String.format("Sim akan memasak selama %s", Angka.secToTime(waktumasak)));
+
+        try {
+            gm.getClock().moveTime(waktumasak * 1000);
+            System.out.println("Ahhh.. senangnya memasak. +10 mood");
+        } catch (SimIsDeadException e) {
+            throw new SimIsDeadException("Wah sim kamu kena tumpahan minyak panas waktu lagi masak!");
+        }
+    }
+
+    public void eat(String food) throws SimIsDeadException, IllegalArgumentException {
+        int waktumakan = 30;
+
+        if (!simItems.checkItemAvailable(food.toLowerCase(), 1)) {
+            throw new IllegalArgumentException("Tidak ada makanan dengan nama tersebut di dalam inventory sim!");
+        }
+
+        System.out.println(String.format("Sim akan makan selama %s", Angka.secToTime(waktumakan)));
+
+        try {
+            gm.getClock().moveTime(waktumakan * 1000);
+        } catch (SimIsDeadException e) {
+            throw new SimIsDeadException("Sim kamu keselek waktu lagi makan!");
+        }
+
+        System.out.println(String.format("\"Abis makan gini enaknya rebahan kali ya...\" +%s hunger", ((Food)simItems.getItemsByName(food.toLowerCase())).getHungerPoint()));
+        setHunger(getHunger()+ ((Food)simItems.getItemsByName(food.toLowerCase())).getHungerPoint());
+        simItems.removeItem(food.toLowerCase());
+
+        timeLastEat = gm.getClock().getGameTime();
+        hasPoop = false;
+    }
+
+    public void gamble(int money) {
+        // random dapet duit/kurang duit
+
+        int modifier = Angka.randint(-100, 100);
+        int gain = money * modifier / 100;
+
+        if (gain > 0) System.out.println(String.format("Selamat! Kamu dapet untung %s", gain));
+        else if (gain < 0) System.out.println(String.format("Yahh! Kamu hilang %s", Math.abs(gain)));
+        else System.out.println(String.format("Entah beruntung atau gimana tapi kamu gak hilang atau dapat duit!"));
+
+        setMoney(getMoney() + gain);
     }
 
     public void work(int time) throws IllegalArgumentException, SimIsDeadException {
@@ -295,92 +403,7 @@ public class Sim extends Exception implements Runnable {
         //         setMood(getMood()+10*times);
         //         setHunger(getHunger()-10*times);
         //     }
-        }
-
-    public void eat(int time, Food food){
-        /*
-        * +X kekenyangan (X sesuai makanan) / siklus makan(30 detik); Makanan yang dimakan akan hilang dari inventory
-        */
-        if(!simItems.getItems("food").containsKey(food)){
-            throw new IllegalArgumentException("\nNo food in inventory.");
-        }
-        for(Map.Entry<Item, Integer> e : simItems.getItems("food").entrySet()){
-            if(e.getKey().getName().equals(food.getName())){
-                hunger += (food.getHungerPoint()*(time%30000));
-            }
-        }
-
-        try {
-            gm.getClock().moveTime(time);
-        } catch (SimIsDeadException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-    }
-    public void cook(Food dish) {
-        switch(dish.getName()){
-            case "nasi ayam":
-            if(simItems.checkItemAvailable("nasi",1) && simItems.checkItemAvailable("ayam",1)){
-                simItems.removeItem(simItems.getItemsByName("nasi"));
-                simItems.removeItem(simItems.getItemsByName("ayam"));
-                simItems.addItem(dish);
-            }
-            else{
-                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
-            }
-            break;
-            case "nasi kari":
-            if(simItems.checkItemAvailable("nasi",1) && simItems.checkItemAvailable("kentang",1) && simItems.checkItemAvailable("wortel",1) && simItems.checkItemAvailable("sapi",1)){
-                simItems.removeItem(simItems.getItemsByName("nasi"));
-                simItems.removeItem(simItems.getItemsByName("kentang"));
-                simItems.removeItem(simItems.getItemsByName("wortel"));
-                simItems.removeItem(simItems.getItemsByName("sapi"));
-                simItems.addItem(dish);
-            }
-            else{
-                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
-            }
-            break;
-            case "susu kacang":
-            if(simItems.checkItemAvailable("susu",1) && simItems.checkItemAvailable("kacang",1)){
-                simItems.removeItem(simItems.getItemsByName("susu"));
-                simItems.removeItem(simItems.getItemsByName("kacang"));
-                simItems.addItem(dish);
-            }
-            else{
-                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
-            }
-            break;
-            case "tumis sayur":
-            if(simItems.checkItemAvailable("wortel",1) && simItems.checkItemAvailable("bayam",1)){
-                simItems.removeItem(simItems.getItemsByName("wortel"));
-                simItems.removeItem(simItems.getItemsByName("bayam"));
-                simItems.addItem(dish);
-            }
-            else{
-                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
-            }
-            break;
-            case "bistik":
-            if(simItems.checkItemAvailable("kentang",1) && simItems.checkItemAvailable("sapi",1)){
-                simItems.removeItem(simItems.getItemsByName("kentang"));
-                simItems.removeItem(simItems.getItemsByName("sapi"));
-                simItems.addItem(dish);
-            }
-            else{
-                throw new IllegalArgumentException("\nNot enough ingredients in inventory.");
-            }
-            break;
-            default: throw new IllegalArgumentException("\nNo such dish to cook.");
-        }
-        mood += 10;
-        try {
-            gm.getClock().moveTime((int) 1.5*dish.getHungerPoint());
-        } catch (SimIsDeadException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+        }    
 
     public void visit(Sim target) throws SimIsDeadException {
         int visittime = (int)(Math.sqrt(Math.pow((this.getCurrHouse().getX() - target.getHouse().getX()), 2) + Math.pow((this.getCurrHouse().getY() - target.getHouse().getY()), 2)));
@@ -588,19 +611,6 @@ public class Sim extends Exception implements Runnable {
                 throw e;
             }
         }
-    }
-
-    public void gamble(int money) {
-        // random dapet duit/kurang duit
-
-        int modifier = Angka.randint(-100, 100);
-        int gain = money * modifier / 100;
-
-        if (gain > 0) System.out.println(String.format("Selamat! Kamu dapet untung %s", gain));
-        else if (gain < 0) System.out.println(String.format("Yahh! Kamu hilang %s", Math.abs(gain)));
-        else System.out.println(String.format("Entah beruntung atau gimana tapi kamu gak hilang atau dapat duit!"));
-
-        setMoney(getMoney() + gain);
     }
 
     public void readQnA() throws SimIsDeadException {
