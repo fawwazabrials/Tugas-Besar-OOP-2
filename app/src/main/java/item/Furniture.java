@@ -27,11 +27,8 @@ public class Furniture extends Item {
 
     // Attributes
     private int x, y;
-    private String name;
-    private String category;
     private String renderChar;
     private String action;
-    private int priceValue;
     private int width;
     private int length;
 

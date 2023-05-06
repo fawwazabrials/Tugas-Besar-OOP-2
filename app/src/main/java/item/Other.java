@@ -16,10 +16,7 @@ public class Other extends Item {
 
     public static Map<String, String[]> getAvailableOther() {return availableOther;}
 
-    private String name;
-    private String category;
     private String action;
-    private int priceValue;
 
     public String getName() {return name;}
     public String getCategory() {return category;}

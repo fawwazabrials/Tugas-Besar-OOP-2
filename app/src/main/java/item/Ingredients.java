@@ -1,11 +1,6 @@
 package item;
 
 public class Ingredients extends Food {
-    private String name;
-    private String category;
-    private int priceValue;
-    private int hungerPoint;
-
     // Constructor
     public Ingredients(String name) {
         this.name = name;

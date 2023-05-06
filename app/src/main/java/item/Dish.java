@@ -1,10 +1,6 @@
 package item;
 
 public class Dish extends Food {
-    private String name;
-    private String category;
-    private int hungerPoint;
-    private int priceValue;
 
     // Constructor
     public Dish(String name) {
