@@ -139,7 +139,7 @@ public class Game {
                 deadSims.add(s.getName());
                 getWorld().removeHouse(s.getHouse().getX(), s.getHouse().getY());
 
-                if (s.getHouse() == currentSim.getCurrHouse()) {
+                if (s.getHouse() == currentSim.getCurrHouse() && currentSim != getCurrentSim()) {
                     try {
                         System.out.println("Karena sim yang dikunjungin udah mati, sim akan pergi kembali ke rumahnya.");
                         currentSim.visit(currentSim);
