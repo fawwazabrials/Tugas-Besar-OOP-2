@@ -131,7 +131,7 @@ public class Game {
 
     public void removeAllDeadSim() {
         List<String> deadSims = new ArrayList<String>();
-        List<Sim> clone = new ArrayList(getWorld().getSims());
+        List<Sim> clone = new ArrayList<Sim>(getWorld().getSims());
 
         for (Sim s : clone) {
             if (s.isDead()) {

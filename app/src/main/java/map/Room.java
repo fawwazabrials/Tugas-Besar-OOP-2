@@ -3,7 +3,7 @@ import java.util.*;
 
 import item.Furniture;
 
-public class Room implements RoomAction, Renderable {
+public class Room implements Renderable {
     // Attributes
     private String roomName;
     private final int width = 6;
@@ -69,7 +69,6 @@ public class Room implements RoomAction, Renderable {
         return true;
     }
     
-    @Override
     public Furniture removeFurniture(int x, int y) {
         Furniture furniture = roomGrid[x][y];
         if (furniture == null) {
@@ -90,7 +89,6 @@ public class Room implements RoomAction, Renderable {
         return furniture;
     }
 
-    @Override
      public void moveFurniture(int oldX, int oldY, int newX, int newY) {
         Furniture furniture = roomGrid[oldX][oldY];
         if (furniture == null) {
@@ -138,8 +136,7 @@ public class Room implements RoomAction, Renderable {
         }
         addFurniture(furniture, x, y);
     }
-
-    @Override
+    
     public void addFurniture(Furniture furniture, int x, int y) {
         if (! isPlaceable(furniture, x, y)) {
             throw new IllegalArgumentException("Furniture cannot be placed");

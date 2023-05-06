@@ -4,7 +4,7 @@ import java.util.*;
 import entity.Sim;
 import main.Game;
 
-public class World implements WorldAction{
+public class World{
     private static World instance = null;
     private Game gm;
     private List<Sim> sims = new ArrayList<>();

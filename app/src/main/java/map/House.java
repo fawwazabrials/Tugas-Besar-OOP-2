@@ -2,7 +2,7 @@ package map;
 import java.util.*;
 import java.awt.Point;
 
-public class House implements HouseAction{
+public class House{
     // House coordinate
     private int x;
     private int y;
@@ -26,7 +26,6 @@ public class House implements HouseAction{
     public String getOwnerName() {return ownerName;}
     public List<Room> getRooms() {return rooms;}
 
-    @Override
     public void addRoom(String roomName, Room benchmarkRoom, Direction direction) {
         /* Mencari key dengan value benchamarkRoom */
         Point coordinate = null;
@@ -81,7 +80,6 @@ public class House implements HouseAction{
         rooms.add(newRoom);
     }
 
-    @Override
     public void removeRoom(Room room) {
         Point coordinate = null;
         for (Map.Entry<Point, Room> entry : roomMap.entrySet()) {
@@ -104,7 +102,6 @@ public class House implements HouseAction{
         rooms.remove(room);
     }
     
-    @Override
     public void moveRoom(Room room, Room benchmarkRoom, Direction direction) {
         if (room.equals(benchmarkRoom)) {
             throw new IllegalArgumentException("Room and benchmark room cannot be the same!");
