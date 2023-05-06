@@ -25,15 +25,25 @@ public class UpgradeHouse implements Option {
             while (getInput) {
                 try {
                     roomName = scan.getInput("\nMasukkan nama ruangan baru: ");
-                    if (roomName.length() <= 21) {
-                        target = scan.getInput("\nMasukkan nama ruangan target: ");
-                        if (target.length() <= 21) {
-                            getInput = false;
+                    boolean isExist = false;
+                    for (Room room: gm.getCurrentSim().getHouse().getRooms()) {
+                        if (room.getRoomName().equals(roomName)){
+                            isExist = true;
+                        }
+                    }
+                    if (!isExist) {
+                        if (roomName.length() <= 21) {
+                            target = scan.getInput("\nMasukkan nama ruangan target: ");
+                            if (target.length() <= 21) {
+                                getInput = false;
+                            } else {
+                                System.out.println("\nNama ruangan target terlalu panjang!");
+                            }
                         } else {
-                            System.out.println("\nNama ruangan target terlalu panjang!");
+                            System.out.println("\nNama ruangan terlalu panjang!");
                         }
                     } else {
-                        System.out.println("\nNama ruangan terlalu panjang!");
+                        System.out.println("\nNama ruangan sudah ada!");
                     }
 
                 } catch (NoInputException e) {
@@ -62,9 +72,28 @@ public class UpgradeHouse implements Option {
                 throw new IllegalArgumentException("\nRuangan target tidak ditemukan!");
             }
             
-            System.out.println("\nDirection : (N)orth  (S)outh  (E)ast  (W)est");
-            System.out.print("Masukkan arah ruangan berdasarkan target : ");
-            Direction direction = Direction.strToDirection(scan.nextLine());
+            Direction direction = null;
+
+            String directionStr = "";
+            getInput = true;
+            try {
+                while (getInput) {
+                    System.out.println("\nDirection : (N)orth  (S)outh  (E)ast  (W)est");
+                    directionStr = scan.getInput("\nMasukkan arah ruangan baru: ");
+                    if (directionStr.length() <= 1) {
+                        direction = Direction.strToDirection(directionStr);
+                        getInput = false;
+                    } else {
+                        System.out.println("\nMasukkan arah yang benar!");
+                    }
+                }
+            } catch (NoInputException e) {
+                getInput = false;
+                return;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                scan.enterUntukLanjut();
+            }
 
             if (targetRoom.getConnectedRooms().get(direction) != null) {
                 throw new IllegalArgumentException("\nAda ruangan lain!");
