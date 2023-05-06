@@ -445,6 +445,9 @@ public class Sim extends Exception implements Runnable {
             setMoney(getMoney()-item.getPriceValue());
             timeShopQueue = gm.getClock().getGameTime();
             deliveryTime = Angka.randint(1, 5) * 30;
+
+            System.out.println(String.format("Barang berhasil dipesan! Pesanan akan sampai dalam waktu %s", Angka.secToTime(deliveryTime)));
+
             shopQueue = new Thread(new Runnable() {
 
                 public void run(){
@@ -467,12 +470,12 @@ public class Sim extends Exception implements Runnable {
         }
     }
 
-    public void sellItem(Item item) throws IllegalArgumentException{
-        if(!simItems.checkItemAvailable(item.getName(), 1)){
+    public void sellItem(String item) throws IllegalArgumentException{
+        if(!simItems.checkItemAvailable(item, 1)){
             throw new IllegalArgumentException("Tidak ada barang dengan nama tersebut!");
         }
+        setMoney(getMoney() + simItems.getItemsByName(item).getPriceValue());
         simItems.removeItem(item);
-        setMoney(getMoney() + item.getPriceValue());
     }
 
     public void move(Room target) {

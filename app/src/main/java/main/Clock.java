@@ -15,6 +15,23 @@ public class Clock {
 
     public int getGameTime() {return gameTime;}
     public int getDay() {return day;}
+
+    public String getDayTime() {
+        int secsInDay = (gameTime - (day-1)*720)*2; // 1 menit di dunia asli -> 2 jam di dunia sim
+        int hour = secsInDay / 60;
+        int minute = secsInDay % 60;
+
+        String showHour, showMinute;
+        if ((double)hour / 10 < 1) {
+            showHour = "0" + ((Integer)hour).toString();
+        } else showHour = ((Integer)hour).toString();
+
+        if ((double)minute / 10 < 1) {
+            showMinute = "0" + ((Integer)minute).toString();
+        } else showMinute = ((Integer)minute).toString();
+
+        return String.format("%s:%s", showHour, showMinute);
+    }
     
     public void forwardTime(int time) {
         gameTime = gameTime+time;
