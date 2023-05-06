@@ -138,6 +138,12 @@ public class Sim extends Exception implements Runnable {
 
     public void run() {
         while (trackUpdates != null) {
+            // cek alive sim, kalo ga, bunuh
+            if (isDead()) {
+                killSim();
+                trackUpdates = null;
+            }
+
             // track sleep
             if ((gm.getClock().getGameTime() - timeLastSleep) >= 10*60) {
                 resetTimeLastSleep();
