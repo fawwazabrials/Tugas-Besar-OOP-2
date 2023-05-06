@@ -354,7 +354,7 @@ public class Sim extends Exception implements Runnable {
 
         System.out.println("Sim akan membaca buku selama " + Angka.secToTime(time));
 
-        for (int i=0; i<cycle; i++) {
+        for (int i=1; i<=cycle; i++) {
             try {
                 gm.getClock().moveTime(30 * 1000);
 
@@ -407,7 +407,7 @@ public class Sim extends Exception implements Runnable {
 
         System.out.println("Sim akan bermain game selama " + Angka.secToTime(time));
 
-        for (int i=0; i<cycle; i++) {
+        for (int i=1; i<=cycle; i++) {
             try {
                 gm.getClock().moveTime(2 * 60 * 1000);
 
@@ -490,7 +490,7 @@ public class Sim extends Exception implements Runnable {
 
         System.out.println("Sim akan tidur selama " + Angka.secToTime(time));
 
-        for (int i=0; i<cycle; i++) {
+        for (int i=1; i<=cycle; i++) {
             try {
                 gm.getClock().moveTime(60 * 4 * 1000);
             } catch (SimIsDeadException e) {
@@ -529,7 +529,7 @@ public class Sim extends Exception implements Runnable {
 
         System.out.println("\nSim akan berjalan selama " + visittime + " detik!");
 
-        for (int i=0; i<cycle; i++) {
+        for (int i=1; i<=cycle; i++) {
             try {
                 gm.getClock().moveTime(30 * 1000);
             } catch (SimIsDeadException e) {
@@ -605,7 +605,7 @@ public class Sim extends Exception implements Runnable {
 
         System.out.println("\nSim akan bekerja selama " + Angka.secToTime(time));
 
-        for (int i=0; i<cycle; i++) {
+        for (int i=1; i<=cycle; i++) {
             try {
                 gm.getClock().moveTime(30 * 1000); // waktu jalan 30dtk
             } catch (SimIsDeadException e) {
@@ -637,7 +637,7 @@ public class Sim extends Exception implements Runnable {
 
         System.out.println("Sim akan berolahraga selama " + Angka.secToTime(time));
 
-        for (int i=0; i<cycle; i++) {
+        for (int i=1; i<=cycle; i++) {
             try {
                 gm.getClock().moveTime(20 * 1000);
             } catch (SimIsDeadException e) {
