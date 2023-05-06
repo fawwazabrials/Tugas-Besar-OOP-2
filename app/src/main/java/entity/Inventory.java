@@ -44,11 +44,11 @@ public class Inventory {
     }
 
     public synchronized void addItem(Item in){
-        if(items.containsKey(in)){
-            items.put(in, items.get(in) + 1);
+        if(getItemsByName(in.getName()) != null){
+            items.put(getItemsByName(in.getName()), items.get(getItemsByName(in.getName())) + 1);
         }
         else{
-            items.put(in, 1);
+            items.put(getItemsByName(in.getName()), 1);
         }
     }
 
