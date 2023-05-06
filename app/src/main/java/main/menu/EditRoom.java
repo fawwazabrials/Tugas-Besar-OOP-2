@@ -54,11 +54,16 @@ public class EditRoom implements Option {
                 try {
                     y = scan.getIntegerInput("ENTER Y COORDINATE: ");
                     x = scan.getIntegerInput("ENTER X COORDINATE: ");
-                    gm.getCurrentSim().getRoom().addFurniture(furniture, x, y);
-                    gm.getCurrentSim().getSimItems().removeItem(furniture);
-                    System.out.println("\nFurniture berhasil ditambahkan!");
-                    scan.enterUntukLanjut();
-                    getInput = false;
+
+                    if (x < 0 || x > gm.getCurrentSim().getRoom().getLength() || y < 0 || y > gm.getCurrentSim().getRoom().getWidth()) {
+                        System.out.println("\nKoordinat di luar batas!");
+                    } else {
+                        gm.getCurrentSim().getRoom().addFurniture(furniture, x, y);
+                        gm.getCurrentSim().getSimItems().removeItem(furniture);
+                        System.out.println("\nFurniture berhasil ditambahkan!");
+                        scan.enterUntukLanjut();
+                        getInput = false;
+                    }
                 } catch (NoInputException e) {
                     getInput = false;
                 } catch (InputMismatchException e) {
@@ -78,10 +83,15 @@ public class EditRoom implements Option {
                         System.out.println("\nFurniture want to remove:");
                         y = scan.getIntegerInput("ENTER Y COORDINATE: ");
                         x = scan.getIntegerInput("ENTER X COORDINATE: ");
-                        gm.getCurrentSim().getSimItems().addItem(gm.getCurrentSim().getRoom().removeFurniture(x, y));    
-                        System.out.println("\nFurniture berhasil dihapus!"); 
-                        scan.enterUntukLanjut(); 
-                        getInput = false;
+
+                        if (x < 0 || x > gm.getCurrentSim().getRoom().getLength() || y < 0 || y > gm.getCurrentSim().getRoom().getWidth()) {
+                            System.out.println("\nKoordinat di luar batas!");
+                        } else {
+                            gm.getCurrentSim().getSimItems().addItem(gm.getCurrentSim().getRoom().removeFurniture(x, y));    
+                            System.out.println("\nFurniture berhasil dihapus!"); 
+                            scan.enterUntukLanjut(); 
+                            getInput = false;
+                        }
                     } catch (NoInputException e) {
                         getInput = false;
                     } catch (InputMismatchException e) {
@@ -109,10 +119,15 @@ public class EditRoom implements Option {
                         System.out.println("\nNew coordinate:");
                         newY = scan.getIntegerInput("ENTER NEW Y COORDINATE: ");
                         newX = scan.getIntegerInput("ENTER NEW X COORDINATE: ");
-                        gm.getCurrentSim().getRoom().moveFurniture(y, x, newY, newX);
-                        System.out.println("\nFurniture berhasil dipindahkan!");
-                        scan.enterUntukLanjut();
-                        getInput = false;
+
+                        if (x < 0 || x > gm.getCurrentSim().getRoom().getLength() || y < 0 || y > gm.getCurrentSim().getRoom().getWidth() || newX < 0 || newX > gm.getCurrentSim().getRoom().getLength() || newY < 0 || newY > gm.getCurrentSim().getRoom().getWidth()) {
+                            System.out.println("\nKoordinat di luar batas!");
+                        } else {
+                            gm.getCurrentSim().getRoom().moveFurniture(y, x, newY, newX);
+                            System.out.println("\nFurniture berhasil dipindahkan!");
+                            scan.enterUntukLanjut();
+                            getInput = false;
+                        }
                     } catch (NoInputException e) {
                         getInput = false;
                     } catch (InputMismatchException e) {
