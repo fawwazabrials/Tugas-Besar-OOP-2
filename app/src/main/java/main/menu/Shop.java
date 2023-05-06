@@ -26,7 +26,7 @@ public class Shop implements Option {
                 String category = scan.getInput("Beli menu yang ingin dilihat (1/2/3) ");
 
                 if (category.equals("1")) {
-                    System.out.println(String.format(" %s ", "--------------------------------------------------------------------"));
+                    System.out.println(String.format("\n %s ", "--------------------------------------------------------------------"));
                     System.out.println(String.format("| %-21s | %-6s | %-33s |", "Furniture Name", "Price", "Description"));
                     System.out.println(String.format("|%s|", "--------------------------------------------------------------------"));
                     System.out.println(String.format("| %-21s | %-6s | %-33s |", "Kasur Single", "50", "Size: 4x1, Aksi: sleep"));
@@ -84,7 +84,7 @@ public class Shop implements Option {
                 }
 
                 else if (category.equals("2")) {
-                    System.out.println(String.format(" %s ", "------------------------------------------------------"));
+                    System.out.println(String.format("\n %s ", "------------------------------------------------------"));
                     System.out.println(String.format("| %-21s | %-6s | %-19s |", "Ingredients Name", "Price", "Description"));
                     System.out.println(String.format("|%s|", "------------------------------------------------------"));
                     System.out.println(String.format("| %-21s | %-6s | %-19s |", "Nasi", "5", "Hunger points: 5"));
