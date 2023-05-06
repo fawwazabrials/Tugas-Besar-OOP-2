@@ -11,7 +11,7 @@ public class Inventory {
         this.items = new HashMap<Item, Integer>();
     }
 
-    public Map<Item, Integer> getItems(String category){
+    public synchronized Map<Item, Integer> getItems(String category){
         Map<Item, Integer> wanted = new HashMap<>();
         for(Map.Entry<Item, Integer> e : items.entrySet()){
             if(e.getKey().getCategory().equals(category)){
@@ -21,11 +21,11 @@ public class Inventory {
         return wanted;
     }
 
-    public Map<Item, Integer> getItems() {
+    public synchronized Map<Item, Integer> getItems() {
         return items;
     }
 
-    public Item getItemsByName(String name){
+    public synchronized Item getItemsByName(String name){
         for(Map.Entry<Item, Integer> e : items.entrySet()){
             if(e.getKey().getName().equals(name)){
                 return e.getKey();
@@ -34,7 +34,7 @@ public class Inventory {
         return null;
     }
 
-    public void addItem(Item in){
+    public synchronized void addItem(Item in){
         if(items.containsKey(in)){
             items.put(in, items.get(in) + 1);
         }
@@ -43,7 +43,7 @@ public class Inventory {
         }
     }
 
-    public void removeItem(Item out){
+    public synchronized void removeItem(Item out){
         if(items.get(out) > 1){
             items.put(out, items.get(out) - 1);
         }
@@ -51,8 +51,12 @@ public class Inventory {
             items.remove(out);
         }
     }
+
+    public synchronized void removeItem(String out) {
+        removeItem(getItemsByName(out));
+    }
     
-    public void printInv(){
+    public synchronized void printInv(){
         if (items.isEmpty()) {
             System.out.println(String.format("| %-51s |" , "No items in inventory."));
         } else {
@@ -63,7 +67,7 @@ public class Inventory {
         System.out.println(String.format(" %s ", "-----------------------------------------------------"));
     }
 
-    public void print(String category) {
+    public synchronized void print(String category) {
         Map<Item, Integer> items = getItems(category);
 
         System.out.println(String.format(" %s ", "--------------------- INVENTORY ---------------------"));
@@ -83,7 +87,7 @@ public class Inventory {
         System.out.println(String.format(" %s ", "-----------------------------------------------------"));
     }
 
-    public void print() {
+    public synchronized void print() {
         Map<Item, Integer> items = getItems();
 
         System.out.println(String.format(" %s ", "--------------------- INVENTORY ---------------------"));
@@ -103,7 +107,7 @@ public class Inventory {
         System.out.println(String.format(" %s ", "-----------------------------------------------------"));
     }
 
-    public boolean checkItemAvailable(String name, int num){
+    public synchronized boolean checkItemAvailable(String name, int num){
         for(Map.Entry<Item, Integer> e : items.entrySet()){
             if(e.getKey().getName().equals(name)){
                 return num >= e.getValue();

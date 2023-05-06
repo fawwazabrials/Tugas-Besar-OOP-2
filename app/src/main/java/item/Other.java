@@ -11,7 +11,7 @@ public class Other extends Item {
         // value : [Harga barang, action]
         availableOther = new HashMap<String, String[]>();
         availableOther.put("HP", new String[] {"50", "Gamble"});
-        availableOther.put("Sheet QnA", new String[] {"0", "Read QnA"});
+        availableOther.put("Sheet QnA", new String[] {"1", "Read QnA"});
     }
 
     public static Map<String, String[]> getAvailableOther() {return availableOther;}
