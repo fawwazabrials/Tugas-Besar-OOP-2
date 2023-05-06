@@ -35,6 +35,15 @@ public class Sim extends Exception implements Runnable {
     private int timeChangedJob, totalJobTimeWorked;
 
     private Thread upgradeHouse, trackUpdates, shopQueue;
+    private int timeUpgradeHouse, timeShopQueue, deliveryTime;
+
+    public int getTimeShopQueue() {return timeShopQueue;}
+    public int getTimeUpgradeHouse() {return timeUpgradeHouse;}
+    public int getDeliveryTime() {return deliveryTime;}
+
+    public boolean isUpgradingHouse() {return upgradeHouse != null;}
+    public boolean isShoppingQueue() {return shopQueue != null;}
+
 
     public Sim(Game gm, House house, Room currRoom, String name) {
         this.gm = gm;
@@ -130,13 +139,13 @@ public class Sim extends Exception implements Runnable {
 
     public void upgradeHouse(String roomName, Room target, Direction direction) {
         if (upgradeHouse == null) {
+            this.timeUpgradeHouse = gm.getClock().getGameTime();
             money -= 1500;
             upgradeHouse = new Thread(new Runnable() {
-                long timeLastUpgrade = gm.getClock().getGameTime();
-                public void run(){
+                public void run() {
                     while (upgradeHouse != null) {
                         try {
-                            if (gm.getClock().getGameTime() - timeLastUpgrade >= 18 * 60) {
+                            if (gm.getClock().getGameTime() - getTimeUpgradeHouse() >= 18 * 60) {
                                 upgradeHouse = null;
                             }
                             Thread.sleep(3000);
@@ -428,18 +437,20 @@ public class Sim extends Exception implements Runnable {
         updateSim();
     }
 
-    public void buyItem(Item item) {
+    public void buyItem(Item item) throws IllegalArgumentException {
         if (shopQueue == null) {
             if(item.getPriceValue() > money){
-                throw new IllegalArgumentException("\nNot enough money");
+                throw new IllegalArgumentException("\nUang sim tidak cukup untuk membeli barang tersebut!");
             }
-            money -= item.getPriceValue();
+            setMoney(getMoney()-item.getPriceValue());
+            timeShopQueue = gm.getClock().getGameTime();
+            deliveryTime = Angka.randint(1, 5) * 30;
             shopQueue = new Thread(new Runnable() {
-                long timeLastOrdered = gm.getClock().getGameTime();
+
                 public void run(){
                     while (shopQueue != null) {
                         try {
-                            if (gm.getClock().getGameTime() - timeLastOrdered >= 18 * 60) {
+                            if (gm.getClock().getGameTime() - getTimeShopQueue() >= deliveryTime) {
                                 shopQueue = null;
                             }
                             Thread.sleep(3000);
@@ -452,16 +463,16 @@ public class Sim extends Exception implements Runnable {
             });
             shopQueue.start();
         } else {
-            throw new IllegalArgumentException("\nAnother order is in place.");
+            throw new IllegalArgumentException("Sim tidak bisa membeli barang karena sedang ada barang yang dipesan!");
         }
     }
 
-    public void sellItem(Item item) {
+    public void sellItem(Item item) throws IllegalArgumentException{
         if(!simItems.checkItemAvailable(item.getName(), 1)){
-            throw new IllegalArgumentException("\nNot enough item to sell");
+            throw new IllegalArgumentException("Tidak ada barang dengan nama tersebut!");
         }
         simItems.removeItem(item);
-        money += item.getPriceValue();
+        setMoney(getMoney() + item.getPriceValue());
     }
 
     public void move(Room target) {
