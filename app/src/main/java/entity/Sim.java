@@ -41,14 +41,6 @@ public class Sim extends Exception implements Runnable {
         
         // Set basic sim info
         this.simItems = new Inventory();
-        simItems.addItem(new Furniture("kasur single", -1, -1));
-        simItems.addItem(new Ingredients("kentang"));
-        simItems.addItem(new Dish("nasi ayam"));
-        simItems.addItem(new Other("Sheet QnA"));
-        simItems.addItem(new Other("HP"));
-        
-        
-        
         this.name = name;
         this.simHouse = house;
         this.currRoom = currRoom;
@@ -57,7 +49,7 @@ public class Sim extends Exception implements Runnable {
         mood = 80;
         hunger = 80;
         health = 80;
-        money = 10000;
+        money = 100;
         
         
         bufferedVisitTime = 0;
