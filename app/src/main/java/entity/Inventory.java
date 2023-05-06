@@ -44,11 +44,19 @@ public class Inventory {
     }
 
     public synchronized void addItem(Item in){
-        if (items.containsKey(in)){
-            items.put(in, items.get(in) + 1);
-        } else{
+        Item item = getItemsByName(in.getName());
+        // System.out.println(item);
+
+        if (item == null)
             items.put(in, 1);
-        }
+        else
+            items.put(item, items.get(item) + 1);
+
+
+
+        // if (items.containsKey(item)){
+        // } else{
+        // }
     }
 
     public synchronized void removeItem(Item out){
