@@ -39,6 +39,7 @@ public class Clock {
     
     public void forwardTime(int time) {
         gameTime = gameTime+time;
+        day = gameTime / 720;
     }
     
     public void moveTime(int time) throws SimIsDeadException {
