@@ -28,7 +28,7 @@ public class Action {
         allAvailableAction.put("Watch TV", new WatchTV());
         allAvailableAction.put("Read", new Read());
         allAvailableAction.put("Gamble", new Gamble());
-        allAvailableAction.put("Read QnA", new ReadQnA());
+        allAvailableAction.put("Read QnA", new ReadQNA());
     }
 
     public Option getOverlapAction() {

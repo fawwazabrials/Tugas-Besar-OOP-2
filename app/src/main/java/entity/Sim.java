@@ -308,6 +308,36 @@ public class Sim extends Exception implements Runnable {
         }
     }
 
+    public void readQNA() throws SimIsDeadException {
+        // random dapet buff / debuff, jalan otomatis 3 menit
+        // 80% jelek, 20% bagus
+        // bagus -> +30 mood, +10 health, -10 hunger
+        // jelek -> -40 mood, -20 health, -30 hunger
+
+        try {
+            System.out.println("Sim akan membaca sheet QnA tubes selama " + Angka.secToTime(3*60));
+            gm.getClock().moveTime(3 * 60 * 1000);
+            
+            int chance = Angka.randint(0, 100);
+    
+            if (chance >= 0 && chance < 20) { // good
+                System.out.println("Wah! Tumben banget ini QnA bagus jawabannya. Sim kamu jadi semangat tubes! +30 mood +10 health -10 hunger");
+    
+                setMood(getMood()+30);
+                setHealth(getHealth()+10);
+                setHunger(getHunger()-10);
+            } else { // bad
+                System.out.println("ANJIR! INI QNA KOK NGACO BANGET. AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA! -40 mood -20 health -30 hunger");
+                
+                setMood(getMood()-40);
+                setHealth(getHealth()-20);
+                setHunger(getHunger()-30);
+            }
+        } catch (SimIsDeadException e) {
+            throw new SimIsDeadException("Stres karena banyak jawaban yang beda, sim kamu kena stroke...");
+        }
+    }
+
     public void poop() throws SimIsDeadException {
         // selalu 10 detik
 
@@ -325,6 +355,47 @@ public class Sim extends Exception implements Runnable {
         hasPoop = true;
     }
 
+    public void buyItem(Item item) throws IllegalArgumentException {
+        if (shopQueue == null) {
+            if(item.getPriceValue() > money){
+                throw new IllegalArgumentException("\nUang sim tidak cukup untuk membeli barang tersebut!");
+            }
+            setMoney(getMoney()-item.getPriceValue());
+            timeShopQueue = gm.getClock().getGameTime();
+            deliveryTime = Angka.randint(1, 5) * 30;
+
+            System.out.println(String.format("Barang berhasil dipesan! Pesanan akan sampai dalam waktu %s", Angka.secToTime(deliveryTime)));
+
+            shopQueue = new Thread(new Runnable() {
+
+                public void run(){
+                    while (shopQueue != null) {
+                        try {
+                            if (gm.getClock().getGameTime() - getTimeShopQueue() >= deliveryTime || gm.getCheat().isFastshop()) {
+                                shopQueue = null;
+                            }
+                            Thread.sleep(3000);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    simItems.addItem(item);
+                }
+            });
+            shopQueue.start();
+        } else {
+            throw new IllegalArgumentException("Sim tidak bisa membeli barang karena sedang ada barang yang dipesan!");
+        }
+    }
+
+    public void sellItem(String item) throws IllegalArgumentException{
+        if(!simItems.checkItemAvailable(item, 1)){
+            throw new IllegalArgumentException("Tidak ada barang dengan nama tersebut!");
+        }
+        setMoney(getMoney() + simItems.getItemsByName(item).getPriceValue());
+        simItems.removeItem(item);
+    }
+    
     public void work(int time) throws IllegalArgumentException, SimIsDeadException {
         /*
         * PREREQUISITE : time sudah pasti kelipatan 4 menit / 120 detik
@@ -504,47 +575,6 @@ public class Sim extends Exception implements Runnable {
         updateSim();
     }
 
-    public void buyItem(Item item) throws IllegalArgumentException {
-        if (shopQueue == null) {
-            if(item.getPriceValue() > money){
-                throw new IllegalArgumentException("\nUang sim tidak cukup untuk membeli barang tersebut!");
-            }
-            setMoney(getMoney()-item.getPriceValue());
-            timeShopQueue = gm.getClock().getGameTime();
-            deliveryTime = Angka.randint(1, 5) * 30;
-
-            System.out.println(String.format("Barang berhasil dipesan! Pesanan akan sampai dalam waktu %s", Angka.secToTime(deliveryTime)));
-
-            shopQueue = new Thread(new Runnable() {
-
-                public void run(){
-                    while (shopQueue != null) {
-                        try {
-                            if (gm.getClock().getGameTime() - getTimeShopQueue() >= deliveryTime || gm.getCheat().isFastshop()) {
-                                shopQueue = null;
-                            }
-                            Thread.sleep(3000);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    simItems.addItem(item);
-                }
-            });
-            shopQueue.start();
-        } else {
-            throw new IllegalArgumentException("Sim tidak bisa membeli barang karena sedang ada barang yang dipesan!");
-        }
-    }
-
-    public void sellItem(String item) throws IllegalArgumentException{
-        if(!simItems.checkItemAvailable(item, 1)){
-            throw new IllegalArgumentException("Tidak ada barang dengan nama tersebut!");
-        }
-        setMoney(getMoney() + simItems.getItemsByName(item).getPriceValue());
-        simItems.removeItem(item);
-    }
-
     public void move(Room target) {
         currRoom = target;
     }
@@ -643,33 +673,5 @@ public class Sim extends Exception implements Runnable {
         }
     }
 
-    public void readQnA() throws SimIsDeadException {
-        // random dapet buff / debuff, jalan otomatis 3 menit
-        // 80% jelek, 20% bagus
-        // bagus -> +30 mood, +10 health, -10 hunger
-        // jelek -> -40 mood, -20 health, -30 hunger
-
-        try {
-            System.out.println("Sim akan membaca sheet QnA selama " + Angka.secToTime(3*60));
-            gm.getClock().moveTime(3 * 60 * 1000);
-            
-            int chance = Angka.randint(0, 100);
     
-            if (chance >= 0 && chance < 20) { // bad
-                System.out.println("Wah! Tumben banget ini QnA bagus jawabannya. Sim kamu jadi semangat tubes! +30 mood +10 health -10 hunger");
-    
-                setMood(getMood()+30);
-                setHealth(getHealth()+10);
-                setHunger(getHunger()-10);
-            } else { // good
-                System.out.println("ANJIR! INI QNA KOK NGACO BANGET. AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA! -40 mood -20 health -30 hunger");
-                
-                setMood(getMood()-40);
-                setHealth(getHealth()-20);
-                setHunger(getHunger()-30);
-            }
-        } catch (SimIsDeadException e) {
-            throw e;
-        }
-    }
 }
