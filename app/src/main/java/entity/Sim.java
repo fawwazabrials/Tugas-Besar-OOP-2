@@ -1,7 +1,5 @@
 package entity;
 
-import java.util.*;
-
 import exception.SimIsDeadException;
 import map.House;
 import map.Room;
@@ -62,6 +60,8 @@ public class Sim extends Exception implements Runnable {
         simItems.addItem(new Ingredients("kentang"));
         simItems.addItem(new Dish("nasi ayam"));
         simItems.addItem(new Other("Sheet QnA"));
+        simItems.addItem(new Other("HP"));
+
 
 
         this.name = name;
@@ -266,6 +266,25 @@ public class Sim extends Exception implements Runnable {
         }
     }
 
+    public void gamble(int money) throws IllegalArgumentException {
+        // random dapet duit/kurang duit
+
+        if (money > getMoney()) 
+            throw new IllegalArgumentException(String.format("Sim tidak bisa menjudikan uang yang dia tidak punya! Uang sim adalah %s", gm.getCurrentSim().getMoney()));
+
+        if (money < 0)
+            throw new IllegalArgumentException("Tidak bisa menjudikan uang negatif!");
+
+        int modifier = Angka.randint(-100, 100);
+        int gain = money * modifier / 100;
+
+        if (gain > 0) System.out.println(String.format("Selamat! Kamu dapet untung %s", gain));
+        else if (gain < 0) System.out.println(String.format("Yahh! Kamu hilang %s", Math.abs(gain)));
+        else System.out.println(String.format("Entah beruntung atau gimana tapi kamu gak hilang atau dapat duit!"));
+
+        setMoney(getMoney() + gain);
+    }
+
     public void poop() throws SimIsDeadException {
         // selalu 10 detik
 
@@ -281,19 +300,6 @@ public class Sim extends Exception implements Runnable {
         setHunger(getHunger()-20);
         setMood(getMood()+10);
         hasPoop = true;
-    }
-
-    public void gamble(int money) {
-        // random dapet duit/kurang duit
-
-        int modifier = Angka.randint(-100, 100);
-        int gain = money * modifier / 100;
-
-        if (gain > 0) System.out.println(String.format("Selamat! Kamu dapet untung %s", gain));
-        else if (gain < 0) System.out.println(String.format("Yahh! Kamu hilang %s", Math.abs(gain)));
-        else System.out.println(String.format("Entah beruntung atau gimana tapi kamu gak hilang atau dapat duit!"));
-
-        setMoney(getMoney() + gain);
     }
 
     public void work(int time) throws IllegalArgumentException, SimIsDeadException {
