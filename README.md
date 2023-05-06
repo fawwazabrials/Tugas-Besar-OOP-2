@@ -23,4 +23,4 @@ Tugas besar ini dibuat dengan menggunakan Gradle sebagai build tool-nya. Untuk m
 
 - Pastikan Gradle sudah terinstall di OS anda!
 - Pindah ke directory ini README.md ini berada
-- Jalankan command `./gradlew -q --console plain run` untuk Linux dan `.\gradlew -q --console plain run`
+- Jalankan command `./gradlew -q run --console-plain` untuk Linux dan `gradlew -q run --console=plain` untuk Windows
