@@ -72,7 +72,7 @@ public class Room implements Renderable {
     public Furniture removeFurniture(int x, int y) {
         Furniture furniture = roomGrid[x][y];
         if (furniture == null) {
-            throw new IllegalArgumentException("No furniture at (" + x + ", " + y + ")");
+            throw new IllegalArgumentException("\nTidak ada furniture di koordinat ini!");
         }
         furnitures.remove(furniture);
         for (int i = 0; i < width; i++) {
@@ -92,7 +92,7 @@ public class Room implements Renderable {
      public void moveFurniture(int oldX, int oldY, int newX, int newY) {
         Furniture furniture = roomGrid[oldX][oldY];
         if (furniture == null) {
-            throw new IllegalArgumentException("No furniture at (" + oldX + ", " + oldY + ")");
+            throw new IllegalArgumentException("\nTidak ada furniture di koordinat ini!");
         }
 
         int topLeftX = -1;
@@ -122,7 +122,7 @@ public class Room implements Renderable {
 
         // Mengatasi jika topLeft tidak diinisalisasi akan throw error
         if (topLeftX == -1 || topLeftY == -1) {
-            throw new IllegalArgumentException("No furniture at (" + oldX + ", " + oldY + ")");
+            throw new IllegalArgumentException("\nTidak ada furniture di koordinat ini!");
         }
 
         int x = newX - (oldX - topLeftX);
@@ -132,14 +132,14 @@ public class Room implements Renderable {
             
             roomGrid = tempRoomGrid;
             furnitures.add(furniture);
-            throw new IllegalArgumentException("Cannot move furniture to the new location");
+            throw new IllegalArgumentException("\nFurniture tidak bisa dipindahkan ke lokasi baru!");
         }
         addFurniture(furniture, x, y);
     }
     
     public void addFurniture(Furniture furniture, int x, int y) {
         if (! isPlaceable(furniture, x, y)) {
-            throw new IllegalArgumentException("Furniture cannot be placed");
+            throw new IllegalArgumentException("\nFurniture tidak bisa ditambahkan!");
         }
         furniture.setX(x);
         furniture.setY(y);

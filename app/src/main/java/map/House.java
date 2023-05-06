@@ -88,7 +88,7 @@ public class House{
             }
         }
         if (coordinate == null) {
-            throw new IllegalArgumentException("Room not found!");
+            throw new IllegalArgumentException("\nRuangan tidak ditemukan!");
         }
 
         for (Map.Entry<Point, Room> entry : roomMap.entrySet()) {
@@ -104,7 +104,7 @@ public class House{
     
     public void moveRoom(Room room, Room benchmarkRoom, Direction direction) {
         if (room.equals(benchmarkRoom)) {
-            throw new IllegalArgumentException("Room and benchmark room cannot be the same!");
+            throw new IllegalArgumentException("\nRoom and benchmark room cannot be the same!");
         }
 
         Point roomCoord = null;
@@ -122,10 +122,10 @@ public class House{
         }
 
         if (roomCoord == null) {
-            throw new IllegalArgumentException("Room not found!");
+            throw new IllegalArgumentException("\nRuangan tidak ditemukan!");
         }
         if (benchCoord == null) {
-            throw new IllegalArgumentException("Benchmark room not found!");
+            throw new IllegalArgumentException("\nRuangan target tidak ditemukan!");
         }
 
         Point newCoord = null;
@@ -145,7 +145,7 @@ public class House{
         }
 
         if (roomMap.containsKey(newCoord)) {
-            throw new IllegalArgumentException("Room already exists!");
+            throw new IllegalArgumentException("\nSudah ada ruangan lain!");
         }
         
         for (Map.Entry<Direction, String> entry : room.getConnectedRooms().entrySet()) {
