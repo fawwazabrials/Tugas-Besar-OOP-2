@@ -21,7 +21,7 @@ public class Read implements Option {
                 input = scan.getIntegerInput("MASUKKAN WAKTU (dalam kelipatan 30 detik): ");
 
                 if (input % 30 == 0 && input != 0) {
-                    System.out.println("\nSim sedang membaca...");
+                    
                     gm.getCurrentSim().read(input);
                     System.out.println("\nSim sudah selesai membaca!");
                     getInput = false;
@@ -37,7 +37,8 @@ public class Read implements Option {
                 System.out.println("Masukkan angka!");
             }
             catch (SimIsDeadException e) {
-                // TODO: Add dead message
+                System.out.println(e.getMessage());
+                getInput = false;
             }
         }
     }

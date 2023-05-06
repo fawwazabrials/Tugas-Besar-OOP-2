@@ -285,6 +285,29 @@ public class Sim extends Exception implements Runnable {
         setMoney(getMoney() + gain);
     }
 
+    public void read(int time) throws SimIsDeadException {
+        // +10 mood -5 hunger
+        // cuma bisa kelipatan 30 detik
+
+        int cycle = time / (30);
+
+        System.out.println("Sim akan membaca buku selama " + Angka.secToTime(time));
+
+        for (int i=0; i<cycle; i++) {
+            try {
+                gm.getClock().moveTime(30 * 1000);
+
+                System.out.println("\nSim sudah membaca buku selama 30 detik, waktu tersisa: " + Angka.secToTime(time-i*30));
+                System.out.println("Keren juga buku Silberschatz! -5 hunger +10 mood");
+                
+                setHunger(getHunger()-5);
+                setMood(getMood()+10);
+            } catch (SimIsDeadException e) {
+                throw new SimIsDeadException("Buset di bukunya ada jumpscare!");
+            }
+        }
+    }
+
     public void poop() throws SimIsDeadException {
         // selalu 10 detik
 
@@ -612,29 +635,6 @@ public class Sim extends Exception implements Runnable {
                 System.out.println("Lucu juga ya Kobo! -10 health -5 hunger +10 mood");
                 
                 setHealth(getHealth()-10);
-                setHunger(getHunger()-5);
-                setMood(getMood()+10);
-            } catch (SimIsDeadException e) {
-                throw e;
-            }
-        }
-    }
-
-    public void read(int time) throws SimIsDeadException {
-        // +10 mood -5 hunger
-        // cuma bisa kelipatan 30 detik
-
-        int cycle = time / (30);
-
-        System.out.println("Sim akan membaca buku selama " + Angka.secToTime(time));
-
-        for (int i=0; i<cycle; i++) {
-            try {
-                gm.getClock().moveTime(1 * 30 * 1000);
-
-                System.out.println("\nSim sudah membaca buku selama 1 menit, waktu tersisa: " + Angka.secToTime(time-i*1*30));
-                System.out.println("Keren juga buku Silberschatz! -5 hunger +10 mood");
-                
                 setHunger(getHunger()-5);
                 setMood(getMood()+10);
             } catch (SimIsDeadException e) {
